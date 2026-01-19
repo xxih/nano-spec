@@ -263,12 +263,14 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 - 运行时：Node.js (>=18)
 - CLI 框架：commander
 - 构建工具：tsc
+- 测试框架：Vitest（TDD 开发方式）
 
 **验收标准**：
 - [ ] 项目使用 TypeScript 开发
 - [ ] 支持 ES2022 模块
 - [ ] package.json 配置正确
 - [ ] tsconfig.json 配置正确
+- [ ] Vitest 测试框架配置正确
 
 ---
 
@@ -296,12 +298,16 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 
 ### 3.4 开发体验
 
-**要求**：支持开发模式
+**要求**：支持开发模式和测试
 
 **验收标准**：
 - [ ] package.json 包含 `dev` 脚本（使用 tsx）
 - [ ] package.json 包含 `build` 脚本（使用 tsc）
+- [ ] package.json 包含 `test` 脚本（运行 Vitest 测试）
+- [ ] package.json 包含 `test:watch` 脚本（监听模式运行测试）
+- [ ] package.json 包含 `test:coverage` 脚本（生成测试覆盖率报告）
 - [ ] 开发时可直接运行 `npm run dev`
+- [ ] 测试覆盖率 ≥80%
 
 ---
 
@@ -314,18 +320,26 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 specflow-cli/
 ├── package.json
 ├── tsconfig.json
+├── vitest.config.ts
 ├── src/
 │   ├── index.ts              # CLI 入口
 │   ├── commands/
 │   │   ├── init.ts           # specflow init
-│   │   └── new.ts            # specflow new
+│   │   ├── init.test.ts      # init 命令测试
+│   │   ├── new.ts            # specflow new
+│   │   └── new.test.ts       # new 命令测试
 │   ├── adapters/             # AI 适配器
 │   │   ├── index.ts          # 适配器注册
+│   │   ├── index.test.ts     # 适配器注册测试
 │   │   ├── cursor.ts         # Cursor 命令生成
+│   │   ├── cursor.test.ts    # Cursor 适配器测试
 │   │   ├── claude.ts         # Claude 命令生成
 │   │   ├── qwen.ts           # qwen 命令生成
+│   │   ├── qwen.test.ts      # qwen 适配器测试
 │   │   ├── iflow.ts          # iflow 命令生成
-│   │   └── cline.ts          # cline 命令生成
+│   │   ├── iflow.test.ts     # iflow 适配器测试
+│   │   ├── cline.ts          # cline 命令生成
+│   │   └── cline.test.ts     # cline 适配器测试
 │   └── templates/            # 内置模板
 │       ├── AGENTS.md
 │       ├── commands/
@@ -350,6 +364,7 @@ specflow-cli/
 - [ ] 目录结构符合上述设计
 - [ ] 所有必需的文件和目录存在
 - [ ] 文件命名规范一致
+- [ ] 测试文件与源码文件同目录，命名规范：`*.test.ts`
 
 ---
 
@@ -394,6 +409,8 @@ interface AIAdapter {
 | @types/node | ^22.0.0 | Node.js 类型定义 |
 | typescript | ^5.5.0 | TypeScript 编译器 |
 | tsx | ^4.0.0 | TypeScript 执行器 |
+| vitest | ^2.0.0 | 测试框架 |
+| @vitest/coverage-v8 | ^2.0.0 | Vitest 覆盖率工具 |
 
 **验收标准**：
 - [ ] package.json 包含正确的开发依赖
@@ -442,6 +459,9 @@ interface AIAdapter {
 - [ ] 支持开发模式
 - [ ] TypeScript 类型检查通过
 - [ ] 代码风格一致
+- [ ] 单元测试覆盖核心功能
+- [ ] 测试覆盖率 ≥80%
+- [ ] 所有测试通过
 
 ### 8.3 文档验收
 
