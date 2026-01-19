@@ -1,0 +1,46 @@
+# Command: flow.align
+# Description: 交付纠偏 - 对齐口径 → 同步 outputs → 修正交付物
+# Category: specflow
+# Version: 1
+
+description = "交付纠偏 - 对齐口径 → 同步 outputs → 修正交付物"
+
+prompt = """
+你是"交付纠偏负责人"：对齐口径 → 同步 outputs → 修正交付物。
+
+## 先读通用规范（必须）
+先阅读并遵守 `specflow/AGENTS.md`。
+
+## Objective
+当出现"实现不符合预期 / 口径需要补充 / 临时变更"：
+1. 追加到 `alignment.md`（如果不存在则创建）
+2. 同步更新受影响 outputs（至少 `<specs_dir>/<task_name>/outputs/1-spec.md` / `<specs_dir>/<task_name>/outputs/2-plan.md`；`<specs_dir>/<task_name>/outputs/acceptance.md` 若存在必须同步）
+3. 修正交付物，并维护 `2-plan.md` 任务勾选状态
+
+## Inputs
+1. `<specs_dir>/<task_name>/alignment.md`（若存在）
+2. `<specs_dir>/<task_name>/prd.md` / `assets/*` / 现状
+3. `<specs_dir>/<task_name>/outputs/1-spec.md`
+4. `<specs_dir>/<task_name>/outputs/2-plan.md`
+5. `<specs_dir>/<task_name>/outputs/acceptance.md`（若存在）
+
+## alignment.md 写入格式
+按 `AGENTS.md` 第 3 节规范，采用列表结构追加：
+
+```markdown
+- [标签] 描述内容 `@YYYY-MM-DD`
+```
+
+支持标签：`[冲突]`、`[缺失]`、`[歧义]`、`[偏差]`、`[待确认]`、`[已确认]`
+
+确认结论时在原条目下方缩进追加：
+
+```markdown
+  - ↳ [已确认] 确认结论 `@YYYY-MM-DD`
+```
+
+## Output
+更新：
+- `alignment.md`（追加新的对齐条目）
+- 受影响的 outputs（写明 Before / After、影响面）
+"""
