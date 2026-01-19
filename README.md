@@ -18,7 +18,6 @@ SpecFlow CLI is a lightweight command-line tool that helps you quickly initializ
 - **Ready to Use**: One-command initialization with `specflow init`
 - **Multi-AI Support**: Generate command files for different AI tools
 - **Customizable**: Modify templates and add common documents for customization
-- **TDD-Driven**: Built with test-driven development, ≥80% test coverage
 
 ### Installation
 
@@ -116,187 +115,6 @@ your-project/
 │   ├── flow.align.md
 │   └── flow.summary.md
 └── ... (other project files)
-```
-
-### Local Development Guide
-
-#### Prerequisites
-
-- Node.js >= 18
-- npm or yarn
-- Git (optional, for version control)
-
-#### Development Workflow
-
-1. **Clone and Setup**
-
-```bash
-git clone <repository-url>
-cd spec-flow
-npm install
-```
-
-2. **Development Mode**
-
-```bash
-# Run in development mode with tsx
-npm run dev
-
-# Run with specific commands
-npm run dev init
-npm run dev new "My Task"
-```
-
-3. **Building**
-
-```bash
-# Build TypeScript to JavaScript
-npm run build
-
-# The output will be in the dist/ directory
-```
-
-4. **Testing**
-
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Generate coverage report
-npm run test:coverage
-```
-
-#### Project Structure for Development
-
-```
-spec-flow/
-├── src/
-│   ├── index.ts                    # CLI entry point
-│   ├── commands/
-│   │   ├── init.ts                 # specflow init command
-│   │   └── new.ts                  # specflow new command
-│   ├── adapters/
-│   │   ├── index.ts                # Adapter registry
-│   │   ├── cursor.ts               # Cursor adapter
-│   │   ├── qwen.ts                 # qwen adapter
-│   │   ├── iflow.ts                # iflow adapter
-│   │   └── cline.ts                # cline adapter
-│   └── templates/                  # Built-in templates
-│       ├── AGENTS.md
-│       ├── commands/
-│       │   ├── flow.1-spec.md
-│       │   ├── flow.2-plan.md
-│       │   ├── flow.3-execute.md
-│       │   ├── flow.accept.md
-│       │   ├── flow.align.md
-│       │   └── flow.summary.md
-│       └── outputs/
-│           ├── 1-spec.md
-│           ├── 2-plan.md
-│           ├── 3-tasks.md
-│           ├── acceptance.md
-│           ├── alignment.md
-│           └── summary.md
-├── bin/
-│   └── specflow.js                 # CLI entry point
-├── package.json
-├── tsconfig.json
-├── vitest.config.ts
-└── README.md
-```
-
-#### TDD Development Process
-
-We follow Test-Driven Development (TDD) principles:
-
-1. **Write a failing test** (Red)
-2. **Implement the feature** (Green)
-3. **Refactor the code** (Refactor)
-
-Example:
-
-```typescript
-// src/commands/init.test.ts
-import {describe, it, expect, vi} from 'vitest';
-import {init} from './init.js';
-
-describe('init command', () => {
-	it('should create specflow directory structure', async () => {
-		// Write test first
-		const consoleSpy = vi.spyOn(console, 'log');
-		await init({ai: 'cursor', force: true});
-		expect(consoleSpy).toHaveBeenCalledWith('✓ 创建 specflow/AGENTS.md');
-	});
-});
-```
-
-#### Adding a New AI Adapter
-
-1. Create adapter file in `src/adapters/`:
-
-```typescript
-// src/adapters/mytool.ts
-import {mkdirSync, cpSync} from 'fs';
-import {join} from 'path';
-import type {AIAdapter} from './index.js';
-
-export const mytoolAdapter: AIAdapter = {
-	name: 'mytool',
-	commandsDir: '.mytool/commands/',
-
-	generateCommands(cwd: string, templatesDir: string): void {
-		const commandsDir = join(cwd, '.mytool', 'commands');
-		mkdirSync(commandsDir, {recursive: true});
-
-		// Copy command templates
-		const commands = [
-			'flow.1-spec.md',
-			'flow.2-plan.md'
-			// ... other commands
-		];
-
-		for (const cmd of commands) {
-			const src = join(templatesDir, 'commands', cmd);
-			const dest = join(commandsDir, cmd);
-			cpSync(src, dest);
-		}
-	}
-};
-```
-
-2. Register the adapter in `src/adapters/index.ts`:
-
-```typescript
-import {mytoolAdapter} from './mytool.js';
-
-const adapters: Record<string, AIAdapter> = {
-	cursor: cursorAdapter,
-	qwen: qwenAdapter,
-	iflow: iflowAdapter,
-	cline: clineAdapter,
-	mytool: mytoolAdapter // Add new adapter
-};
-```
-
-3. Add tests for the new adapter
-
-4. Run tests to ensure everything works
-
-#### Customizing Templates
-
-You can customize the templates by modifying files in `src/templates/`:
-
-- **AGENTS.md**: General rules and guidelines
-- **commands/**: Slash command definitions
-- **outputs/**: Output document templates
-
-After modifying templates, rebuild the project:
-
-```bash
-npm run build
 ```
 
 ### Commands Reference
@@ -397,8 +215,6 @@ npm run test:watch
 npm run test:coverage
 ```
 
-Target test coverage: ≥80%
-
 ### Building
 
 Build the project for production:
@@ -415,9 +231,8 @@ Contributions are welcome! Please follow these guidelines:
 
 1. Fork the repository
 2. Create a feature branch
-3. Write tests for new features (TDD)
-4. Ensure all tests pass
-5. Submit a pull request
+3. Ensure all tests pass
+4. Submit a pull request
 
 ### License
 
@@ -439,7 +254,6 @@ SpecFlow CLI 是一个轻量级的命令行工具，帮助你快速初始化规�
 - **即开即用**：`specflow init` 一键初始化
 - **多 AI 适配**：支持生成不同 AI 工具的命令文件
 - **可定制**：通过修改模板和添加公共文档实现定制
-- **测试驱动**：采用 TDD 开发，测试覆盖率 ≥80%
 
 ### 安装
 
@@ -537,187 +351,6 @@ your-project/
 │   ├── flow.align.md
 │   └── flow.summary.md
 └── ... (其他项目文件)
-```
-
-### 本地开发指南
-
-#### 前置要求
-
-- Node.js >= 18
-- npm 或 yarn
-- Git（可选，用于版本控制）
-
-#### 开发工作流
-
-1. **克隆和设置**
-
-```bash
-git clone <repository-url>
-cd spec-flow
-npm install
-```
-
-2. **开发模式**
-
-```bash
-# 使用 tsx 在开发模式下运行
-npm run dev
-
-# 运行特定命令
-npm run dev init
-npm run dev new "我的任务"
-```
-
-3. **构建**
-
-```bash
-# 将 TypeScript 编译为 JavaScript
-npm run build
-
-# 输出将在 dist/ 目录中
-```
-
-4. **测试**
-
-```bash
-# 运行所有测试
-npm test
-
-# 在监听模式下运行测试
-npm run test:watch
-
-# 生成覆盖率报告
-npm run test:coverage
-```
-
-#### 开发项目结构
-
-```
-spec-flow/
-├── src/
-│   ├── index.ts                    # CLI 入口点
-│   ├── commands/
-│   │   ├── init.ts                 # specflow init 命令
-│   │   └── new.ts                  # specflow new 命令
-│   ├── adapters/
-│   │   ├── index.ts                # 适配器注册
-│   │   ├── cursor.ts               # Cursor 适配器
-│   │   ├── qwen.ts                 # qwen 适配器
-│   │   ├── iflow.ts                # iflow 适配器
-│   │   └── cline.ts                # cline 适配器
-│   └── templates/                  # 内置模板
-│       ├── AGENTS.md
-│       ├── commands/
-│       │   ├── flow.1-spec.md
-│       │   ├── flow.2-plan.md
-│       │   ├── flow.3-execute.md
-│       │   ├── flow.accept.md
-│       │   ├── flow.align.md
-│       │   └── flow.summary.md
-│       └── outputs/
-│           ├── 1-spec.md
-│           ├── 2-plan.md
-│           ├── 3-tasks.md
-│           ├── acceptance.md
-│           ├── alignment.md
-│           └── summary.md
-├── bin/
-│   └── specflow.js                 # CLI 入口点
-├── package.json
-├── tsconfig.json
-├── vitest.config.ts
-└── README.md
-```
-
-#### TDD 开发流程
-
-我们遵循测试驱动开发（TDD）原则：
-
-1. **编写失败的测试**（红色）
-2. **实现功能**（绿色）
-3. **重构代码**（重构）
-
-示例：
-
-```typescript
-// src/commands/init.test.ts
-import {describe, it, expect, vi} from 'vitest';
-import {init} from './init.js';
-
-describe('init 命令', () => {
-	it('应该创建 specflow 目录结构', async () => {
-		// 先编写测试
-		const consoleSpy = vi.spyOn(console, 'log');
-		await init({ai: 'cursor', force: true});
-		expect(consoleSpy).toHaveBeenCalledWith('✓ 创建 specflow/AGENTS.md');
-	});
-});
-```
-
-#### 添加新的 AI 适配器
-
-1. 在 `src/adapters/` 中创建适配器文件：
-
-```typescript
-// src/adapters/mytool.ts
-import {mkdirSync, cpSync} from 'fs';
-import {join} from 'path';
-import type {AIAdapter} from './index.js';
-
-export const mytoolAdapter: AIAdapter = {
-	name: 'mytool',
-	commandsDir: '.mytool/commands/',
-
-	generateCommands(cwd: string, templatesDir: string): void {
-		const commandsDir = join(cwd, '.mytool', 'commands');
-		mkdirSync(commandsDir, {recursive: true});
-
-		// 复制命令模板
-		const commands = [
-			'flow.1-spec.md',
-			'flow.2-plan.md'
-			// ... 其他命令
-		];
-
-		for (const cmd of commands) {
-			const src = join(templatesDir, 'commands', cmd);
-			const dest = join(commandsDir, cmd);
-			cpSync(src, dest);
-		}
-	}
-};
-```
-
-2. 在 `src/adapters/index.ts` 中注册适配器：
-
-```typescript
-import {mytoolAdapter} from './mytool.js';
-
-const adapters: Record<string, AIAdapter> = {
-	cursor: cursorAdapter,
-	qwen: qwenAdapter,
-	iflow: iflowAdapter,
-	cline: clineAdapter,
-	mytool: mytoolAdapter // 添加新适配器
-};
-```
-
-3. 为新适配器添加测试
-
-4. 运行测试确保一切正常
-
-#### 自定义模板
-
-你可以通过修改 `src/templates/` 中的文件来自定义模板：
-
-- **AGENTS.md**：通用规则和指南
-- **commands/**：斜杠命令定义
-- **outputs/**：输出文档模板
-
-修改模板后，重新构建项目：
-
-```bash
-npm run build
 ```
 
 ### 命令参考
@@ -818,8 +451,6 @@ npm run test:watch
 npm run test:coverage
 ```
 
-目标测试覆盖率：≥80%
-
 ### 构建
 
 构建项目用于生产：
@@ -836,13 +467,180 @@ npm run build
 
 1. Fork 仓库
 2. 创建功能分支
-3. 为新功能编写测试（TDD）
-4. 确保所有测试通过
-5. 提交拉取请求
+3. 确保所有测试通过
+4. 提交拉取请求
 
 ### 许可证
 
 MIT License
+
+---
+
+## Local Development Guide / 本地开发指南
+
+### Prerequisites / 前置要求
+
+- Node.js >= 18
+- npm or yarn
+- Git (optional, for version control)
+
+### Development Workflow / 开发工作流
+
+1. **Clone and Setup / 克隆和设置**
+
+```bash
+git clone <repository-url>
+cd spec-flow
+npm install
+```
+
+2. **Development Mode / 开发模式**
+
+```bash
+# Run in development mode with tsx
+# 使用 tsx 在开发模式下运行
+npm run dev
+
+# Run with specific commands
+# 运行特定命令
+npm run dev init
+npm run dev new "My Task"
+```
+
+3. **Building / 构建**
+
+```bash
+# Build TypeScript to JavaScript
+# 将 TypeScript 编译为 JavaScript
+npm run build
+
+# The output will be in the dist/ directory
+# 输出将在 dist/ 目录中
+```
+
+4. **Testing / 测试**
+
+```bash
+# Run all tests
+# 运行所有测试
+npm test
+
+# Run tests in watch mode
+# 在监听模式下运行测试
+npm run test:watch
+
+# Generate coverage report
+# 生成覆盖率报告
+npm run test:coverage
+```
+
+### Project Structure for Development / 开发项目结构
+
+```
+spec-flow/
+├── src/
+│   ├── index.ts                    # CLI entry point / CLI 入口点
+│   ├── commands/
+│   │   ├── init.ts                 # specflow init command / specflow init 命令
+│   │   └── new.ts                  # specflow new command / specflow new 命令
+│   ├── adapters/
+│   │   ├── index.ts                # Adapter registry / 适配器注册
+│   │   ├── cursor.ts               # Cursor adapter / Cursor 适配器
+│   │   ├── qwen.ts                 # qwen adapter / qwen 适配器
+│   │   ├── iflow.ts                # iflow adapter / iflow 适配器
+│   │   └── cline.ts                # cline adapter / cline 适配器
+│   └── templates/                  # Built-in templates / 内置模板
+│       ├── AGENTS.md
+│       ├── commands/
+│       │   ├── flow.1-spec.md
+│       │   ├── flow.2-plan.md
+│       │   ├── flow.3-execute.md
+│       │   ├── flow.accept.md
+│       │   ├── flow.align.md
+│       │   └── flow.summary.md
+│       └── outputs/
+│           ├── 1-spec.md
+│           ├── 2-plan.md
+│           ├── 3-tasks.md
+│           ├── acceptance.md
+│           ├── alignment.md
+│           └── summary.md
+├── bin/
+│   └── specflow.js                 # CLI entry point / CLI 入口点
+├── package.json
+├── tsconfig.json
+├── vitest.config.ts
+└── README.md
+```
+
+### Adding a New AI Adapter / 添加新的 AI 适配器
+
+1. Create adapter file in `src/adapters/` / 在 `src/adapters/` 中创建适配器文件：
+
+```typescript
+// src/adapters/mytool.ts
+import {mkdirSync, cpSync} from 'fs';
+import {join} from 'path';
+import type {AIAdapter} from './index.js';
+
+export const mytoolAdapter: AIAdapter = {
+	name: 'mytool',
+	commandsDir: '.mytool/commands/',
+
+	generateCommands(cwd: string, templatesDir: string): void {
+		const commandsDir = join(cwd, '.mytool', 'commands');
+		mkdirSync(commandsDir, {recursive: true});
+
+		// Copy command templates
+		// 复制命令模板
+		const commands = [
+			'flow.1-spec.md',
+			'flow.2-plan.md'
+			// ... other commands
+		];
+
+		for (const cmd of commands) {
+			const src = join(templatesDir, 'commands', cmd);
+			const dest = join(commandsDir, cmd);
+			cpSync(src, dest);
+		}
+	}
+};
+```
+
+2. Register the adapter in `src/adapters/index.ts` / 在 `src/adapters/index.ts` 中注册适配器：
+
+```typescript
+import {mytoolAdapter} from './mytool.js';
+
+const adapters: Record<string, AIAdapter> = {
+	cursor: cursorAdapter,
+	qwen: qwenAdapter,
+	iflow: iflowAdapter,
+	cline: clineAdapter,
+	mytool: mytoolAdapter // Add new adapter / 添加新适配器
+};
+```
+
+3. Add tests for the new adapter / 为新适配器添加测试
+
+4. Run tests to ensure everything works / 运行测试确保一切正常
+
+### Customizing Templates / 自定义模板
+
+You can customize the templates by modifying files in `src/templates/`:
+你可以通过修改 `src/templates/` 中的文件来自定义模板：
+
+- **AGENTS.md**: General rules and guidelines / 通用规则和指南
+- **commands/**: Slash command definitions / 斜杠命令定义
+- **outputs/**: Output document templates / 输出文档模板
+
+After modifying templates, rebuild the project:
+修改模板后，重新构建项目：
+
+```bash
+npm run build
+```
 
 ---
 
