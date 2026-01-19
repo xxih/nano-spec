@@ -38,7 +38,7 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 
 **参数**：
 - `--ai <tool>`：指定 AI 工具类型（默认：cursor）
-  - 支持：cursor, claude
+  - 支持：cursor, claude, qwen, iflow, cline
 - `-f, --force`：强制覆盖已存在的文件
 
 **验收标准**：
@@ -48,6 +48,9 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 - [ ] 根据指定的 AI 工具创建对应的命令目录和文件
   - Cursor: `.cursor/commands/flow.*.md` (6 个文件)
   - Claude: `.claude/commands/flow.*.md` (6 个文件)
+  - qwen: `.qwen/commands/flow.*.md` (6 个文件)
+  - iflow: `.iflow/commands/flow.*.md` (6 个文件)
+  - cline: `.cline/commands/flow.*.md` (6 个文件)
 - [ ] 若目录已存在且未使用 `--force`，显示警告并退出
 - [ ] 若指定了不支持的 AI 工具，显示错误信息并列出支持的选项
 
@@ -138,6 +141,54 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 
 ---
 
+#### 2.2.3 qwen 适配器
+
+**描述**：生成 qwen AI 的斜杠命令文件
+
+**功能点**：
+1. 转换 Cursor 命令格式到 qwen 格式
+2. 支持 qwen 的命令规范
+
+**验收标准**：
+- [ ] 创建 `.qwen/commands/` 目录
+- [ ] 生成 6 个命令文件
+- [ ] 命令文件格式符合 qwen 规范
+- [ ] [待澄清] qwen 命令格式规范需要确认
+
+---
+
+#### 2.2.4 iflow 适配器
+
+**描述**：生成 iflow AI 的斜杠命令文件
+
+**功能点**：
+1. 转换 Cursor 命令格式到 iflow 格式
+2. 支持 iflow 的命令规范（TOML 格式）
+
+**验收标准**：
+- [ ] 创建 `.iflow/commands/` 目录
+- [ ] 生成 6 个命令文件（.toml 格式）
+- [ ] 命令文件格式符合 iflow 规范
+- [ ] [待澄清] iflow 命令格式规范需要确认
+
+---
+
+#### 2.2.5 cline 适配器
+
+**描述**：生成 cline AI 的斜杠命令文件
+
+**功能点**：
+1. 转换 Cursor 命令格式到 cline 格式
+2. 支持 cline 的命令规范
+
+**验收标准**：
+- [ ] 创建 `.cline/commands/` 目录
+- [ ] 生成 6 个命令文件
+- [ ] 命令文件格式符合 cline 规范
+- [ ] [待澄清] cline 命令格式规范需要确认
+
+---
+
 ### 2.3 内置模板
 
 #### 2.3.1 AGENTS.md
@@ -179,7 +230,7 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 **验收标准**：
 - [ ] 每个模板文件存在且格式正确
 - [ ] 模板包含必要的字段和结构说明
-- [ ] [待澄清] 每个模板的具体字段需要进一步定义
+- [ ] 模板从 `assets/templates/` 复制到 `specflow/templates/`
 
 ---
 
@@ -199,6 +250,7 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 - [ ] 每个命令文件包含明确的角色定义
 - [ ] 每个命令包含 Objective、Rules、Output、Checklist
 - [ ] 命令之间遵循输入优先级规则（alignment.md > brief.md > assets/* > 现状）
+- [ ] 命令模板从内置模板复制到对应的 AI 工具目录
 
 ---
 
@@ -270,7 +322,10 @@ specflow-cli/
 │   ├── adapters/             # AI 适配器
 │   │   ├── index.ts          # 适配器注册
 │   │   ├── cursor.ts         # Cursor 命令生成
-│   │   └── claude.ts         # Claude 命令生成（待实现）
+│   │   ├── claude.ts         # Claude 命令生成
+│   │   ├── qwen.ts           # qwen 命令生成
+│   │   ├── iflow.ts          # iflow 命令生成
+│   │   └── cline.ts          # cline 命令生成
 │   └── templates/            # 内置模板
 │       ├── AGENTS.md
 │       ├── commands/
@@ -348,20 +403,17 @@ interface AIAdapter {
 
 ## 6. 待澄清项
 
-### 6.1 模板内容
-
-- [ ] 6 个产出物模板（1-spec.md、2-plan.md、3-tasks.md、acceptance.md、alignment.md、summary.md）的具体字段和结构需要进一步定义
-- [ ] 6 个斜杠命令模板的具体内容需要进一步定义
-
-### 6.2 Claude 适配器
+### 6.1 Claude 适配器
 
 - [ ] Claude 命令格式规范需要参考 spec-kit 代码仓库确认
 - [ ] Cursor 到 Claude 的格式转换逻辑需要明确
 
-### 6.3 其他 AI 工具
+### 6.2 其他 AI 工具
 
-- [ ] GitHub Copilot 的命令格式和适配方式需要调研
-- [ ] 其他 AI 工具的适配优先级需要确认
+- [ ] qwen 的命令格式和适配方式需要调研
+- [ ] iflow 的命令格式和适配方式需要调研
+- [ ] cline 的命令格式和适配方式需要调研
+- [ ] GitHub Copilot 的命令格式和适配方式需要调研（可选）
 
 ---
 
@@ -404,7 +456,10 @@ interface AIAdapter {
 ### 9.1 Phase 2 功能
 
 - [ ] Claude 适配器实现
-- [ ] GitHub Copilot 适配器实现
+- [ ] qwen 适配器实现
+- [ ] iflow 适配器实现
+- [ ] cline 适配器实现
+- [ ] GitHub Copilot 适配器实现（可选）
 - [ ] 模板变量替换支持
 
 ### 9.2 Phase 3 功能
@@ -420,5 +475,6 @@ interface AIAdapter {
 - `brief.md` - 需求描述
 - `assets/实现方案.md` - 技术实现方案
 - `assets/spec.md` - 框架设计文档
+- `assets/templates/` - 产出物模板（6 个文件）
 - `specflow/AGENTS.md` - 通用规则
 - spec-kit 代码仓库 - Claude 适配器参考实现
