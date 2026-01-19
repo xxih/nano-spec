@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # workspace
 *.code-workspace
+
+# my-test-folder
+my-test-folder/
