@@ -102,7 +102,22 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 
 ---
 
-### 2.2 AI 适配器
+### 2.2 AI 适配器架构
+
+**描述**：为不同 AI 工具生成适配的命令文件，支持格式转换和内容定制
+
+**设计原则**：
+- 参考OpenSpec实现，提供灵活的适配机制
+- 不同AI工具的命令文件格式、内容要求各不相同
+- 适配器需要支持格式转换、变量替换、内容定制
+
+**核心功能**：
+1. **格式转换**：将通用命令模板转换为各AI工具的特定格式
+2. **内容定制**：根据各AI工具的规范调整命令内容
+3. **变量替换**：支持在命令模板中使用变量（如{{date}}、{{version}}等）
+4. **模板管理**：为每个AI工具维护独立的命令模板
+
+---
 
 #### 2.2.1 Cursor 适配器
 
@@ -127,17 +142,18 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 
 #### 2.2.2 Claude 适配器
 
-**描述**：生成 Claude AI 的斜杠命令文件（Phase 2）
+**描述**：生成 Claude AI 的斜杠命令文件
 
 **功能点**：
-1. 转换 Cursor 命令格式到 Claude 格式
-2. 参考 spec-kit 代码仓库实现格式转换
+1. 转换通用命令格式到 Claude 格式
+2. 参考 OpenSpec 实现格式转换逻辑
+3. 支持 Claude 特定的命令结构和语法
 
 **验收标准**：
 - [ ] 创建 `.claude/commands/` 目录
 - [ ] 生成 6 个命令文件
 - [ ] 命令文件格式符合 Claude 规范
-- [ ] [待澄清] Claude 命令格式规范需要参考 spec-kit 代码仓库确认
+- [ ] 实现格式转换逻辑（从通用模板到 Claude 格式）
 
 ---
 
@@ -146,14 +162,15 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 **描述**：生成 qwen AI 的斜杠命令文件
 
 **功能点**：
-1. 转换 Cursor 命令格式到 qwen 格式
+1. 转换通用命令格式到 qwen 格式
 2. 支持 qwen 的命令规范
+3. 处理 qwen 特定的语法和结构要求
 
 **验收标准**：
 - [ ] 创建 `.qwen/commands/` 目录
 - [ ] 生成 6 个命令文件
 - [ ] 命令文件格式符合 qwen 规范
-- [ ] [待澄清] qwen 命令格式规范需要确认
+- [ ] 实现 qwen 特定的格式转换逻辑
 
 ---
 
@@ -162,14 +179,16 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 **描述**：生成 iflow AI 的斜杠命令文件
 
 **功能点**：
-1. 转换 Cursor 命令格式到 iflow 格式
+1. 转换通用命令格式到 iflow TOML 格式
 2. 支持 iflow 的命令规范（TOML 格式）
+3. 处理 iflow 特定的字段和结构
 
 **验收标准**：
 - [ ] 创建 `.iflow/commands/` 目录
 - [ ] 生成 6 个命令文件（.toml 格式）
 - [ ] 命令文件格式符合 iflow 规范
-- [ ] [待澄清] iflow 命令格式规范需要确认
+- [ ] 实现 Markdown 到 TOML 的格式转换逻辑
+- [ ] 处理 iflow 特定的字段（如 category、version 等）
 
 ---
 
@@ -178,14 +197,60 @@ SpecFlow CLI - Spec 驱动开发工作流脚手架
 **描述**：生成 cline AI 的斜杠命令文件
 
 **功能点**：
-1. 转换 Cursor 命令格式到 cline 格式
+1. 转换通用命令格式到 cline 格式
 2. 支持 cline 的命令规范
+3. 处理 cline 特定的语法和结构要求
 
 **验收标准**：
 - [ ] 创建 `.cline/commands/` 目录
 - [ ] 生成 6 个命令文件
 - [ ] 命令文件格式符合 cline 规范
-- [ ] [待澄清] cline 命令格式规范需要确认
+- [ ] 实现 cline 特定的格式转换逻辑
+
+---
+
+#### 2.2.6 适配器接口设计
+
+**接口定义**：
+```typescript
+interface AIAdapter {
+  name: string;
+  commandsDir: string;
+  fileFormat: 'md' | 'toml' | 'json' | 'yaml';
+  generateCommands(cwd: string, templatesDir: string): void;
+  transformCommand(content: string, commandName: string): string; // 格式转换
+  supportsVariables?: boolean; // 是否支持变量替换
+}
+```
+
+**核心方法**：
+- `generateCommands`：生成命令文件的主入口
+- `transformCommand`：将通用模板转换为特定AI工具的格式
+- 支持可选的变量替换功能
+
+---
+
+#### 2.2.7 模板管理
+
+**模板结构**：
+```
+src/templates/
+├── commands/                   # 通用命令模板
+│   ├── flow.1-spec.md.base
+│   ├── flow.2-plan.md.base
+│   └── ...
+└── adapters/                   # AI工具特定模板
+    ├── cursor/
+    │   └── flow.*.md          # Cursor 特定模板（可选）
+    ├── iflow/
+    │   └── flow.*.toml        # iflow 特定模板（可选）
+    └── ...
+```
+
+**模板选择策略**：
+1. 优先使用AI工具特定的模板（如果存在）
+2. 否则使用通用模板，通过 `transformCommand` 转换
+3. 支持变量替换（如 {{date}}、{{version}}）
 
 ---
 

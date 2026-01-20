@@ -48,11 +48,20 @@
 
 ### 5. AI 适配器架构
 
-定义统一的适配器接口并实现注册机制：
+定义统一的适配器接口并实现注册机制，支持格式转换和内容定制：
 
 - `src/adapters/index.ts`：定义 `AIAdapter` 接口，实现适配器注册表
+- 接口支持：
+  - `fileFormat`：指定命令文件格式（md、toml、json、yaml）
+  - `transformCommand`：格式转换方法，将通用模板转换为特定AI工具格式
+  - `supportsVariables`：是否支持变量替换
 - 支持动态获取适配器：`getAdapter(name)`
 - 支持列出所有适配器：`listAdapters()`
+
+**参考 OpenSpec 实现**：
+- OpenSpec 为不同AI工具提供独立的适配器实现
+- 支持格式转换、变量替换、内容定制
+- 模板管理更加灵活，支持通用模板和特定模板
 
 ### 6. Cursor 适配器实现
 
@@ -61,30 +70,68 @@
 - 创建 `.cursor/commands/` 目录
 - 复制 6 个命令模板文件到目标目录
 - 命令文件：`flow.1-spec.md`、`flow.2-plan.md`、`flow.3-execute.md`、`flow.accept.md`、`flow.align.md`、`flow.summary.md`
+- Cursor 使用 Markdown 格式，直接复制模板即可
 
 ### 7. qwen 适配器实现
 
-实现 qwen 命令生成（直接复制格式）：
+实现 qwen 命令生成，支持格式转换：
 
 - 创建 `.qwen/commands/` 目录
-- 复制 6 个命令模板文件到目标目录
+- 实现格式转换逻辑：从通用 Markdown 模板转换为 qwen 特定格式
 - 验证命令文件格式符合 qwen 规范
+- 处理 qwen 特定的语法和结构要求
 
 ### 8. iflow 适配器实现
 
-实现 iflow 命令生成（TOML 格式）：
+实现 iflow 命令生成，支持 Markdown 到 TOML 的格式转换：
 
 - 创建 `.iflow/commands/` 目录
-- 复制 6 个命令模板文件（.toml 格式）到目标目录
+- 实现 `transformCommand` 方法：将 Markdown 模板转换为 TOML 格式
+- 处理 iflow 特定的字段：
+  - `# Command:` → `[command] name =`
+  - `# Description:` → `description =`
+  - `# Category:` → `category =`
+  - `# Version:` → `version =`
+  - `prompt =` 部分 → 保持为多行字符串
 - 验证 TOML 格式符合 iflow 规范
 
 ### 9. cline 适配器实现
 
-实现 cline 命令生成：
+实现 cline 命令生成，支持格式转换：
 
 - 创建 `.cline/commands/` 目录
-- 复制 6 个命令模板文件到目标目录
+- 实现格式转换逻辑：从通用 Markdown 模板转换为 cline 特定格式
 - 验证命令文件格式符合 cline 规范
+- 处理 cline 特定的语法和结构要求
+
+### 10. 模板管理优化
+
+优化模板管理结构，支持更灵活的适配：
+
+```
+src/templates/
+├── commands/                   # 通用命令模板（Markdown 格式）
+│   ├── flow.1-spec.md.base
+│   ├── flow.2-plan.md.base
+│   ├── flow.3-execute.md.base
+│   ├── flow.accept.md.base
+│   ├── flow.align.md.base
+│   └── flow.summary.md.base
+└── adapters/                   # AI工具特定模板（可选）
+    ├── cursor/
+    │   └── flow.*.md          # Cursor 特定模板（可选）
+    ├── iflow/
+    │   └── flow.*.toml        # iflow 特定模板（可选）
+    ├── qwen/
+    │   └── flow.*.md          # qwen 特定模板（可选）
+    └── cline/
+        └── flow.*.md          # cline 特定模板（可选）
+```
+
+**模板选择策略**：
+1. 优先使用AI工具特定的模板（如果存在）
+2. 否则使用通用模板（.base 文件），通过 `transformCommand` 转换
+3. 支持变量替换（如 {{date}}、{{version}}、{{specs_dir}}）
 
 ### 10. 内置模板准备
 
