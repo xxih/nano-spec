@@ -1,6 +1,6 @@
 # AGENTS (Generic)
 
-本文档定义 Spec Flow 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
+本文档定义 Nano Spec 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
 
 ---
 
@@ -11,7 +11,7 @@
 | 变量           | 值         | 说明       |
 | -------------- | ---------- | ---------- |
 | `<cmd_prefix>` | `flow`     | 命令前缀   |
-| `<specs_dir>`  | `specflow` | 规格根目录 |
+| `<specs_dir>`  | `nanospec` | 规格根目录 |
 | `<task_name>`  | -          | 任务名称   |
 
 ### 1.2 命令速查
@@ -71,13 +71,13 @@ alignment.md > brief.md / prd.md > assets/* > 现状
 
 **任何阶段**发现问题都必须追加到 `alignment.md`（不限于 `/<cmd_prefix>.align` 命令）：
 
-| 阶段 | 触发场景 |
-| ---- | -------- |
-| `1-spec` | 需求冲突、歧义、缺失 |
-| `2-plan` | 口径不一致、方案风险 |
-| `3-execute` | 实现偏差、阻塞问题 |
-| `accept` | 验收标准不明确 |
-| `summary` | 遗漏的决策点 |
+| 阶段        | 触发场景             |
+| ----------- | -------------------- |
+| `1-spec`    | 需求冲突、歧义、缺失 |
+| `2-plan`    | 口径不一致、方案风险 |
+| `3-execute` | 实现偏差、阻塞问题   |
+| `accept`    | 验收标准不明确       |
+| `summary`   | 遗漏的决策点         |
 
 #### 写入格式
 
@@ -112,14 +112,14 @@ alignment.md > brief.md / prd.md > assets/* > 现状
 
 ### 3.3 输出模板映射
 
-| 产物            | 模板                                  | 关联命令               |
-| --------------- | ------------------------------------- | ---------------------- |
-| `1-spec.md`     | `<specs_dir>/templates/1-spec.md`     | `/<cmd_prefix>.1-spec` |
-| `2-plan.md`     | `<specs_dir>/templates/2-plan.md`     | `/<cmd_prefix>.2-plan` |
-| `3-tasks.md`    | `<specs_dir>/templates/3-tasks.md`    | `/<cmd_prefix>.2-plan` |
-| `acceptance.md` | `<specs_dir>/templates/acceptance.md` | `/<cmd_prefix>.accept` |
-| `alignment.md`  | `<specs_dir>/templates/alignment.md`  | `/<cmd_prefix>.align`  |
-| `summary.md`    | `<specs_dir>/templates/summary.md`    | `/<cmd_prefix>.summary`|
+| 产物            | 模板                                  | 关联命令                |
+| --------------- | ------------------------------------- | ----------------------- |
+| `1-spec.md`     | `<specs_dir>/templates/1-spec.md`     | `/<cmd_prefix>.1-spec`  |
+| `2-plan.md`     | `<specs_dir>/templates/2-plan.md`     | `/<cmd_prefix>.2-plan`  |
+| `3-tasks.md`    | `<specs_dir>/templates/3-tasks.md`    | `/<cmd_prefix>.2-plan`  |
+| `acceptance.md` | `<specs_dir>/templates/acceptance.md` | `/<cmd_prefix>.accept`  |
+| `alignment.md`  | `<specs_dir>/templates/alignment.md`  | `/<cmd_prefix>.align`   |
+| `summary.md`    | `<specs_dir>/templates/summary.md`    | `/<cmd_prefix>.summary` |
 
 **模板优先级**：
 
@@ -139,4 +139,4 @@ templates/*.md（若存在） > commands 内嵌默认模板
 | 改输出格式 | `<specs_dir>/templates/*.md`   |
 | 改核心规则 | 本文件（AGENTS.md）            |
 | 加新命令   | `.cursor/commands/` 下新建文件 |
-| 增强工作流  | 追加到 `AGENTS.md`            |
+| 增强工作流 | 追加到 `AGENTS.md`             |

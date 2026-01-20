@@ -1,6 +1,6 @@
 # Command: spec.1-spec
 # Description: 规格撰写 - 把模糊需求转化为清晰、可执行、可验收的规格说明
-# Category: specflow
+# Category: nanospec
 # Version: 1
 
 description = "规格撰写 - 把模糊需求转化为清晰、可执行、可验收的规格说明"

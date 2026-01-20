@@ -21,7 +21,7 @@
 - [歧义] `xcopy /E /I /Y src\templates dist\templates` 命令的必要性 @2026-01-20
   - ↳ [已确认] `xcopy` 命令是**必要的**，用于将输出产物模板复制到 `dist/templates/`
   - ↳ [已确认] `src/templates/outputs/` 下有 5 个文件：2-plan.md, 3-tasks.md, acceptance.md, alignment.md, summary.md
-  - ↳ [已确认] 这些文件会被 `init.ts` 复制到用户项目的 `specflow/templates/` 目录，供用户定制输出格式
+  - ↳ [已确认] 这些文件会被 `init.ts` 复制到用户项目的 `nanospec/templates/` 目录，供用户定制输出格式
   - ↳ [已确认] `src/templates/outputs/1-spec.md` 不存在，这是正确的（`1-spec.md` 是可选的定制模板）
   - ↳ [已确认] `init.ts` 中的 `copyFile` 函数会在文件不存在时跳过，不会报错
   - ↳ [已确认] `dist/templates/outputs/1-spec.md` 是旧的构建产物残留，已删除
@@ -32,8 +32,8 @@
   - ↳ [已确认] 所有命令的 `.toml` 文件中都已内联默认输出格式
   - ↳ [已确认] 移除 `src/templates/` 目录和 `xcopy` 命令
   - ↳ [已确认] 更新 `package.json` 的 build 脚本：`"build": "tsc"`
-  - ↳ [已确认] 用户如需定制输出格式，可自行在 `specflow/templates/` 创建对应文件
-  - ↳ [已确认] 将 `AGENTS.md` 从 `specflow/AGENTS.md` 复制到项目根目录 `AGENTS.md`
+  - ↳ [已确认] 用户如需定制输出格式，可自行在 `nanospec/templates/` 创建对应文件
+  - ↳ [已确认] 将 `AGENTS.md` 从 `nanospec/AGENTS.md` 复制到项目根目录 `AGENTS.md`
   - ↳ [已确认] 更新 `init.ts` 中的 `AGENTS.md` 查找逻辑，直接从项目根目录查找
   - ↳ [已确认] 更新 `package.json` 的 `files` 字段，添加 `AGENTS.md` 和 `.iflow` 目录
   - ↳ [已确认] 最终包大小 20.6 kB，44 个文件

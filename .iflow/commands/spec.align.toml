@@ -1,6 +1,6 @@
 # Command: spec.align
 # Description: 交付纠偏 - 对齐口径 → 同步 outputs → 修正交付物
-# Category: specflow
+# Category: nanospec
 # Version: 1
 
 description = "交付纠偏 - 对齐口径 → 同步 outputs → 修正交付物"

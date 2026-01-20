@@ -41,28 +41,28 @@
 
 - [x] 5.1 更新 `package.json` 中的 name 字段为 "nano-spec-cli"
 - [x] 5.2 更新 `package.json` 中的 description 字段
-- [x] 5.3 更新 `README.md` 中的标题 "SpecFlow CLI" → "nano-spec CLI"
+- [x] 5.3 更新 `README.md` 中的标题 "nanospec CLI" → "nano-spec CLI"
 - [x] 5.4 更新 `README.md` 中所有 `/flow.*` → `/spec.*`
 - [x] 5.5 更新 `README.md` 中所有 `flow.*.md` → `spec.*.md`
-- [x] 5.6 更新 `README.md` 中所有 "SpecFlow" → "nano-spec"
+- [x] 5.6 更新 `README.md` 中所有 "nanospec" → "nano-spec"
 
 ## 6. 规范文档更新
 
-- [x] 6.1 更新 `specflow/AGENTS.md` 中的 `<cmd_prefix>` 值为 `spec`
-- [x] 6.2 更新 `specflow/AGENTS.md` 中的命令速查表
-- [x] 6.3 更新 `specflow/AGENTS.md` 中的输出模板映射表
-- [ ] 6.4 更新 `specflow/20260119-init-specflow/outputs/1-spec.md` 中的引用（可选）
-- [ ] 6.5 更新 `specflow/20260119-init-specflow/outputs/2-plan.md` 中的引用（可选）
-- [ ] 6.6 更新 `specflow/20260119-init-specflow/outputs/3-tasks.md` 中的引用（可选）
-- [ ] 6.7 更新 `specflow/20260120-优化prompt以及简化模板机制/outputs/1-spec.md` 中的引用（可选）
-- [ ] 6.8 更新 `specflow/20260120-优化prompt以及简化模板机制/outputs/2-plan.md` 中的引用（可选）
-- [ ] 6.9 更新 `specflow/20260120-优化prompt以及简化模板机制/outputs/3-tasks.md` 中的引用（可选）
+- [x] 6.1 更新 `nanospec/AGENTS.md` 中的 `<cmd_prefix>` 值为 `spec`
+- [x] 6.2 更新 `nanospec/AGENTS.md` 中的命令速查表
+- [x] 6.3 更新 `nanospec/AGENTS.md` 中的输出模板映射表
+- [ ] 6.4 更新 `nanospec/20260119-init-nanospec/outputs/1-spec.md` 中的引用（可选）
+- [ ] 6.5 更新 `nanospec/20260119-init-nanospec/outputs/2-plan.md` 中的引用（可选）
+- [ ] 6.6 更新 `nanospec/20260119-init-nanospec/outputs/3-tasks.md` 中的引用（可选）
+- [ ] 6.7 更新 `nanospec/20260120-优化prompt以及简化模板机制/outputs/1-spec.md` 中的引用（可选）
+- [ ] 6.8 更新 `nanospec/20260120-优化prompt以及简化模板机制/outputs/2-plan.md` 中的引用（可选）
+- [ ] 6.9 更新 `nanospec/20260120-优化prompt以及简化模板机制/outputs/3-tasks.md` 中的引用（可选）
 
 ## 7. 构建和测试验证
 
 - [x] 7.1 运行 `npm run build` 验证编译通过
 - [x] 7.2 运行 `npm test` 确保所有测试通过
-- [x] 7.3 检查生成的命令文件名是否正确（spec.*）
+- [x] 7.3 检查生成的命令文件名是否正确（spec.\*）
 - [x] 7.4 检查命令文件内容中的引用是否正确
 - [x] 7.5 使用搜索工具检查是否有遗漏的 `flow.` 引用
 - [x] 7.6 验证 README.md 中的示例命令是否正确

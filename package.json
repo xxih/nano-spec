@@ -5,16 +5,17 @@
 	"type": "module",
 	"main": "dist/index.js",
 	"bin": {
-		"specflow": "./bin/specflow.js"
+		"nanospec": "./bin/nanospec.js"
 	},
 	"files": [
-	    "dist",
-	    "bin",
-	    "AGENTS.md",
-	    ".iflow",
-	    "README.md",
-	    "LICENSE"
-	  ],	"scripts": {
+		"dist",
+		"bin",
+		"AGENTS.md",
+		".iflow",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
 		"build": "tsc",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
@@ -25,7 +26,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/xxih/spec-flow.git"
+		"url": "git+https://github.com/xxih/nano-spec.git"
 	},
 	"keywords": [
 		"spec-driven",
@@ -40,9 +41,9 @@
 	"author": "xxih",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/xxih/spec-flow/issues"
+		"url": "https://github.com/xxih/nano-spec/issues"
 	},
-	"homepage": "https://github.com/xxih/spec-flow#readme",
+	"homepage": "https://github.com/xxih/nano-spec#readme",
 	"dependencies": {
 		"commander": "^12.0.0"
 	},

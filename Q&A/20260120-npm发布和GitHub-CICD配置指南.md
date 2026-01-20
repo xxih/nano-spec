@@ -1,6 +1,7 @@
 # 如何将 nano-spec 包发布到 npm 并配置 GitHub CI/CD
 
 ## 问题
+
 告诉我，怎么将这个包发布到 npm 上，给我一个完整教程指南。以及后续怎么接 GitHub 的 cicd
 
 ## 回答
@@ -8,6 +9,7 @@
 ### 核心答案
 
 将 `nano-spec` 包发布到 npm 并配置 GitHub CI/CD 需要完成以下主要步骤：
+
 1. 准备 npm 账号和包配置
 2. 修复 `.gitignore` 配置（关键问题）
 3. 配置 `package.json` 的发布字段
@@ -21,6 +23,7 @@
 ### 1. 前置准备
 
 #### 1.1 注册 npm 账号
+
 ```bash
 # 访问 https://www.npmjs.com/ 注册账号
 # 或使用 CLI 注册
@@ -28,12 +31,14 @@ npm adduser
 ```
 
 #### 1.2 登录 npm
+
 ```bash
 npm login
 # 输入用户名、密码和邮箱
 ```
 
 #### 1.3 验证登录状态
+
 ```bash
 npm whoami
 # 应该显示你的用户名
@@ -44,6 +49,7 @@ npm whoami
 **⚠️ 重要发现：当前 `.gitignore` 配置存在问题**
 
 查看 `.gitignore:53`，发现 `dist` 目录被忽略了：
+
 ```gitignore
 # Nuxt.js build / generate output
 .nuxt
@@ -51,6 +57,7 @@ dist
 ```
 
 **问题分析：**
+
 - `dist` 目录包含了 TypeScript 编译后的 JavaScript 代码（`package.json:4` 的 `main` 字段指向 `dist/index.js`）
 - 如果 `dist` 不发布到 npm，用户安装包后将无法使用
 - 这是 npm 包发布的常见错误
@@ -60,6 +67,7 @@ dist
 在 `.gitignore` 中添加 `!dist/` 来排除 dist 目录，或者使用 `.npmignore` 文件：
 
 **方案 A：修改 `.gitignore`（推荐）**
+
 ```gitignore
 # Nuxt.js build / generate output
 .nuxt
@@ -68,6 +76,7 @@ dist
 
 **方案 B：创建 `.npmignore` 文件（更灵活）**
 创建 `.npmignore` 文件，明确指定哪些文件不发布：
+
 ```
 # 源代码和开发文件
 src/
@@ -106,59 +115,55 @@ my-test-folder/
 
 ```json
 {
-  "name": "nano-spec",
-  "version": "1.0.0",
-  "description": "A minimal extendable Spec-Driven framework. Not just for code -- for writing, research, and anything you want to get done.",
-  "type": "module",
-  "main": "dist/index.js",
-  "bin": {
-    "specflow": "./bin/specflow.js"
-  },
-  "files": [
-    "dist",
-    "bin",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "build": "tsc && xcopy /E /I /Y src\\templates dist\\templates",
-    "dev": "tsx src/index.ts",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "npm run build",
-    "prepack": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xxih/spec-flow.git"
-  },
-  "keywords": [
-    "spec-driven",
-    "workflow",
-    "cli",
-    "ai-tools",
-    "cursor",
-    "qwen",
-    "iflow",
-    "cline"
-  ],
-  "author": "xxih",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xxih/spec-flow/issues"
-  },
-  "homepage": "https://github.com/xxih/spec-flow#readme",
-  "engines": {
-    "node": ">=18"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "nano-spec",
+	"version": "1.0.0",
+	"description": "A minimal extendable Spec-Driven framework. Not just for code -- for writing, research, and anything you want to get done.",
+	"type": "module",
+	"main": "dist/index.js",
+	"bin": {
+		"nanospec": "./bin/nanospec.js"
+	},
+	"files": ["dist", "bin", "README.md", "LICENSE"],
+	"scripts": {
+		"build": "tsc && xcopy /E /I /Y src\\templates dist\\templates",
+		"dev": "tsx src/index.ts",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"prepublishOnly": "npm run build",
+		"prepack": "npm run build"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xxih/nano-spec.git"
+	},
+	"keywords": [
+		"spec-driven",
+		"workflow",
+		"cli",
+		"ai-tools",
+		"cursor",
+		"qwen",
+		"iflow",
+		"cline"
+	],
+	"author": "xxih",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/xxih/nano-spec/issues"
+	},
+	"homepage": "https://github.com/xxih/nano-spec#readme",
+	"engines": {
+		"node": ">=18"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
 ```
 
 **新增字段说明：**
+
 - `files`: 明确指定要发布的文件/目录
 - `repository`: 仓库地址
 - `keywords`: 关键词，便于搜索
@@ -172,6 +177,7 @@ my-test-folder/
 ### 4. 准备发布内容
 
 #### 4.1 添加 LICENSE 文件
+
 ```bash
 # 创建 MIT License 文件
 echo "MIT License
@@ -198,6 +204,7 @@ SOFTWARE." > LICENSE
 ```
 
 #### 4.2 检查构建产物
+
 ```bash
 # 构建项目
 npm run build
@@ -220,18 +227,20 @@ npm view nano-spec
 ```
 
 **如果包名已被占用，可以使用作用域包：**
+
 ```json
 {
-  "name": "@your-username/nano-spec",
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "@your-username/nano-spec",
+	"publishConfig": {
+		"access": "public"
+	}
 }
 ```
 
 ### 6. 发布流程
 
 #### 6.1 测试发布（推荐）
+
 ```bash
 # 使用 npm test 命名空间测试
 npm pack
@@ -241,6 +250,7 @@ npm pack
 ```
 
 #### 6.2 正式发布
+
 ```bash
 # 发布到 npm
 npm publish
@@ -250,6 +260,7 @@ npm publish --access public
 ```
 
 #### 6.3 验证发布
+
 ```bash
 # 访问 https://www.npmjs.com/package/nano-spec
 # 或使用命令查看
@@ -281,11 +292,11 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [main, master, develop]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   release:
-    types: [ created ]
+    types: [created]
 
 jobs:
   # 测试作业
@@ -420,81 +431,85 @@ jobs:
 ### 3. 语义化版本控制（可选但推荐）
 
 #### 3.1 安装 semantic-release
+
 ```bash
 npm install --save-dev semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/npm
 ```
 
 #### 3.2 创建 `.releaserc` 配置文件
+
 ```json
 {
-  "branches": ["main", "master"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
-    [
-      "@semantic-release/npm",
-      {
-        "npmPublish": true
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": ["package.json", "CHANGELOG.md"],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": [
-          {
-            "path": "nano-spec-*.tgz"
-          }
-        ]
-      }
-    ]
-  ]
+	"branches": ["main", "master"],
+	"plugins": [
+		"@semantic-release/commit-analyzer",
+		"@semantic-release/release-notes-generator",
+		"@semantic-release/changelog",
+		[
+			"@semantic-release/npm",
+			{
+				"npmPublish": true
+			}
+		],
+		[
+			"@semantic-release/git",
+			{
+				"assets": ["package.json", "CHANGELOG.md"],
+				"message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+			}
+		],
+		[
+			"@semantic-release/github",
+			{
+				"assets": [
+					{
+						"path": "nano-spec-*.tgz"
+					}
+				]
+			}
+		]
+	]
 }
 ```
 
 #### 3.3 更新 CI/CD 工作流以使用 semantic-release
+
 ```yaml
 # 在 publish job 中替换为：
-  publish:
-    name: Publish to npm
-    runs-on: ubuntu-latest
-    needs: test
+publish:
+  name: Publish to npm
+  runs-on: ubuntu-latest
+  needs: test
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: npm ci
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Build project
-        run: npm run build
+    - name: Build project
+      run: npm run build
 
-      - name: Run semantic-release
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Run semantic-release
+      run: npx semantic-release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
 ### 4. 提交规范（用于 semantic-release）
 
 使用 Conventional Commits 规范：
+
 - `feat:` 新功能
 - `fix:` 修复 bug
 - `docs:` 文档更新
@@ -504,6 +519,7 @@ npm install --save-dev semantic-release @semantic-release/git @semantic-release/
 - `chore:` 构建过程或辅助工具的变动
 
 示例：
+
 ```bash
 git commit -m "feat: add support for new AI adapter"
 git commit -m "fix: resolve template path resolution issue"
@@ -592,7 +608,7 @@ git push
 - `.gitignore:53` - `dist` 目录被忽略，这是发布的关键问题
 - `tsconfig.json:6-7` - TypeScript 配置输出目录为 `dist`
 - `src/index.ts:1-21` - CLI 入口文件，使用 commander 定义命令
-- `bin/specflow.js:1-2` - CLI 脚本入口，引用编译后的代码
+- `bin/nanospec.js:1-2` - CLI 脚本入口，引用编译后的代码
 
 ### 相关文件
 
@@ -600,7 +616,7 @@ git push
 - `.gitignore` - Git 忽略规则（需要修改）
 - `tsconfig.json` - TypeScript 编译配置
 - `src/index.ts` - 主要源代码
-- `bin/specflow.js` - CLI 入口脚本
+- `bin/nanospec.js` - CLI 入口脚本
 - `README.md` - 项目文档
 
 ### 关键设计决策
@@ -615,6 +631,7 @@ git push
 #### 1. 包名冲突问题
 
 如果 `nano-spec` 包名已被占用，有以下选择：
+
 - 使用作用域包：`@your-username/nano-spec`
 - 修改包名：`nano-spec-cli`、`@your-username/nano-spec-cli` 等
 - 联系原包所有者协商转让
@@ -622,6 +639,7 @@ git push
 #### 2. 版本策略
 
 建议遵循语义化版本（SemVer）：
+
 - `MAJOR.MINOR.PATCH`
 - 破坏性变更：增加主版本号
 - 新功能：增加次版本号
@@ -630,10 +648,11 @@ git push
 #### 3. 测试建议
 
 在发布前确保：
+
 - 所有测试通过：`npm test`
 - 测试覆盖率达标：`npm run test:coverage`
 - 本地构建成功：`npm run build`
-- CLI 功能正常：`npm link && specflow --help`
+- CLI 功能正常：`npm link && nanospec --help`
 
 #### 4. 文档维护
 
@@ -653,25 +672,33 @@ git push
 ## 常见问题
 
 ### Q1: 发布时提示 "403 Forbidden"
+
 **A:** 检查以下几点：
+
 - npm token 是否正确配置
 - 包名是否已被占用
 - 是否有发布权限
 
 ### Q2: 用户安装后找不到命令
+
 **A:** 确保：
+
 - `package.json` 中 `bin` 字段正确
-- `bin/specflow.js` 文件存在且有正确的 shebang
+- `bin/nanospec.js` 文件存在且有正确的 shebang
 - `package.json` 中 `files` 字段包含 `bin` 目录
 
 ### Q3: CI/CD 失败
+
 **A:** 检查：
+
 - GitHub Actions 日志
 - Secrets 是否正确配置
 - 构建脚本是否在所有 Node 版本下都能运行
 
 ### Q4: 如何撤回已发布的版本？
+
 **A:**
+
 ```bash
 # 撤回特定版本（24小时内）
 npm unpublish nano-spec@1.0.0
@@ -685,4 +712,5 @@ npm unpublish nano-spec --force
 ---
 
 ## 分析时间
+
 2026-01-20 16:30:00

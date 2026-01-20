@@ -3,7 +3,7 @@
 - [x] 1.1 创建 package.json 配置文件（包含 Vitest 依赖）
 - [x] 1.2 创建 tsconfig.json 配置文件
 - [x] 1.3 创建 vitest.config.ts 配置文件
-- [x] 1.4 创建 bin/specflow.js 入口文件
+- [x] 1.4 创建 bin/nanospec.js 入口文件
 - [x] 1.5 创建 src/ 目录结构（commands/、adapters/、templates/）
 
 ## 2. CLI 框架搭建
@@ -18,7 +18,7 @@
 - [x] 3.1 编写 src/commands/init.test.ts 测试（TDD：先写测试）
 - [x] 3.2 实现 src/commands/init.ts 基础逻辑（通过测试）
 - [x] 3.3 实现目录存在性检查和 --force 处理
-- [x] 3.4 实现目录结构创建（specflow/、templates/）
+- [x] 3.4 实现目录结构创建（nanospec/、templates/）
 - [x] 3.5 实现 AGENTS.md 复制逻辑
 - [x] 3.6 实现 6 个产出物模板复制逻辑
 - [x] 3.7 集成 AI 适配器调用
@@ -28,7 +28,7 @@
 
 - [x] 4.1 编写 src/commands/new.test.ts 测试（TDD：先写测试）
 - [x] 4.2 实现 src/commands/new.ts 基础逻辑（通过测试）
-- [x] 4.3 实现初始化检查（specflow/ 目录存在性）
+- [x] 4.3 实现初始化检查（nanospec/ 目录存在性）
 - [x] 4.4 实现日期戳目录名生成
 - [x] 4.5 实现任务目录结构创建
 - [x] 4.6 实现 brief.md 文件创建（含占位符）
@@ -96,12 +96,12 @@
 - [x] 12.3 配置 npm test 脚本（运行 Vitest 测试）
 - [x] 12.4 配置 npm run test:watch 脚本（监听模式）
 - [x] 12.5 配置 npm run test:coverage 脚本（生成覆盖率报告）
-- [x] 12.6 测试 specflow init（默认 Cursor）
-- [x] 12.7 测试 specflow init --ai qwen
-- [x] 12.8 测试 specflow init --ai iflow
-- [x] 12.9 测试 specflow init --ai cline
-- [x] 12.10 测试 specflow init --force
-- [x] 12.11 测试 specflow new 创建任务目录
+- [x] 12.6 测试 nanospec init（默认 Cursor）
+- [x] 12.7 测试 nanospec init --ai qwen
+- [x] 12.8 测试 nanospec init --ai iflow
+- [x] 12.9 测试 nanospec init --ai cline
+- [x] 12.10 测试 nanospec init --force
+- [x] 12.11 测试 nanospec new 创建任务目录
 - [x] 12.12 验证所有生成的文件和目录结构
 - [x] 12.13 验证 TypeScript 类型检查通过
 - [x] 12.14 验证代码规模控制在 300 行左右
@@ -115,7 +115,7 @@
   - [x] 添加 `transformCommand` 方法（格式转换）
   - [x] 添加 `supportsVariables` 属性（是否支持变量替换）
 - [x] 13.2 实现模板管理优化
-  - [x] 创建通用模板目录（src/templates/commands/*.base）
+  - [x] 创建通用模板目录（src/templates/commands/\*.base）
   - [x] 创建 AI 工具特定模板目录（src/templates/adapters/{cursor,qwen,iflow,cline}/）
   - [x] 实现模板选择策略（优先特定模板，回退到通用模板）
 - [x] 13.3 实现 iflow 适配器格式转换

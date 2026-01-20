@@ -1,6 +1,6 @@
 # AGENTS (Generic)
 
-本文档定义 Spec Flow 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
+本文档定义 Nano Spec 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
 
 ---
 
@@ -11,7 +11,7 @@
 | 变量           | 值         | 说明       |
 | -------------- | ---------- | ---------- |
 | `<cmd_prefix>` | `spec`     | 命令前缀   |
-| `<specs_dir>`  | `specflow` | 规格根目录 |
+| `<specs_dir>`  | `nanospec` | 规格根目录 |
 | `<task_name>`  | -          | 任务名称   |
 
 ### 1.2 命令速查

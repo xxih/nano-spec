@@ -1,6 +1,6 @@
 # Command: spec.3-execute
 # Description: 执行交付 - 按任务清单逐项交付，维护状态，发现偏差及时对齐
-# Category: specflow
+# Category: nanospec
 # Version: 1
 
 description = "执行交付 - 按任务清单逐项交付，维护状态，发现偏差及时对齐"

@@ -32,7 +32,7 @@ npm install -g nano-spec-cli
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd spec-flow
+cd nano-spec
 
 # Install dependencies
 npm install
@@ -268,7 +268,7 @@ npm install -g nano-spec-cli
 ```bash
 # 克隆仓库
 git clone <repository-url>
-cd spec-flow
+cd nano-spec
 
 # 安装依赖
 npm install
@@ -490,7 +490,7 @@ MIT License
 
 ```bash
 git clone <repository-url>
-cd spec-flow
+cd nano-spec
 npm install
 ```
 
@@ -537,7 +537,7 @@ npm run test:coverage
 ### Project Structure for Development / 开发项目结构
 
 ```
-spec-flow/
+nano-spec/
 ├── src/
 │   ├── index.ts                    # CLI entry point / CLI 入口点
 │   ├── commands/
@@ -566,7 +566,7 @@ spec-flow/
 │           ├── alignment.md
 │           └── summary.md
 ├── bin/
-│   └── specflow.js                 # CLI entry point / CLI 入口点
+│   └── nanospec.js                 # CLI entry point / CLI 入口点
 ├── package.json
 ├── tsconfig.json
 ├── vitest.config.ts
@@ -646,6 +646,6 @@ npm run build
 
 ## Support / 支持
 
-For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/xxih/spec-flow).
+For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/xxih/nano-spec).
 
-如有问题、疑问或贡献，请访问 [GitHub 仓库](https://github.com/xxih/spec-flow)。
+如有问题、疑问或贡献，请访问 [GitHub 仓库](https://github.com/xxih/nano-spec)。

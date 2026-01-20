@@ -2,13 +2,14 @@
 
 ## 背景与目标
 
-当前 Spec Flow 系统存在以下问题：
+当前 Nano Spec 系统存在以下问题：
 
 1. **Cursor 产物格式错误**：Cursor 生成的产物仅简单地将 TOML 文本复制到 MD 文档中，格式不匹配，不符合预期输出要求
 2. **模板机制复杂**：需要优化现有模板机制，使其更加灵活
 3. **prompt 需要优化**：现有的 prompt 结构需要改进以获得更好的 AI 生成结果
 
 **目标**：
+
 - 优化所有命令的 prompt，确保 AI 能够生成符合要求的输出格式
 - 简化模板机制，将其变为可选功能
 - 所有命令默认内嵌模板结构，同时支持通过 `templates/` 目录进行定制
@@ -17,7 +18,7 @@
 ## 核心组成
 
 ```
-specflow/
+nanospec/
 ├── AGENTS.md                          # 通用规范文档（基准）
 ├── templates/                         # 可选的输出产物模板定制目录
 │   ├── 1-spec.md                      # 可选的规格说明模板
@@ -40,9 +41,9 @@ specflow/
 
 **核心组件**：
 
-1. **AGENTS.md** - 定义通用规范、目录结构、规则和定制方式（位于 specflow/ 根目录）
+1. **AGENTS.md** - 定义通用规范、目录结构、规则和定制方式（位于 nanospec/ 根目录）
 2. **核心 prompt** - 六个命令的完整 prompt 定义（flow.1-spec, flow.2-plan, flow.3-execute, flow.accept, flow.align, flow.summary），内嵌在各自的 TOML 配置文件中
-3. **模板机制** - 可选的输出产物定制层，仅用于存放 outputs/*.md 模板文件，优先级：`templates/*.md` > `commands 内嵌默认模板`
+3. **模板机制** - 可选的输出产物定制层，仅用于存放 outputs/_.md 模板文件，优先级：`templates/_.md`>`commands 内嵌默认模板`
 
 ## 核心原则
 
@@ -78,7 +79,7 @@ specflow/
 ### 4. 文档一致性
 
 - [ ] `.iflow/commands/` 下的 TOML 文件已更新，内嵌完整的默认 prompt
-- [ ] `specflow/AGENTS.md` 已更新为最新版本（包含总览、结构、规则、定制等完整章节）
+- [ ] `nanospec/AGENTS.md` 已更新为最新版本（包含总览、结构、规则、定制等完整章节）
 - [ ] `templates/` 目录（若存在）仅包含输出产物模板文件
 - [ ] 所有文档引用路径正确
 

@@ -1,7 +1,7 @@
-import { existsSync, readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import type { CommandFormat } from './index.js';
+import {existsSync, readFileSync} from 'fs';
+import {dirname, join} from 'path';
+import {fileURLToPath} from 'url';
+import type {CommandFormat} from './index.js';
 
 /**
  * 获取命令模板内容
@@ -13,33 +13,37 @@ import type { CommandFormat } from './index.js';
  * @returns 模板内容，如果不存在则返回 null
  */
 export function getCommandTemplate(
-  templatesDir: string,
-  adapterName: string,
-  commandName: string
+	templatesDir: string,
+	adapterName: string,
+	commandName: string
 ): string | null {
-  // 1. 优先从内置的 .iflow/commands/ 读取（内联模板）
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
-  const builtinCommandsDir = join(__dirname, '../../.iflow/commands');
-  const builtinPath = join(builtinCommandsDir, `${commandName}.toml`);
+	// 1. 优先从内置的 .iflow/commands/ 读取（内联模板）
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+	const builtinCommandsDir = join(__dirname, '../../.iflow/commands');
+	const builtinPath = join(builtinCommandsDir, `${commandName}.toml`);
 
-  if (existsSync(builtinPath)) {
-    return readFileSync(builtinPath, 'utf-8');
-  }
+	if (existsSync(builtinPath)) {
+		return readFileSync(builtinPath, 'utf-8');
+	}
 
-  // 2. 尝试从项目定制的 templates/commands/ 读取
-  const projectCommandsPath = join(templatesDir, 'commands', `${commandName}.toml`);
-  if (existsSync(projectCommandsPath)) {
-    return readFileSync(projectCommandsPath, 'utf-8');
-  }
+	// 2. 尝试从项目定制的 templates/commands/ 读取
+	const projectCommandsPath = join(
+		templatesDir,
+		'commands',
+		`${commandName}.toml`
+	);
+	if (existsSync(projectCommandsPath)) {
+		return readFileSync(projectCommandsPath, 'utf-8');
+	}
 
-  // 3. 尝试读取 .md 格式的通用模板（向后兼容）
-  const mdPath = join(templatesDir, 'commands', `${commandName}.md`);
-  if (existsSync(mdPath)) {
-    return readFileSync(mdPath, 'utf-8');
-  }
+	// 3. 尝试读取 .md 格式的通用模板（向后兼容）
+	const mdPath = join(templatesDir, 'commands', `${commandName}.md`);
+	if (existsSync(mdPath)) {
+		return readFileSync(mdPath, 'utf-8');
+	}
 
-  return null;
+	return null;
 }
 
 /**
@@ -50,67 +54,70 @@ export function getCommandTemplate(
  * @param commandName 命令名称（如 spec.1-spec）
  * @returns 解析后的命令对象
  */
-export function parseTomlCommand(content: string, commandName: string): {
-  name: string;
-  description: string;
-  prompt: string;
+export function parseTomlCommand(
+	content: string,
+	commandName: string
+): {
+	name: string;
+	description: string;
+	prompt: string;
 } {
-  const lines = content.split('\n');
-  let description = '';
-  let prompt = '';
-  let inPrompt = false;
-  const promptLines: string[] = [];
+	const lines = content.split('\n');
+	let description = '';
+	let prompt = '';
+	let inPrompt = false;
+	const promptLines: string[] = [];
 
-  for (const line of lines) {
-    // 提取 description
-    if (line.startsWith('description =')) {
-      // 移除引号和等号，获取描述
-      const match = line.match(/description\s*=\s*["'](.+?)["']/);
-      if (match) {
-        description = match[1];
-      }
-    }
-    // 提取 prompt（多行字符串）
-    else if (line.startsWith('prompt =')) {
-      // 先检查单行三引号字符串
-      const tripleQuoteMatch = line.match(/prompt\s*=\s*"""(.*)"""/);
-      if (tripleQuoteMatch) {
-        // 单行三引号字符串
-        prompt = tripleQuoteMatch[1].trim();
-        inPrompt = false;
-      } else if (line.includes('"""')) {
-        // 多行字符串开始（跨行）
-        inPrompt = true;
-      } else {
-        // 单行普通字符串
-        const match = line.match(/prompt\s*=\s*["'](.+?)["']/);
-        if (match) {
-          prompt = match[1];
-        }
-        inPrompt = false;
-      }
-    }
-    // 读取多行 prompt 内容
-    else if (inPrompt) {
-      if (line.trim() === '"""') {
-        // 多行字符串结束
-        inPrompt = false;
-      } else {
-        promptLines.push(line);
-      }
-    }
-  }
+	for (const line of lines) {
+		// 提取 description
+		if (line.startsWith('description =')) {
+			// 移除引号和等号，获取描述
+			const match = line.match(/description\s*=\s*["'](.+?)["']/);
+			if (match) {
+				description = match[1];
+			}
+		}
+		// 提取 prompt（多行字符串）
+		else if (line.startsWith('prompt =')) {
+			// 先检查单行三引号字符串
+			const tripleQuoteMatch = line.match(/prompt\s*=\s*"""(.*)"""/);
+			if (tripleQuoteMatch) {
+				// 单行三引号字符串
+				prompt = tripleQuoteMatch[1].trim();
+				inPrompt = false;
+			} else if (line.includes('"""')) {
+				// 多行字符串开始（跨行）
+				inPrompt = true;
+			} else {
+				// 单行普通字符串
+				const match = line.match(/prompt\s*=\s*["'](.+?)["']/);
+				if (match) {
+					prompt = match[1];
+				}
+				inPrompt = false;
+			}
+		}
+		// 读取多行 prompt 内容
+		else if (inPrompt) {
+			if (line.trim() === '"""') {
+				// 多行字符串结束
+				inPrompt = false;
+			} else {
+				promptLines.push(line);
+			}
+		}
+	}
 
-  // 只有当 prompt 为空时，才使用 promptLines
-  if (!prompt) {
-    prompt = promptLines.join('\n').trim();
-  }
+	// 只有当 prompt 为空时，才使用 promptLines
+	if (!prompt) {
+		prompt = promptLines.join('\n').trim();
+	}
 
-  return {
-    name: commandName,
-    description: description || commandName,
-    prompt: prompt || '',
-  };
+	return {
+		name: commandName,
+		description: description || commandName,
+		prompt: prompt || ''
+	};
 }
 
 /**
@@ -120,38 +127,38 @@ export function parseTomlCommand(content: string, commandName: string): {
  * @returns 解析后的元数据和内容
  */
 export function parseMarkdownCommand(content: string): {
-  command: string;
-  description: string;
-  category: string;
-  version: string;
-  prompt: string;
+	command: string;
+	description: string;
+	category: string;
+	version: string;
+	prompt: string;
 } {
-  const lines = content.split('\n');
-  let command = '';
-  let description = '';
-  let category = 'specflow';
-  let version = '1';
-  let prompt = '';
-  let inPrompt = false;
+	const lines = content.split('\n');
+	let command = '';
+	let description = '';
+	let category = 'nanospec';
+	let version = '1';
+	let prompt = '';
+	let inPrompt = false;
 
-  for (const line of lines) {
-    if (line.startsWith('# Command:')) {
-      command = line.replace('# Command:', '').trim();
-    } else if (line.startsWith('# Description:')) {
-      description = line.replace('# Description:', '').trim();
-    } else if (line.startsWith('# Category:')) {
-      category = line.replace('# Category:', '').trim();
-    } else if (line.startsWith('# Version:')) {
-      version = line.replace('# Version:', '').trim();
-    } else if (line.startsWith('prompt =')) {
-      inPrompt = true;
-      prompt += line + '\n';
-    } else if (inPrompt) {
-      prompt += line + '\n';
-    }
-  }
+	for (const line of lines) {
+		if (line.startsWith('# Command:')) {
+			command = line.replace('# Command:', '').trim();
+		} else if (line.startsWith('# Description:')) {
+			description = line.replace('# Description:', '').trim();
+		} else if (line.startsWith('# Category:')) {
+			category = line.replace('# Category:', '').trim();
+		} else if (line.startsWith('# Version:')) {
+			version = line.replace('# Version:', '').trim();
+		} else if (line.startsWith('prompt =')) {
+			inPrompt = true;
+			prompt += line + '\n';
+		} else if (inPrompt) {
+			prompt += line + '\n';
+		}
+	}
 
-  return { command, description, category, version, prompt };
+	return {command, description, category, version, prompt};
 }
 
 /**
@@ -161,9 +168,10 @@ export function parseMarkdownCommand(content: string): {
  * @returns TOML 格式的命令内容
  */
 export function markdownToToml(content: string): string {
-  const { command, description, category, version, prompt } = parseMarkdownCommand(content);
+	const {command, description, category, version, prompt} =
+		parseMarkdownCommand(content);
 
-  return `# Command: ${command}
+	return `# Command: ${command}
 # Description: ${description}
 # Category: ${category}
 # Version: ${version}
@@ -182,14 +190,14 @@ prompt = """${prompt}"""
  * @returns 替换后的内容
  */
 export function replaceVariables(
-  content: string,
-  variables: Record<string, string>
+	content: string,
+	variables: Record<string, string>
 ): string {
-  let result = content;
-  for (const [key, value] of Object.entries(variables)) {
-    result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
-  }
-  return result;
+	let result = content;
+	for (const [key, value] of Object.entries(variables)) {
+		result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
+	}
+	return result;
 }
 
 /**
@@ -199,11 +207,11 @@ export function replaceVariables(
  * @returns 文件扩展名
  */
 export function getFileExtension(format: CommandFormat): string {
-  const extensions: Record<CommandFormat, string> = {
-    md: '.md',
-    toml: '.toml',
-    json: '.json',
-    yaml: '.yaml',
-  };
-  return extensions[format] || '.md';
+	const extensions: Record<CommandFormat, string> = {
+		md: '.md',
+		toml: '.toml',
+		json: '.json',
+		yaml: '.yaml'
+	};
+	return extensions[format] || '.md';
 }

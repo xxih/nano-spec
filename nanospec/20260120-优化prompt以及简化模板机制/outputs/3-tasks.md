@@ -1,8 +1,8 @@
 ## 1. 更新 AGENTS.md
 
 - [x] 1.1 读取 `assets/核心prompt/AGENTS.md` 内容
-- [x] 1.2 备份当前 `specflow/AGENTS.md`
-- [x] 1.3 用新内容替换 `specflow/AGENTS.md`（已验证内容一致，无需替换）
+- [x] 1.2 备份当前 `nanospec/AGENTS.md`
+- [x] 1.3 用新内容替换 `nanospec/AGENTS.md`（已验证内容一致，无需替换）
 - [x] 1.4 验证文件格式正确，包含所有章节
 
 ## 2. 更新 flow.1-spec.toml
@@ -62,7 +62,7 @@
 
 ## 9. 验证更新效果
 
-- [x] 9.1 检查 `specflow/AGENTS.md` 格式正确
+- [x] 9.1 检查 `nanospec/AGENTS.md` 格式正确
 - [x] 9.2 检查所有 `.iflow/commands/flow.*.toml` 的 prompt 字段内容完整
 - [x] 9.3 确认 `templates/` 目录仅包含输出产物模板文件（若存在）（当前不存在）
 - [x] 9.4 确认所有文档引用路径正确

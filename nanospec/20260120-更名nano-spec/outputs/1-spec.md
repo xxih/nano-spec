@@ -2,7 +2,7 @@
 
 ## 背景与目标
 
-将整个 specflow-cli 项目更名为 **nano-spec**，以更好地反映其"最小化、轻量级"的设计理念。同时将命令前缀从 `flow.` 改为 `spec.`，使命名更加简洁直观。
+将整个 nanospec-cli 项目更名为 **nano-spec**，以更好地反映其"最小化、轻量级"的设计理念。同时将命令前缀从 `flow.` 改为 `spec.`，使命名更加简洁直观。
 
 ## 核心组成
 
@@ -21,7 +21,7 @@
 │   ├── 所有文档和注释
 │   └── 所有代码中的字符串引用
 └── 项目元数据
-    ├── package.json (name: "specflow-cli" → "nano-spec-cli")
+    ├── package.json (name: "nanospec-cli" → "nano-spec-cli")
     ├── README.md (标题和描述)
     └── 代码仓库配置
 ```
@@ -37,7 +37,7 @@
 
 2. **文档更新**
    - [ ] README.md 中所有 `flow.` 引用改为 `spec.`
-   - [ ] README.md 中 "SpecFlow" 改为 "nano-spec"
+   - [ ] README.md 中 "nanospec" 改为 "nano-spec"
    - [ ] 所有任务文档（1-spec.md, 2-plan.md, 3-tasks.md）中的引用已更新
    - [ ] AGENTS.md 中的变量定义 `<cmd_prefix>` 值改为 `spec`
 
@@ -50,7 +50,7 @@
 4. **功能验证**
    - [ ] `npm run build` 成功，无编译错误
    - [ ] `npm test` 全部通过
-   - [ ] 生成的命令文件名正确（spec.*）
+   - [ ] 生成的命令文件名正确（spec.\*）
    - [ ] 命令内容中的引用正确
 
 ## 约束与注意

@@ -1,6 +1,6 @@
 # Command: spec.accept
 # Description: 验收用例 - 把规格转化为可执行的验收用例
-# Category: specflow
+# Category: nanospec
 # Version: 1
 
 description = "验收用例 - 把规格转化为可执行的验收用例"

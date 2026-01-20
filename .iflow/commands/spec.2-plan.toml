@@ -1,6 +1,6 @@
 # Command: spec.2-plan
 # Description: 方案设计 - 把规格转化为可执行的方案和任务清单
-# Category: specflow
+# Category: nanospec
 # Version: 1
 
 description = "方案设计 - 把规格转化为可执行的方案和任务清单"
