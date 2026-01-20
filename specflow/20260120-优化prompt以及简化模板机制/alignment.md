@@ -32,3 +32,9 @@
     - utils.ts 更新：优化模板获取逻辑，优先级为 内置 > 项目定制
     - 所有适配器更新：统一使用 `parseTomlCommand` 解析 TOML 格式
   - ↳ [已确认] 模板机制已重构完成，支持灵活定制 `@2026-01-21`
+
+- [优化] Prompt 同步更新 `@2026-01-21`
+  - 变更：用户修改了 `assets/核心prompt/flow.2-plan.md`，新增了 "Decision Protocol" 部分
+  - 内容：添加了针对不同任务类型（Coding Task vs Content/Writing Task）的判断逻辑
+  - 影响：需要同步更新到内置的 `.iflow/commands/flow.2-plan.toml`
+  - ↳ [已确认] 已同步更新 flow.2-plan.toml，添加 Decision Protocol 部分 `@2026-01-21`
