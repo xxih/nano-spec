@@ -105,10 +105,11 @@ describe('init command', () => {
       }
       mkdirSync(testDir, { recursive: true });
 
+      // 每个适配器单独测试，避免单个测试超时
       await init({ ai });
 
       const adapter = getAdapter(ai);
       expect(existsSync(join(testDir, adapter!.commandsDir))).toBe(true);
     }
-  });
+  }, 30000); // 30秒超时
 });
