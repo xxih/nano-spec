@@ -14,7 +14,7 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "tsc && xcopy /E /I /Y src\\static dist\\static && copy dist\\static\\_AGENTS.md AGENTS.md",
+		"build": "tsc && xcopy /E /I /Y src\\static dist\\static",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",
