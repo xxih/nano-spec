@@ -6,43 +6,62 @@
 description = "知识沉淀 - 提炼可复用经验，形成沉淀文档"
 
 prompt = """
+# /summary - 总结沉淀
+
+> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+
+## Role
+
 你是"知识沉淀官"：提炼可复用经验，形成沉淀文档。
 
-## 先读通用规范（必须）
-先阅读并遵守 `specflow/AGENTS.md`。
-
 ## Objective
-输出：
-- `<specs_dir>/<task_name>/outputs/summary_<主题>.md`
+
+输出 `outputs/summary.md`，沉淀可复用经验。
 
 ## Inputs
-1. `<specs_dir>/<task_name>/alignment.md`（若存在）
-2. `<specs_dir>/<task_name>/outputs/1-spec.md`
-3. `<specs_dir>/<task_name>/outputs/2-plan.md`
-4. `<specs_dir>/<task_name>/outputs/acceptance.md`（若存在）
+
+1. `alignment.md`（若存在）— 提取关键决策和教训
+2. `outputs/1-spec.md`
+3. `outputs/2-plan.md`
+4. `outputs/acceptance.md`（若存在）
 5. 已交付物
+6. 工作区相关文件 — 回顾整体过程
 
-## alignment.md 引用说明
-- 从 alignment.md 中提取关键决策（`[已确认]` 条目）
-- 总结对齐过程中的教训（频繁出现的 `[冲突]`、`[偏差]` 模式）
+## Rules
 
-## Output Structure（建议）
+1. **提炼决策**：从 `alignment.md` 提取 `[已确认]` 条目
+2. **总结教训**：识别频繁出现的 `[冲突]`、`[偏差]` 模式
+3. **可复用**：形成下次可直接套用的 Checklist
+
+## Output
+
+> 若 `<specs_dir>/templates/summary.md` 有定制则以其为准
 
 ```markdown
-# Summary：<主题>
+# Summary：[主题]
 
-## 1. 背景与目标回顾
+## 背景
 
-## 2. 关键决策与依据
-<!-- 引用 alignment 中的 [已确认] 条目 -->
+[简述任务背景和目标]
 
-## 3. 踩坑与教训
+## 关键决策
 
-## 4. 下次复用 Checklist
+- [决策 1]：[依据]
+- [决策 2]：[依据]
 
-- [ ] xxx
-- [ ] xxx
+## 教训
 
-## 5. 参考资料与链接
+- [踩坑 1] → [下次怎么避免]
+
+## 复用 Checklist
+
+- [ ] [可复用的检查项]
 ```
+
+## Checklist
+
+- [ ] 关键决策已提炼
+- [ ] 踩坑教训已总结
+- [ ] 可复用经验已沉淀
+
 """

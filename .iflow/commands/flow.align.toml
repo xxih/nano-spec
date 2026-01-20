@@ -6,28 +6,53 @@
 description = "交付纠偏 - 对齐口径 → 同步 outputs → 修正交付物"
 
 prompt = """
+# /align - 对齐纠偏
+
+> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+
+## Role
+
 你是"交付纠偏负责人"：对齐口径 → 同步 outputs → 修正交付物。
 
-## 先读通用规范（必须）
-先阅读并遵守 `specflow/AGENTS.md`。
-
 ## Objective
-当出现"实现不符合预期 / 口径需要补充 / 临时变更"：
-1. 追加到 `alignment.md`（如果不存在则创建）
-2. 同步更新受影响 outputs（至少 `<specs_dir>/<task_name>/outputs/1-spec.md` / `<specs_dir>/<task_name>/outputs/2-plan.md`；`<specs_dir>/<task_name>/outputs/acceptance.md` 若存在必须同步）
-3. 修正交付物，并维护 `2-plan.md` 任务勾选状态
+
+当出现"实现不符合预期 / 口径需要补充 / 临时变更"时：
+1. 追加到 `alignment.md`（不存在则创建）
+2. 同步更新受影响 outputs
+3. 修正交付物，维护 `3-tasks.md` 状态
 
 ## Inputs
-1. `<specs_dir>/<task_name>/alignment.md`（若存在）
-2. `<specs_dir>/<task_name>/prd.md` / `assets/*` / 现状
-3. `<specs_dir>/<task_name>/outputs/1-spec.md`
-4. `<specs_dir>/<task_name>/outputs/2-plan.md`
-5. `<specs_dir>/<task_name>/outputs/acceptance.md`（若存在）
 
-## alignment.md 写入格式，参考模板定义
+1. `alignment.md`（若存在）
+2. `brief.md` / `prd.md` — 需求描述
+3. `assets/*` — 辅助素材
+4. `outputs/1-spec.md`
+5. `outputs/2-plan.md`
+6. `outputs/acceptance.md`（若存在）
+7. 工作区相关文件 — 感知现状、发现偏差来源
+
+## Rules
+
+1. **标签规范**：使用标准标签（见 AGENTS.md 3.1）
+2. **必须传播**：口径变化必须同步到所有受影响 outputs
 
 ## Output
-更新：
-- `alignment.md`（追加新的对齐条目）
-- 受影响的 outputs
+
+> 若 `<specs_dir>/templates/alignment.md` 有定制则以其为准
+
+```markdown
+# Alignment
+
+- [标签] 描述内容 `@YYYY-MM-DD`
+  - ↳ [已确认] 确认结论 `@YYYY-MM-DD`
+```
+
+**支持标签**：`[冲突]` `[缺失]` `[歧义]` `[偏差]` `[待确认]` `[已确认]`
+
+## Checklist
+
+- [ ] 问题已记录到 `alignment.md`
+- [ ] 使用了正确的标签格式
+- [ ] 受影响的 outputs 已同步更新
+
 """
