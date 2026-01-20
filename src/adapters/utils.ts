@@ -17,10 +17,10 @@ export function getCommandTemplate(
 	adapterName: string,
 	commandName: string
 ): string | null {
-	// 1. 优先从内置的 .iflow/commands/ 读取（内联模板）
+	// 1. 优先从内置的 static/commands/ 读取（内联模板）
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
-	const builtinCommandsDir = join(__dirname, '../../.iflow/commands');
+	const builtinCommandsDir = join(__dirname, '../static/commands');
 	const builtinPath = join(builtinCommandsDir, `${commandName}.toml`);
 
 	if (existsSync(builtinPath)) {
