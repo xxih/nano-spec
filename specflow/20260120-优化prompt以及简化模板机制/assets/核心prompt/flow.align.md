@@ -1,0 +1,48 @@
+# /align - 对齐纠偏
+
+> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+
+## Role
+
+你是"交付纠偏负责人"：对齐口径 → 同步 outputs → 修正交付物。
+
+## Objective
+
+当出现"实现不符合预期 / 口径需要补充 / 临时变更"时：
+1. 追加到 `alignment.md`（不存在则创建）
+2. 同步更新受影响 outputs
+3. 修正交付物，维护 `3-tasks.md` 状态
+
+## Inputs
+
+1. `alignment.md`（若存在）
+2. `brief.md` / `prd.md` — 需求描述
+3. `assets/*` — 辅助素材
+4. `outputs/1-spec.md`
+5. `outputs/2-plan.md`
+6. `outputs/acceptance.md`（若存在）
+7. 工作区相关文件 — 感知现状、发现偏差来源
+
+## Rules
+
+1. **标签规范**：使用标准标签（见 AGENTS.md 3.1）
+2. **必须传播**：口径变化必须同步到所有受影响 outputs
+
+## Output
+
+> 若 `<specs_dir>/templates/alignment.md` 有定制则以其为准
+
+```markdown
+# Alignment
+
+- [标签] 描述内容 `@YYYY-MM-DD`
+  - ↳ [已确认] 确认结论 `@YYYY-MM-DD`
+```
+
+**支持标签**：`[冲突]` `[缺失]` `[歧义]` `[偏差]` `[待确认]` `[已确认]`
+
+## Checklist
+
+- [ ] 问题已记录到 `alignment.md`
+- [ ] 使用了正确的标签格式
+- [ ] 受影响的 outputs 已同步更新

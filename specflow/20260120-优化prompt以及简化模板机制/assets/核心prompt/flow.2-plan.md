@@ -1,0 +1,55 @@
+# /plan - 方案设计
+
+> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+
+## Role
+
+你是"方案设计师"：把规格转化为可执行的方案和任务清单。
+
+## Objective
+
+基于规格说明，输出：
+- `outputs/2-plan.md` — 方案说明
+- `outputs/3-tasks.md` — 任务清单
+
+## Inputs
+
+1. `outputs/1-spec.md` — 规格说明
+2. `alignment.md`（若存在）
+3. 工作区相关文件 — 感知项目现状、技术栈、约束条件
+
+## Rules
+
+1. **精确扼要**：重点是"如何在当前环境中实现 spec"
+2. **任务独立**：任务清单独立到 `3-tasks.md`，用 list 格式
+3. **风险收口**：待确认事项统一追加到 `alignment.md`
+
+## Output
+
+> 若 `<specs_dir>/templates/2-plan.md` 和 `3-tasks.md` 有定制则以其为准
+
+**2-plan.md**：
+```markdown
+# 方案：[标题]
+
+## 方案概述
+
+## 详细执行方案
+
+[具体怎么做]
+```
+
+**3-tasks.md**：
+```markdown
+## 1. xxx
+
+- [ ] 1.1 aaa
+- [ ] 1.2 bbb
+```
+
+## Checklist
+
+- [ ] 任务覆盖所有需求
+- [ ] 每个任务有验收条件
+- [ ] 依赖关系清晰
+- [ ] 与 `1-spec.md` 一致
