@@ -4,242 +4,6 @@
 
 ---
 
-## English
-
-A minimal extendable Spec-Driven framework. Not just for code -- for writing, research, and anything you want to get done.
-
-### Overview
-
-NanoSpec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, qwen, iflow, cline) and provides a standardized workflow for specification, planning, execution, and acceptance.
-
-### Features
-
-- **Minimal & Simple**: Only 6 slash commands, CLI focuses on initialization
-- **Ready to Use**: One-command initialization with `nanospec init`
-- **Multi-AI Support**: Generate command files for different AI tools
-- **Customizable**: Modify templates and add common documents for customization
-
-### Installation
-
-#### Global Installation
-
-```bash
-npm install -g nano-spec
-```
-
-#### Local Development
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd nano-spec
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Link globally for testing
-npm link
-```
-
-### Quick Start
-
-1. **Initialize NanoSpec in your project**
-
-```bash
-# Initialize with default AI tool (Cursor)
-nanospec init
-
-# Initialize with specific AI tool
-nanospec init --ai qwen
-nanospec init --ai iflow
-nanospec init --ai cline
-
-# Force overwrite existing files
-nanospec init --force
-```
-
-2. **Create a new task**
-
-```bash
-# Create a task with default name
-nanospec new
-
-# Create a task with custom name
-nanospec new "User Authentication"
-```
-
-3. **Start the workflow**
-
-Edit the `brief.md` file in your task directory to describe your requirements, then use the slash commands:
-
-- `/spec.1-spec` - Write specifications
-- `/spec.2-plan` - Create technical plan and task breakdown
-- `/spec.3-execute` - Execute and deliver
-- `/spec.accept` - Create acceptance test cases
-- `/spec.align` - Align and correct deviations
-- `/spec.summary` - Summarize and document
-
-### Project Structure
-
-After initialization, your project will have the following structure:
-
-```
-your-project/
-├── nanospec/
-│   ├── AGENTS.md                    # General rules and guidelines
-│   ├── templates/                   # Output templates
-│   │   ├── 1-spec.md
-│   │   ├── 2-plan.md
-│   │   ├── 3-tasks.md
-│   │   ├── acceptance.md
-│   │   ├── alignment.md
-│   │   └── summary.md
-│   └── <task-name>/                 # Task directories
-│       ├── brief.md                 # Requirement description
-│       ├── assets/                  # Supporting materials
-│       ├── alignment.md             # Alignment records (optional)
-│       └── outputs/
-│           ├── 1-spec.md
-│           ├── 2-plan.md
-│           ├── 3-tasks.md
-│           ├── acceptance.md
-│           └── summary-*.md
-├── .cursor/commands/                # Cursor commands (if used)
-│   ├── spec.1-spec.md
-│   ├── spec.2-plan.md
-│   ├── spec.3-execute.md
-│   ├── spec.accept.md
-│   ├── spec.align.md
-│   └── spec.summary.md
-└── ... (other project files)
-```
-
-### Commands Reference
-
-#### nanospec init
-
-Initialize NanoSpec project structure.
-
-```bash
-nanospec init [options]
-```
-
-**Options:**
-
-- `--ai <tool>`: AI tool type (default: cursor)
-  - Available: cursor, qwen, iflow, cline
-- `-f, --force`: Force overwrite existing files
-
-#### nanospec new
-
-Create a new task directory.
-
-```bash
-nanospec new [name]
-```
-
-**Arguments:**
-
-- `name`: Task name (optional, default: "待命名")
-
-### Workflow Guide
-
-#### 1. Specification Phase
-
-Use `/spec.1-spec` to write detailed specifications based on requirements in `brief.md` and supporting materials in `assets/`.
-
-**Output:** `outputs/1-spec.md`
-
-#### 2. Planning Phase
-
-Use `/spec.2-plan` to create technical plans and task breakdowns.
-
-**Outputs:**
-
-- `outputs/2-plan.md` - Technical plan
-- `outputs/3-tasks.md` - Task checklist
-
-#### 3. Execution Phase
-
-Use `/spec.3-execute` to execute tasks and deliver results.
-
-**Action:** Update task completion status in `outputs/3-tasks.md`
-
-#### 4. Acceptance Phase
-
-Use `/spec.accept` to create acceptance test cases.
-
-**Output:** `outputs/acceptance.md` (optional)
-
-#### 5. Alignment Phase
-
-Use `/spec.align` when conflicts, ambiguities, or deviations are discovered.
-
-**Output:** `alignment.md` (created only when needed)
-
-#### 6. Summary Phase
-
-Use `/spec.summary` to summarize and document the completed work.
-
-**Output:** `outputs/summary-<date>.md` (optional)
-
-### Priority Rules
-
-When processing information, the following priority is applied:
-
-```
-alignment.md > brief.md / prd.md > assets/* > current state
-```
-
-**Important:** When changes occur during any phase, propagate them to:
-
-1. `1-spec.md`
-2. `2-plan.md` / `3-tasks.md`
-3. `acceptance.md` (if exists)
-
-### Testing
-
-Run the test suite:
-
-```bash
-# All tests
-npm test
-
-# Watch mode
-npm run test:watch
-
-# Coverage report
-npm run test:coverage
-```
-
-### Building
-
-Build the project for production:
-
-```bash
-npm run build
-```
-
-The compiled files will be in the `dist/` directory.
-
-### Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. Fork the repository
-2. Create a feature branch
-3. Ensure all tests pass
-4. Submit a pull request
-
-### License
-
-MIT License
-
----
-
 ## 中文
 
 一个极简且可扩展的规格驱动框架。不仅适用于代码——也适用于写作、研究和任何你想完成的事情。
@@ -471,6 +235,242 @@ npm run build
 4. 提交拉取请求
 
 ### 许可证
+
+MIT License
+
+---
+
+## English
+
+A minimal extendable Spec-Driven framework. Not just for code -- for writing, research, and anything you want to get done.
+
+### Overview
+
+NanoSpec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, qwen, iflow, cline) and provides a standardized workflow for specification, planning, execution, and acceptance.
+
+### Features
+
+- **Minimal & Simple**: Only 6 slash commands, CLI focuses on initialization
+- **Ready to Use**: One-command initialization with `nanospec init`
+- **Multi-AI Support**: Generate command files for different AI tools
+- **Customizable**: Modify templates and add common documents for customization
+
+### Installation
+
+#### Global Installation
+
+```bash
+npm install -g nano-spec
+```
+
+#### Local Development
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd nano-spec
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Link globally for testing
+npm link
+```
+
+### Quick Start
+
+1. **Initialize NanoSpec in your project**
+
+```bash
+# Initialize with default AI tool (Cursor)
+nanospec init
+
+# Initialize with specific AI tool
+nanospec init --ai qwen
+nanospec init --ai iflow
+nanospec init --ai cline
+
+# Force overwrite existing files
+nanospec init --force
+```
+
+2. **Create a new task**
+
+```bash
+# Create a task with default name
+nanospec new
+
+# Create a task with custom name
+nanospec new "User Authentication"
+```
+
+3. **Start the workflow**
+
+Edit the `brief.md` file in your task directory to describe your requirements, then use the slash commands:
+
+- `/spec.1-spec` - Write specifications
+- `/spec.2-plan` - Create technical plan and task breakdown
+- `/spec.3-execute` - Execute and deliver
+- `/spec.accept` - Create acceptance test cases
+- `/spec.align` - Align and correct deviations
+- `/spec.summary` - Summarize and document
+
+### Project Structure
+
+After initialization, your project will have the following structure:
+
+```
+your-project/
+├── nanospec/
+│   ├── AGENTS.md                    # General rules and guidelines
+│   ├── templates/                   # Output templates
+│   │   ├── 1-spec.md
+│   │   ├── 2-plan.md
+│   │   ├── 3-tasks.md
+│   │   ├── acceptance.md
+│   │   ├── alignment.md
+│   │   └── summary.md
+│   └── <task-name>/                 # Task directories
+│       ├── brief.md                 # Requirement description
+│       ├── assets/                  # Supporting materials
+│       ├── alignment.md             # Alignment records (optional)
+│       └── outputs/
+│           ├── 1-spec.md
+│           ├── 2-plan.md
+│           ├── 3-tasks.md
+│           ├── acceptance.md
+│           └── summary-*.md
+├── .cursor/commands/                # Cursor commands (if used)
+│   ├── spec.1-spec.md
+│   ├── spec.2-plan.md
+│   ├── spec.3-execute.md
+│   ├── spec.accept.md
+│   ├── spec.align.md
+│   └── spec.summary.md
+└── ... (other project files)
+```
+
+### Commands Reference
+
+#### nanospec init
+
+Initialize NanoSpec project structure.
+
+```bash
+nanospec init [options]
+```
+
+**Options:**
+
+- `--ai <tool>`: AI tool type (default: cursor)
+  - Available: cursor, qwen, iflow, cline
+- `-f, --force`: Force overwrite existing files
+
+#### nanospec new
+
+Create a new task directory.
+
+```bash
+nanospec new [name]
+```
+
+**Arguments:**
+
+- `name`: Task name (optional, default: "待命名")
+
+### Workflow Guide
+
+#### 1. Specification Phase
+
+Use `/spec.1-spec` to write detailed specifications based on requirements in `brief.md` and supporting materials in `assets/`.
+
+**Output:** `outputs/1-spec.md`
+
+#### 2. Planning Phase
+
+Use `/spec.2-plan` to create technical plans and task breakdowns.
+
+**Outputs:**
+
+- `outputs/2-plan.md` - Technical plan
+- `outputs/3-tasks.md` - Task checklist
+
+#### 3. Execution Phase
+
+Use `/spec.3-execute` to execute tasks and deliver results.
+
+**Action:** Update task completion status in `outputs/3-tasks.md`
+
+#### 4. Acceptance Phase
+
+Use `/spec.accept` to create acceptance test cases.
+
+**Output:** `outputs/acceptance.md` (optional)
+
+#### 5. Alignment Phase
+
+Use `/spec.align` when conflicts, ambiguities, or deviations are discovered.
+
+**Output:** `alignment.md` (created only when needed)
+
+#### 6. Summary Phase
+
+Use `/spec.summary` to summarize and document the completed work.
+
+**Output:** `outputs/summary-<date>.md` (optional)
+
+### Priority Rules
+
+When processing information, the following priority is applied:
+
+```
+alignment.md > brief.md / prd.md > assets/* > current state
+```
+
+**Important:** When changes occur during any phase, propagate them to:
+
+1. `1-spec.md`
+2. `2-plan.md` / `3-tasks.md`
+3. `acceptance.md` (if exists)
+
+### Testing
+
+Run the test suite:
+
+```bash
+# All tests
+npm test
+
+# Watch mode
+npm run test:watch
+
+# Coverage report
+npm run test:coverage
+```
+
+### Building
+
+Build the project for production:
+
+```bash
+npm run build
+```
+
+The compiled files will be in the `dist/` directory.
+
+### Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. Fork the repository
+2. Create a feature branch
+3. Ensure all tests pass
+4. Submit a pull request
+
+### License
 
 MIT License
 
