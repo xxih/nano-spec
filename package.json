@@ -7,13 +7,42 @@
 	"bin": {
 		"specflow": "./bin/specflow.js"
 	},
-	"scripts": {
-		"build": "tsc && xcopy /E /I /Y src\\templates dist\\templates",
+	"files": [
+	    "dist",
+	    "bin",
+	    "AGENTS.md",
+	    ".iflow",
+	    "README.md",
+	    "LICENSE"
+	  ],	"scripts": {
+		"build": "tsc",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",
-		"test:coverage": "vitest run --coverage"
+		"test:coverage": "vitest run --coverage",
+		"prepublishOnly": "npm run build",
+		"prepack": "npm run build"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/xxih/spec-flow.git"
+	},
+	"keywords": [
+		"spec-driven",
+		"workflow",
+		"cli",
+		"ai-tools",
+		"cursor",
+		"qwen",
+		"iflow",
+		"cline"
+	],
+	"author": "xxih",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/xxih/spec-flow/issues"
+	},
+	"homepage": "https://github.com/xxih/spec-flow#readme",
 	"dependencies": {
 		"commander": "^12.0.0"
 	},
@@ -26,5 +55,8 @@
 	},
 	"engines": {
 		"node": ">=18"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

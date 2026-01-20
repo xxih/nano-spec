@@ -47,7 +47,7 @@ export function getCommandTemplate(
  * 提取 name、description 和 prompt 字段
  *
  * @param content TOML 格式的命令内容
- * @param commandName 命令名称（如 flow.1-spec）
+ * @param commandName 命令名称（如 spec.1-spec）
  * @returns 解析后的命令对象
  */
 export function parseTomlCommand(content: string, commandName: string): {

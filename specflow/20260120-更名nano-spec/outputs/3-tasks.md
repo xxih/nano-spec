@@ -73,3 +73,16 @@
 - [ ] 8.2 检查 git 状态，确认所有更改已跟踪
 - [ ] 8.3 更新文档中的版本号（如果需要）
 - [ ] 8.4 验证项目可以正常初始化和使用
+
+## 9. npm 发布准备
+
+- [x] 9.1 创建 `.npmignore` 文件解决 `dist` 目录发布问题
+- [x] 9.2 完善 `package.json` 添加发布所需字段（files、repository、keywords、author、license、bugs、homepage、publishConfig）
+- [x] 9.3 创建 `LICENSE` 文件（MIT License）
+- [x] 9.4 创建 `.github/workflows/ci-cd.yml` GitHub Actions CI/CD 配置
+- [ ] 9.5 在 GitHub 仓库中配置 `NPM_TOKEN` Secret
+- [ ] 9.6 检查包名 `nano-spec` 是否可用
+- [ ] 9.7 构建并预览发布内容：`npm run build && npm pack --dry-run`
+- [ ] 9.8 登录 npm：`npm login`
+- [ ] 9.9 发布到 npm：`npm publish --access public`
+- [ ] 9.10 验证发布：`npm view nano-spec`

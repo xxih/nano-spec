@@ -26,14 +26,13 @@ export async function init(options: InitOptions): Promise<void> {
   }
 
   // 创建 specflow 目录结构
-  mkdirSync(templatesDir, { recursive: true });
+  mkdirSync(specflowDir, { recursive: true });
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const builtinTemplates = join(__dirname, '../templates');
 
-  // 复制 AGENTS.md（优先从 dist/templates 查找，然后从项目根目录的 specflow/ 查找）
-  const agentsSrc = join(builtinTemplates, 'AGENTS.md');
+  // 复制 AGENTS.md（从项目根目录查找）
+  const agentsSrc = join(__dirname, '../../AGENTS.md');
   const agentsFallback = join(cwd, 'specflow', 'AGENTS.md');
   const agentsSource = existsSync(agentsSrc) ? agentsSrc : agentsFallback;
 
@@ -44,21 +43,8 @@ export async function init(options: InitOptions): Promise<void> {
     console.warn('⚠️  未找到 AGENTS.md，跳过复制');
   }
 
-  // 复制输出产物模板（可选定制）
-  const outputTemplates = [
-    '1-spec.md', '2-plan.md', '3-tasks.md',
-    'acceptance.md', 'alignment.md', 'summary.md'
-  ];
-  for (const template of outputTemplates) {
-    copyFile(
-      join(builtinTemplates, 'outputs', template),
-      join(templatesDir, template)
-    );
-  }
-  console.log('✓ 创建 specflow/templates/ (6 个输出模板)');
-
   // 生成 AI 工具的命令文件（使用内置的 .iflow/commands/ 模板）
-  adapter.generateCommands(cwd, builtinTemplates);
+  adapter.generateCommands(cwd, __dirname);
   console.log(`✓ 创建 ${adapter.commandsDir} (6 个命令)`);
 
   console.log('\n🎉 SpecFlow 初始化完成！');
@@ -68,7 +54,7 @@ export async function init(options: InitOptions): Promise<void> {
   console.log('  3. 使用 /spec.1-spec 开始规格撰写');
   console.log('\n提示：');
   console.log('  - 内置模板位于 .iflow/commands/');
-  console.log('  - 可在 specflow/templates/ 定制输出产物模板');
+  console.log('  - 如需定制输出格式，可在 specflow/templates/ 创建对应文件');
 }
 
 function copyFile(src: string, dest: string): void {
