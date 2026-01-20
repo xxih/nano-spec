@@ -26,7 +26,7 @@ export interface AIAdapter {
   /**
    * 格式转换：将通用 Markdown 模板转换为特定 AI 工具格式
    * @param content Markdown 格式的命令内容
-   * @param commandName 命令名称（如 flow.1-spec）
+   * @param commandName 命令名称（如 spec.1-spec）
    * @returns 转换后的内容
    */
   transformCommand?(content: string, commandName: string): string;

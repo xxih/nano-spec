@@ -1,4 +1,4 @@
-# Command: flow.3-execute
+# Command: spec.3-execute
 # Description: 执行交付 - 按任务清单逐项交付，维护状态，发现偏差及时对齐
 # Category: specflow
 # Version: 1

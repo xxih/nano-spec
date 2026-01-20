@@ -47,12 +47,12 @@ describe('cursor adapter', () => {
 
     const commandsDir = join(testDir, '.cursor', 'commands');
     const expectedFiles = [
-      'flow.1-spec.md',
-      'flow.2-plan.md',
-      'flow.3-execute.md',
-      'flow.accept.md',
-      'flow.align.md',
-      'flow.summary.md',
+      'spec.1-spec.md',
+      'spec.2-plan.md',
+      'spec.3-execute.md',
+      'spec.accept.md',
+      'spec.align.md',
+      'spec.summary.md',
     ];
 
     for (const file of expectedFiles) {
@@ -64,7 +64,7 @@ describe('cursor adapter', () => {
     cursorAdapter.generateCommands(testDir, templatesDir);
 
     const commandsDir = join(testDir, '.cursor', 'commands');
-    const filePath = join(commandsDir, 'flow.1-spec.md');
+    const filePath = join(commandsDir, 'spec.1-spec.md');
 
     if (existsSync(filePath)) {
       const content = readFileSync(filePath, 'utf-8');
@@ -72,13 +72,20 @@ describe('cursor adapter', () => {
     }
   });
 
-  it('transformCommand 应该返回原始内容', () => {
-    const markdown = `# Command: test
+  it('transformCommand 应该将 TOML 转换为 Markdown 格式', () => {
+    const toml = `# Command: test
 # Description: Test command
+# Category: specflow
+# Version: 1
+
+description = "Test command"
 prompt = """Test prompt"""`;
 
-    const result = cursorAdapter.transformCommand!(markdown, 'test');
-    expect(result).toBe(markdown);
+    const result = cursorAdapter.transformCommand!(toml, 'test');
+    expect(result).toContain('---');
+    expect(result).toContain('name: test');
+    expect(result).toContain('description: Test command');
+    expect(result).toContain('Test prompt');
   });
 
   it('应该能够多次调用而不报错', () => {

@@ -33,5 +33,5 @@ export async function newTask(name?: string): Promise<void> {
   console.log('  ├── brief.md');
   console.log('  ├── assets/');
   console.log('  └── outputs/');
-  console.log('\n下一步：编辑 brief.md 描述需求，然后使用 /flow.1-spec');
+  console.log('\n下一步：编辑 brief.md 描述需求，然后使用 /spec.1-spec');
 }

@@ -32,12 +32,17 @@ export async function init(options: InitOptions): Promise<void> {
   const __dirname = dirname(__filename);
   const builtinTemplates = join(__dirname, '../templates');
 
-  // 复制 AGENTS.md
-  copyFile(
-    join(builtinTemplates, 'AGENTS.md'),
-    join(specflowDir, 'AGENTS.md')
-  );
-  console.log('✓ 创建 specflow/AGENTS.md');
+  // 复制 AGENTS.md（优先从 dist/templates 查找，然后从项目根目录的 specflow/ 查找）
+  const agentsSrc = join(builtinTemplates, 'AGENTS.md');
+  const agentsFallback = join(cwd, 'specflow', 'AGENTS.md');
+  const agentsSource = existsSync(agentsSrc) ? agentsSrc : agentsFallback;
+
+  if (existsSync(agentsSource)) {
+    copyFile(agentsSource, join(specflowDir, 'AGENTS.md'));
+    console.log('✓ 创建 specflow/AGENTS.md');
+  } else {
+    console.warn('⚠️  未找到 AGENTS.md，跳过复制');
+  }
 
   // 复制输出产物模板（可选定制）
   const outputTemplates = [
@@ -60,7 +65,7 @@ export async function init(options: InitOptions): Promise<void> {
   console.log('\n下一步：');
   console.log('  1. specflow new "任务名称"  创建任务目录');
   console.log('  2. 编辑 brief.md 描述需求');
-  console.log('  3. 使用 /flow.1-spec 开始规格撰写');
+  console.log('  3. 使用 /spec.1-spec 开始规格撰写');
   console.log('\n提示：');
   console.log('  - 内置模板位于 .iflow/commands/');
   console.log('  - 可在 specflow/templates/ 定制输出产物模板');

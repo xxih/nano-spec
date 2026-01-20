@@ -47,12 +47,12 @@ describe('iflow adapter', () => {
 
     const commandsDir = join(testDir, '.iflow', 'commands');
     const expectedFiles = [
-      'flow.1-spec.toml',
-      'flow.2-plan.toml',
-      'flow.3-execute.toml',
-      'flow.accept.toml',
-      'flow.align.toml',
-      'flow.summary.toml',
+      'spec.1-spec.toml',
+      'spec.2-plan.toml',
+      'spec.3-execute.toml',
+      'spec.accept.toml',
+      'spec.align.toml',
+      'spec.summary.toml',
     ];
 
     for (const file of expectedFiles) {
@@ -64,7 +64,7 @@ describe('iflow adapter', () => {
     iflowAdapter.generateCommands(testDir, templatesDir);
 
     const commandsDir = join(testDir, '.iflow', 'commands');
-    const filePath = join(commandsDir, 'flow.1-spec.toml');
+    const filePath = join(commandsDir, 'spec.1-spec.toml');
 
     if (existsSync(filePath)) {
       const content = readFileSync(filePath, 'utf-8');
@@ -74,17 +74,19 @@ describe('iflow adapter', () => {
     }
   });
 
-  it('transformCommand 应该将 Markdown 转换为 TOML', () => {
-    const markdown = `# Command: test
+  it('transformCommand 应该返回原始 TOML 内容', () => {
+    const toml = `# Command: test
 # Description: Test command
 # Category: test
 # Version: 1
 
+description = "Test command"
 prompt = """Test prompt"""`;
 
-    const toml = iflowAdapter.transformCommand!(markdown, 'test');
-    expect(toml).toMatch(/description = "Test command"/);
-    expect(toml).toMatch(/prompt = """/);
+    const result = iflowAdapter.transformCommand!(toml, 'test');
+    expect(result).toBe(toml);
+    expect(result).toMatch(/description = "Test command"/);
+    expect(result).toMatch(/prompt = """/);
   });
 
   it('应该能够多次调用而不报错', () => {

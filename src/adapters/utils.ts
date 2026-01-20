@@ -9,7 +9,7 @@ import type { CommandFormat } from './index.js';
  *
  * @param templatesDir 模板根目录
  * @param adapterName 适配器名称
- * @param commandName 命令名称（如 flow.1-spec）
+ * @param commandName 命令名称（如 spec.1-spec）
  * @returns 模板内容，如果不存在则返回 null
  */
 export function getCommandTemplate(
@@ -72,13 +72,17 @@ export function parseTomlCommand(content: string, commandName: string): {
     }
     // 提取 prompt（多行字符串）
     else if (line.startsWith('prompt =')) {
-      inPrompt = true;
-      // 检查是否是多行字符串的开始
-      if (line.includes('"""')) {
-        // 多行字符串，从下一行开始读取
-        continue;
+      // 先检查单行三引号字符串
+      const tripleQuoteMatch = line.match(/prompt\s*=\s*"""(.*)"""/);
+      if (tripleQuoteMatch) {
+        // 单行三引号字符串
+        prompt = tripleQuoteMatch[1].trim();
+        inPrompt = false;
+      } else if (line.includes('"""')) {
+        // 多行字符串开始（跨行）
+        inPrompt = true;
       } else {
-        // 单行字符串
+        // 单行普通字符串
         const match = line.match(/prompt\s*=\s*["'](.+?)["']/);
         if (match) {
           prompt = match[1];
@@ -97,7 +101,10 @@ export function parseTomlCommand(content: string, commandName: string): {
     }
   }
 
-  prompt = promptLines.join('\n').trim();
+  // 只有当 prompt 为空时，才使用 promptLines
+  if (!prompt) {
+    prompt = promptLines.join('\n').trim();
+  }
 
   return {
     name: commandName,

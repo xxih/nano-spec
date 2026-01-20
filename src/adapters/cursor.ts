@@ -14,12 +14,12 @@ export const cursorAdapter: AIAdapter = {
     mkdirSync(commandsDir, { recursive: true });
 
     const commands = [
-      'flow.1-spec',
-      'flow.2-plan',
-      'flow.3-execute',
-      'flow.accept',
-      'flow.align',
-      'flow.summary',
+      'spec.1-spec',
+      'spec.2-plan',
+      'spec.3-execute',
+      'spec.accept',
+      'spec.align',
+      'spec.summary',
     ];
 
     for (const cmd of commands) {
