@@ -107,3 +107,39 @@
 - [x] 12.14 验证代码规模控制在 300 行左右
 - [x] 12.15 验证所有测试通过
 - [x] 12.16 验证测试覆盖率 ≥80%
+
+## 13. AI 适配器架构重构（参考 OpenSpec）
+
+- [x] 13.1 扩展 AIAdapter 接口定义
+  - [x] 添加 `fileFormat` 属性（支持：md、toml、json、yaml）
+  - [x] 添加 `transformCommand` 方法（格式转换）
+  - [x] 添加 `supportsVariables` 属性（是否支持变量替换）
+- [x] 13.2 实现模板管理优化
+  - [x] 创建通用模板目录（src/templates/commands/*.base）
+  - [x] 创建 AI 工具特定模板目录（src/templates/adapters/{cursor,qwen,iflow,cline}/）
+  - [x] 实现模板选择策略（优先特定模板，回退到通用模板）
+- [x] 13.3 实现 iflow 适配器格式转换
+  - [x] 实现 Markdown → TOML 转换逻辑
+  - [x] 处理特定字段映射（Command → name, Description → description 等）
+  - [x] 验证生成的 TOML 格式正确
+- [x] 13.4 实现 qwen 适配器格式转换
+  - [x] 实现 Markdown → qwen 特定格式转换
+  - [x] 处理 qwen 特定的语法和结构要求
+  - [x] 验证生成的命令文件格式正确
+- [x] 13.5 实现 cline 适配器格式转换
+  - [x] 实现 Markdown → cline 特定格式转换
+  - [x] 处理 cline 特定的语法和结构要求
+  - [x] 验证生成的命令文件格式正确
+- [x] 13.6 更新所有适配器实现
+  - [x] 更新 src/adapters/cursor.ts（使用新接口）
+  - [x] 更新 src/adapters/qwen.ts（使用新接口）
+  - [x] 更新 src/adapters/iflow.ts（使用新接口）
+  - [x] 更新 src/adapters/cline.ts（使用新接口）
+- [x] 13.7 更新适配器测试用例
+  - [x] 更新 src/adapters/cursor.test.ts（测试新接口）
+  - [x] 更新 src/adapters/qwen.test.ts（测试格式转换）
+  - [x] 更新 src/adapters/iflow.test.ts（测试 TOML 转换）
+  - [x] 更新 src/adapters/cline.test.ts（测试格式转换）
+  - [x] 更新 src/adapters/index.test.ts（测试新接口）
+- [x] 13.8 验证所有测试通过（31 个测试全部通过）
+- [x] 13.9 验证测试覆盖率 ≥80%（87.72%）

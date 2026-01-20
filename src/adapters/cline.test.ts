@@ -29,7 +29,10 @@ describe('cline adapter', () => {
   it('应该有正确的适配器属性', () => {
     expect(clineAdapter.name).toBe('cline');
     expect(clineAdapter.commandsDir).toBe('.cline/commands/');
+    expect(clineAdapter.fileFormat).toBe('md');
+    expect(clineAdapter.supportsVariables).toBe(false);
     expect(typeof clineAdapter.generateCommands).toBe('function');
+    expect(typeof clineAdapter.transformCommand).toBe('function');
   });
 
   it('应该创建 .cline/commands/ 目录', () => {
@@ -39,17 +42,17 @@ describe('cline adapter', () => {
     expect(existsSync(commandsDir)).toBe(true);
   });
 
-  it('应该生成 6 个命令文件', () => {
+  it('应该生成 6 个 Markdown 命令文件', () => {
     clineAdapter.generateCommands(testDir, templatesDir);
 
     const commandsDir = join(testDir, '.cline', 'commands');
     const expectedFiles = [
-      'flow.1-spec.toml',
-      'flow.2-plan.toml',
-      'flow.3-execute.toml',
-      'flow.accept.toml',
-      'flow.align.toml',
-      'flow.summary.toml',
+      'flow.1-spec.md',
+      'flow.2-plan.md',
+      'flow.3-execute.md',
+      'flow.accept.md',
+      'flow.align.md',
+      'flow.summary.md',
     ];
 
     for (const file of expectedFiles) {
@@ -61,12 +64,21 @@ describe('cline adapter', () => {
     clineAdapter.generateCommands(testDir, templatesDir);
 
     const commandsDir = join(testDir, '.cline', 'commands');
-    const filePath = join(commandsDir, 'flow.1-spec.toml');
+    const filePath = join(commandsDir, 'flow.1-spec.md');
 
     if (existsSync(filePath)) {
       const content = readFileSync(filePath, 'utf-8');
       expect(content.length).toBeGreaterThan(0);
     }
+  });
+
+  it('transformCommand 应该返回原始内容', () => {
+    const markdown = `# Command: test
+# Description: Test command
+prompt = """Test prompt"""`;
+
+    const result = clineAdapter.transformCommand!(markdown, 'test');
+    expect(result).toBe(markdown);
   });
 
   it('应该能够多次调用而不报错', () => {

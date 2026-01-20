@@ -29,7 +29,10 @@ describe('iflow adapter', () => {
   it('应该有正确的适配器属性', () => {
     expect(iflowAdapter.name).toBe('iflow');
     expect(iflowAdapter.commandsDir).toBe('.iflow/commands/');
+    expect(iflowAdapter.fileFormat).toBe('toml');
+    expect(iflowAdapter.supportsVariables).toBe(false);
     expect(typeof iflowAdapter.generateCommands).toBe('function');
+    expect(typeof iflowAdapter.transformCommand).toBe('function');
   });
 
   it('应该创建 .iflow/commands/ 目录', () => {
@@ -67,8 +70,21 @@ describe('iflow adapter', () => {
       const content = readFileSync(filePath, 'utf-8');
       expect(content.length).toBeGreaterThan(0);
       // TOML 文件应该包含基本结构
-      expect(content).toMatch(/\[/); // TOML section
+      expect(content).toMatch(/description =/); // TOML key-value
     }
+  });
+
+  it('transformCommand 应该将 Markdown 转换为 TOML', () => {
+    const markdown = `# Command: test
+# Description: Test command
+# Category: test
+# Version: 1
+
+prompt = """Test prompt"""`;
+
+    const toml = iflowAdapter.transformCommand!(markdown, 'test');
+    expect(toml).toMatch(/description = "Test command"/);
+    expect(toml).toMatch(/prompt = """/);
   });
 
   it('应该能够多次调用而不报错', () => {

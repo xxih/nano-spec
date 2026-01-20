@@ -36,13 +36,14 @@ describe('adapters index', () => {
     expect(adapter).toBeNull();
   });
 
-  it('所有适配器应该有 generateCommands 方法', () => {
+  it('所有适配器应该有必需的方法', () => {
     const adapters = listAdapters();
 
     for (const name of adapters) {
       const adapter = getAdapter(name);
       expect(adapter).toBeDefined();
       expect(typeof adapter?.generateCommands).toBe('function');
+      expect(typeof adapter?.transformCommand).toBe('function');
     }
   });
 
@@ -54,14 +55,36 @@ describe('adapters index', () => {
 
       expect(adapter).toHaveProperty('name');
       expect(adapter).toHaveProperty('commandsDir');
+      expect(adapter).toHaveProperty('fileFormat');
+      expect(adapter).toHaveProperty('supportsVariables');
       expect(adapter).toHaveProperty('generateCommands');
+      expect(adapter).toHaveProperty('transformCommand');
 
       expect(typeof adapter.name).toBe('string');
       expect(typeof adapter.commandsDir).toBe('string');
+      expect(typeof adapter.fileFormat).toBe('string');
+      expect(typeof adapter.supportsVariables).toBe('boolean');
       expect(typeof adapter.generateCommands).toBe('function');
+      expect(typeof adapter.transformCommand).toBe('function');
 
       expect(adapter.name.length).toBeGreaterThan(0);
       expect(adapter.commandsDir.length).toBeGreaterThan(0);
+      expect(['md', 'toml', 'json', 'yaml']).toContain(adapter.fileFormat);
     }
+  });
+
+  it('iflow 适配器应该使用 TOML 格式', () => {
+    const iflowAdapter = getAdapter('iflow') as AIAdapter;
+    expect(iflowAdapter.fileFormat).toBe('toml');
+  });
+
+  it('cursor、qwen、cline 适配器应该使用 Markdown 格式', () => {
+    const cursorAdapter = getAdapter('cursor') as AIAdapter;
+    const qwenAdapter = getAdapter('qwen') as AIAdapter;
+    const clineAdapter = getAdapter('cline') as AIAdapter;
+
+    expect(cursorAdapter.fileFormat).toBe('md');
+    expect(qwenAdapter.fileFormat).toBe('md');
+    expect(clineAdapter.fileFormat).toBe('md');
   });
 });
