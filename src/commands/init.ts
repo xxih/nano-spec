@@ -31,13 +31,11 @@ export async function init(options: InitOptions): Promise<void> {
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
 
-	// 复制 AGENTS.md（从 dist/_AGENTS.md 查找）
-	const agentsSrc = join(__dirname, '../../dist/_AGENTS.md');
-	const agentsFallback = join(cwd, 'nanospec', 'AGENTS.md');
-	const agentsSource = existsSync(agentsSrc) ? agentsSrc : agentsFallback;
+	// 复制 AGENTS.md（从 dist/static/_AGENTS.md 查找）
+	const agentsSrc = join(__dirname, '../../dist/static/_AGENTS.md');
 
-	if (existsSync(agentsSource)) {
-		copyFile(agentsSource, join(nanospecDir, 'AGENTS.md'));
+	if (existsSync(agentsSrc)) {
+		copyFile(agentsSrc, join(nanospecDir, 'AGENTS.md'));
 		console.log('✓ 创建 nanospec/AGENTS.md');
 	} else {
 		console.warn('⚠️  未找到 AGENTS.md，跳过复制');
