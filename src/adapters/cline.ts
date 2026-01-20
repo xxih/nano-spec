@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { AIAdapter } from './index.js';
-import { getCommandTemplate, getFileExtension } from './utils.js';
+import { getCommandTemplate, getFileExtension, parseTomlCommand } from './utils.js';
 
 export const clineAdapter: AIAdapter = {
   name: 'cline',
@@ -23,14 +23,14 @@ export const clineAdapter: AIAdapter = {
     ];
 
     for (const cmd of commands) {
-      // 获取模板内容
+      // 获取模板内容（TOML 格式）
       const template = getCommandTemplate(templatesDir, 'cline', cmd);
       if (!template) {
         console.warn(`⚠️  模板不存在: ${cmd}`);
         continue;
       }
 
-      // 转换格式（cline 使用标准 Markdown 格式）
+      // 转换格式（从 TOML 转换为 Cline Markdown 格式）
       const content = this.transformCommand?.(template, cmd) || template;
 
       // 写入文件
@@ -41,8 +41,23 @@ export const clineAdapter: AIAdapter = {
   },
 
   transformCommand(content: string, commandName: string): string {
-    // cline 使用标准 Markdown 格式，直接返回
-    // 如果需要特定的格式调整，可以在这里添加
-    return content;
+    // 解析 TOML 格式的命令
+    const parsed = parseTomlCommand(content, commandName);
+
+    // 生成 Cline 支持的 Markdown 格式
+    // Cline 的命令格式：使用 YAML frontmatter + prompt
+    const lines: string[] = [];
+
+    // 添加 YAML frontmatter
+    lines.push('---');
+    lines.push(`name: ${parsed.name}`);
+    lines.push(`description: ${parsed.description}`);
+    lines.push('---');
+    lines.push('');
+
+    // 添加 prompt 内容
+    lines.push(parsed.prompt);
+
+    return lines.join('\n');
   },
 };

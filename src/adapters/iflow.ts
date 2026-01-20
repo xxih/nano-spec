@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { AIAdapter } from './index.js';
-import { getCommandTemplate, markdownToToml, getFileExtension } from './utils.js';
+import { getCommandTemplate, getFileExtension } from './utils.js';
 
 export const iflowAdapter: AIAdapter = {
   name: 'iflow',
@@ -23,14 +23,14 @@ export const iflowAdapter: AIAdapter = {
     ];
 
     for (const cmd of commands) {
-      // 获取模板内容
+      // 获取模板内容（TOML 格式）
       const template = getCommandTemplate(templatesDir, 'iflow', cmd);
       if (!template) {
         console.warn(`⚠️  模板不存在: ${cmd}`);
         continue;
       }
 
-      // 转换格式
+      // iflow 使用 TOML 格式，直接返回原始内容
       const content = this.transformCommand?.(template, cmd) || template;
 
       // 写入文件
@@ -41,6 +41,7 @@ export const iflowAdapter: AIAdapter = {
   },
 
   transformCommand(content: string, commandName: string): string {
-    return markdownToToml(content);
+    // iflow 使用 TOML 格式，直接返回原始内容
+    return content;
   },
 };

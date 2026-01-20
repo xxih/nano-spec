@@ -1,10 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import type { CommandFormat } from './index.js';
 
 /**
  * 获取命令模板内容
- * 优先级：特定适配器模板 > 通用模板
+ * 优先级：内置模板 > 项目定制模板
  *
  * @param templatesDir 模板根目录
  * @param adapterName 适配器名称
@@ -16,25 +17,93 @@ export function getCommandTemplate(
   adapterName: string,
   commandName: string
 ): string | null {
-  // 1. 尝试读取特定适配器模板
-  const specificPath = join(templatesDir, 'adapters', adapterName, `${commandName}.toml`);
-  if (existsSync(specificPath)) {
-    return readFileSync(specificPath, 'utf-8');
+  // 1. 优先从内置的 .iflow/commands/ 读取（内联模板）
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const builtinCommandsDir = join(__dirname, '../../.iflow/commands');
+  const builtinPath = join(builtinCommandsDir, `${commandName}.toml`);
+
+  if (existsSync(builtinPath)) {
+    return readFileSync(builtinPath, 'utf-8');
   }
 
-  // 2. 尝试读取通用模板（.base 文件）
-  const basePath = join(templatesDir, 'commands', `${commandName}.md`);
-  if (existsSync(basePath)) {
-    return readFileSync(basePath, 'utf-8');
+  // 2. 尝试从项目定制的 templates/commands/ 读取
+  const projectCommandsPath = join(templatesDir, 'commands', `${commandName}.toml`);
+  if (existsSync(projectCommandsPath)) {
+    return readFileSync(projectCommandsPath, 'utf-8');
   }
 
-  // 3. 尝试读取 .toml 格式的通用模板
-  const tomlPath = join(templatesDir, 'commands', `${commandName}.toml`);
-  if (existsSync(tomlPath)) {
-    return readFileSync(tomlPath, 'utf-8');
+  // 3. 尝试读取 .md 格式的通用模板（向后兼容）
+  const mdPath = join(templatesDir, 'commands', `${commandName}.md`);
+  if (existsSync(mdPath)) {
+    return readFileSync(mdPath, 'utf-8');
   }
 
   return null;
+}
+
+/**
+ * 解析 TOML 格式的命令文件
+ * 提取 name、description 和 prompt 字段
+ *
+ * @param content TOML 格式的命令内容
+ * @param commandName 命令名称（如 flow.1-spec）
+ * @returns 解析后的命令对象
+ */
+export function parseTomlCommand(content: string, commandName: string): {
+  name: string;
+  description: string;
+  prompt: string;
+} {
+  const lines = content.split('\n');
+  let description = '';
+  let prompt = '';
+  let inPrompt = false;
+  const promptLines: string[] = [];
+
+  for (const line of lines) {
+    // 提取 description
+    if (line.startsWith('description =')) {
+      // 移除引号和等号，获取描述
+      const match = line.match(/description\s*=\s*["'](.+?)["']/);
+      if (match) {
+        description = match[1];
+      }
+    }
+    // 提取 prompt（多行字符串）
+    else if (line.startsWith('prompt =')) {
+      inPrompt = true;
+      // 检查是否是多行字符串的开始
+      if (line.includes('"""')) {
+        // 多行字符串，从下一行开始读取
+        continue;
+      } else {
+        // 单行字符串
+        const match = line.match(/prompt\s*=\s*["'](.+?)["']/);
+        if (match) {
+          prompt = match[1];
+        }
+        inPrompt = false;
+      }
+    }
+    // 读取多行 prompt 内容
+    else if (inPrompt) {
+      if (line.trim() === '"""') {
+        // 多行字符串结束
+        inPrompt = false;
+      } else {
+        promptLines.push(line);
+      }
+    }
+  }
+
+  prompt = promptLines.join('\n').trim();
+
+  return {
+    name: commandName,
+    description: description || commandName,
+    prompt: prompt || '',
+  };
 }
 
 /**
