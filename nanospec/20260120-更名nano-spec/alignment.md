@@ -1,5 +1,13 @@
 # Alignment
 
+- [偏差] AGENTS.md 不应该放在根目录，会被 AI 约定俗成读取 @2026-01-21
+  - ↳ [已确认] 将 AGENTS.md 重命名为 _AGENTS.md，放在 src/static/ 目录
+  - ↳ [已确认] 更新 package.json 的 build 脚本，在构建时复制 _AGENTS.md 到 dist/ 和根目录
+  - ↳ [已确认] 更新 init.ts 中的查找逻辑，从 dist/_AGENTS.md 读取
+  - ↳ [已确认] 从 package.json 的 files 字段中移除 AGENTS.md
+  - ↳ [已确认] 删除根目录的 AGENTS.md 文件
+  - ↳ [已确认] 构建和测试均通过 @2026-01-21
+
 - [冲突] README.md 编码问题导致中文乱码 @2026-01-20
   - ↳ [已确认] 需要使用 PowerShell 的 -replace 修复编码问题，统一使用 UTF-8 编码
   - ↳ [已确认] 重新编辑 README.md 解决中文显示问题

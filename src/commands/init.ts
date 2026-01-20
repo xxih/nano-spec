@@ -31,8 +31,8 @@ export async function init(options: InitOptions): Promise<void> {
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
 
-	// 复制 AGENTS.md（从项目根目录查找）
-	const agentsSrc = join(__dirname, '../../AGENTS.md');
+	// 复制 AGENTS.md（从 dist/_AGENTS.md 查找）
+	const agentsSrc = join(__dirname, '../../dist/_AGENTS.md');
 	const agentsFallback = join(cwd, 'nanospec', 'AGENTS.md');
 	const agentsSource = existsSync(agentsSrc) ? agentsSrc : agentsFallback;
 

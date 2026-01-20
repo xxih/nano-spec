@@ -10,13 +10,12 @@
 	"files": [
 		"dist",
 		"bin",
-		"AGENTS.md",
 		".iflow",
 		"README.md",
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc && copy src\\static\\_AGENTS.md dist\\_AGENTS.md && copy dist\\_AGENTS.md AGENTS.md",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",

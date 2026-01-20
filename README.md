@@ -10,12 +10,12 @@ A minimal extendable Spec-Driven framework. Not just for code -- for writing, re
 
 ### Overview
 
-nano-spec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, qwen, iflow, cline) and provides a standardized workflow for specification, planning, execution, and acceptance.
+NanoSpec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, qwen, iflow, cline) and provides a standardized workflow for specification, planning, execution, and acceptance.
 
 ### Features
 
 - **Minimal & Simple**: Only 6 slash commands, CLI focuses on initialization
-- **Ready to Use**: One-command initialization with `nano-spec init`
+- **Ready to Use**: One-command initialization with `nanospec init`
 - **Multi-AI Support**: Generate command files for different AI tools
 - **Customizable**: Modify templates and add common documents for customization
 
@@ -24,7 +24,7 @@ nano-spec CLI is a lightweight command-line tool that helps you quickly initiali
 #### Global Installation
 
 ```bash
-npm install -g nano-spec-cli
+npm install -g nano-spec
 ```
 
 #### Local Development
@@ -46,29 +46,29 @@ npm link
 
 ### Quick Start
 
-1. **Initialize nano-spec in your project**
+1. **Initialize NanoSpec in your project**
 
 ```bash
 # Initialize with default AI tool (Cursor)
-nano-spec init
+nanospec init
 
 # Initialize with specific AI tool
-nano-spec init --ai qwen
-nano-spec init --ai iflow
-nano-spec init --ai cline
+nanospec init --ai qwen
+nanospec init --ai iflow
+nanospec init --ai cline
 
 # Force overwrite existing files
-nano-spec init --force
+nanospec init --force
 ```
 
 2. **Create a new task**
 
 ```bash
 # Create a task with default name
-nano-spec new
+nanospec new
 
 # Create a task with custom name
-nano-spec new "User Authentication"
+nanospec new "User Authentication"
 ```
 
 3. **Start the workflow**
@@ -88,7 +88,7 @@ After initialization, your project will have the following structure:
 
 ```
 your-project/
-├── nano-spec/
+├── nanospec/
 │   ├── AGENTS.md                    # General rules and guidelines
 │   ├── templates/                   # Output templates
 │   │   ├── 1-spec.md
@@ -119,12 +119,12 @@ your-project/
 
 ### Commands Reference
 
-#### nano-spec init
+#### nanospec init
 
-Initialize nano-spec project structure.
+Initialize NanoSpec project structure.
 
 ```bash
-nano-spec init [options]
+nanospec init [options]
 ```
 
 **Options:**
@@ -133,12 +133,12 @@ nano-spec init [options]
   - Available: cursor, qwen, iflow, cline
 - `-f, --force`: Force overwrite existing files
 
-#### nano-spec new
+#### nanospec new
 
 Create a new task directory.
 
 ```bash
-nano-spec new [name]
+nanospec new [name]
 ```
 
 **Arguments:**
@@ -246,12 +246,12 @@ MIT License
 
 ### 概述
 
-nano-spec CLI 是一个轻量级的命令行工具，帮助你快速初始化规格驱动开发工作流的项目结构。它支持多种 AI 工具（Cursor、qwen、iflow、cline），并提供标准化的规格、规划、执行和验收工作流。
+NanoSpec CLI 是一个轻量级的命令行工具，帮助你快速初始化规格驱动开发工作流的项目结构。它支持多种 AI 工具（Cursor、qwen、iflow、cline），并提供标准化的规格、规划、执行和验收工作流。
 
 ### 特性
 
 - **极简优先**：只有 6 个斜杠命令，CLI 专注于初始化
-- **即开即用**：`nano-spec init` 一键初始化
+- **即开即用**：`nanospec init` 一键初始化
 - **多 AI 适配**：支持生成不同 AI 工具的命令文件
 - **可定制**：通过修改模板和添加公共文档实现定制
 
@@ -260,7 +260,7 @@ nano-spec CLI 是一个轻量级的命令行工具，帮助你快速初始化规
 #### 全局安装
 
 ```bash
-npm install -g nano-spec-cli
+npm install -g nano-spec
 ```
 
 #### 本地开发
@@ -282,29 +282,29 @@ npm link
 
 ### 快速开始
 
-1. **在项目中初始化 nano-spec**
+1. **在项目中初始化 NanoSpec**
 
 ```bash
 # 使用默认 AI 工具（Cursor）初始化
-nano-spec init
+nanospec init
 
 # 使用指定的 AI 工具初始化
-nano-spec init --ai qwen
-nano-spec init --ai iflow
-nano-spec init --ai cline
+nanospec init --ai qwen
+nanospec init --ai iflow
+nanospec init --ai cline
 
 # 强制覆盖已存在的文件
-nano-spec init --force
+nanospec init --force
 ```
 
 2. **创建新任务**
 
 ```bash
 # 创建默认名称的任务
-nano-spec new
+nanospec new
 
 # 创建自定义名称的任务
-nano-spec new "用户认证功能"
+nanospec new "用户认证功能"
 ```
 
 3. **开始工作流**
@@ -324,7 +324,7 @@ nano-spec new "用户认证功能"
 
 ```
 your-project/
-├── nano-spec/
+├── nanospec/
 │   ├── AGENTS.md                    # 通用规则和指南
 │   ├── templates/                   # 输出模板
 │   │   ├── 1-spec.md
@@ -355,12 +355,12 @@ your-project/
 
 ### 命令参考
 
-#### nano-spec init
+#### nanospec init
 
-初始化 nano-spec 项目结构。
+初始化 nanospec 项目结构。
 
 ```bash
-nano-spec init [选项]
+nanospec init [选项]
 ```
 
 **选项：**
@@ -369,12 +369,12 @@ nano-spec init [选项]
   - 可用：cursor, qwen, iflow, cline
 - `-f, --force`：强制覆盖已存在的文件
 
-#### nano-spec new
+#### nanospec new
 
 创建新的任务目录。
 
 ```bash
-nano-spec new [名称]
+nanospec new [名称]
 ```
 
 **参数：**
@@ -541,8 +541,8 @@ nano-spec/
 ├── src/
 │   ├── index.ts                    # CLI entry point / CLI 入口点
 │   ├── commands/
-│   │   ├── init.ts                 # nano-spec init command / nano-spec init 命令
-│   │   └── new.ts                  # nano-spec new command / nano-spec new 命令
+│   │   ├── init.ts                 # nanospec init command / nanospec init 命令
+│   │   └── new.ts                  # nanospec new command / nanospec new 命令
 │   ├── adapters/
 │   │   ├── index.ts                # Adapter registry / 适配器注册
 │   │   ├── cursor.ts               # Cursor adapter / Cursor 适配器
