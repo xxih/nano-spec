@@ -25,6 +25,23 @@
   - ↳ 问题：不同 AI 工具的命令文件格式、内容要求各不相同，不能只是简单的复制粘贴
   - ↳ 需求：参考 OpenSpec 的实现，为不同 AI 工具提供格式转换和内容适配能力
   - ↳ 影响：需要重新设计适配器接口，支持格式转换、内容定制、变量替换等高级功能
+- [已确认] 测试完全缺失，Vitest 配置形同虚设 `@2026-01-20`
+  - ↳ 当前状态：src/ 目录下没有任何 *.test.ts 测试文件
+  - ↳ 与 TDD 要求不符：规格中明确要求采用 TDD 开发方式，先写测试 → 实现功能 → 重构代码
+  - ↳ 影响：无法验证代码正确性，无法保证测试覆盖率 ≥80%
+  - ↳ 已补充的测试：
+    - src/commands/init.test.ts - init 命令测试（7 个测试用例）
+    - src/commands/new.test.ts - new 命令测试（7 个测试用例）
+    - src/adapters/index.test.ts - 适配器注册测试（5 个测试用例）
+    - src/adapters/cursor.test.ts - Cursor 适配器测试（5 个测试用例）
+    - src/adapters/qwen.test.ts - qwen 适配器测试（5 个测试用例）
+    - src/adapters/iflow.test.ts - iflow 适配器测试（5 个测试用例）
+    - src/adapters/cline.test.ts - cline 适配器测试（5 个测试用例）
+  - ↳ 测试结果：39 个测试全部通过，测试覆盖率达到 89.09%（超过 80% 目标）
+  - ↳ 测试覆盖详情：
+    - src/adapters/: 100% 覆盖率（所有适配器）
+    - src/commands/: 97.53% 覆盖率（init.ts 96.15%, new.ts 100%）
+    - 整体覆盖率：89.09%（statements、branch、func、lines 均达标）
 
 <!--
 支持标签：
