@@ -8,7 +8,10 @@
 
 ## Objective
 
-基于规格说明，输出：
+基于 `outputs/1-spec.md`，判断任务大小，制定执行方案。
+
+输出：
+
 - `outputs/2-plan.md` — 方案说明
 - `outputs/3-tasks.md` — 任务清单
 
@@ -16,7 +19,7 @@
 
 1. `outputs/1-spec.md` — 规格说明
 2. `alignment.md`（若存在）
-3. 工作区相关文件 — 感知项目现状、技术栈、约束条件
+3. **当前工作区** — 现有的代码库、文档库或素材。
 
 ## Rules
 
@@ -29,6 +32,7 @@
 > 若 `<specs_dir>/templates/2-plan.md` 和 `3-tasks.md` 有定制则以其为准
 
 **2-plan.md**：
+
 ```markdown
 # 方案：[标题]
 
@@ -40,6 +44,7 @@
 ```
 
 **3-tasks.md**：
+
 ```markdown
 ## 1. xxx
 
