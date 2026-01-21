@@ -118,10 +118,10 @@ describe('config module', () => {
 
 	it('应该处理数字配置', async () => {
 		const configPath = join(testDir, '.nanospecrc');
-		writeFileSync(configPath, JSON.stringify({max_tasks: 10}), 'utf-8');
+		writeFileSync(configPath, JSON.stringify({auto_sync: false}), 'utf-8');
 
 		const config = await loadConfig();
 
-		expect(config.max_tasks).toBe(10);
+		expect(config.auto_sync).toBe(false);
 	});
 });

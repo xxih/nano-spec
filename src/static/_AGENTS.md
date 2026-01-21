@@ -110,25 +110,27 @@ alignment.md > brief.md / prd.md > assets/* > 现状
 - 新增：追加到 `3-tasks.md`
 - 阻塞：标注阻塞原因，追加到 `alignment.md`
 
-### 3.3 输出模板映射
+### 3.3 任务记忆机制
 
-| 产物            | 模板                                  | 关联命令                |
-| --------------- | ------------------------------------- | ----------------------- |
-| `1-spec.md`     | `<specs_dir>/templates/1-spec.md`     | `/<cmd_prefix>.1-spec`  |
-| `2-plan.md`     | `<specs_dir>/templates/2-plan.md`     | `/<cmd_prefix>.2-plan`  |
-| `3-tasks.md`    | `<specs_dir>/templates/3-tasks.md`    | `/<cmd_prefix>.2-plan`  |
-| `acceptance.md` | `<specs_dir>/templates/acceptance.md` | `/<cmd_prefix>.accept`  |
-| `alignment.md`  | `<specs_dir>/templates/alignment.md`  | `/<cmd_prefix>.align`   |
-| `summary.md`    | `<specs_dir>/templates/summary.md`    | `/<cmd_prefix>.summary` |
+#### 3.3.1 当前任务文件
 
-**模板优先级**：
+`.nanospec/current-task` 记录当前工作中的 task_name。
 
-```
-templates/*.md（若存在） > commands 内嵌默认模板
-```
+#### 3.3.2 读取规则
 
-- **开箱即用**：每个 command 内嵌了默认模板结构，无需额外配置
-- **可定制**：在 `<specs_dir>/templates/` 下创建同名文件即可覆盖默认结构
+每个 command 开始时：
+
+1. 若用户指定了 task_name → 使用指定值，更新 `current-task`
+2. 若用户未指定 → 读取 `current-task`
+3. 若 `current-task` 不存在 → 提示用户指定任务
+
+### 3.3.3 写入规则
+
+以下情况更新 `current-task`：
+
+- `spec.1-spec` 创建新任务
+- 任意 command 指定了新的 task_name
+- `spec.switch` 显式切换
 
 ---
 
@@ -136,7 +138,25 @@ templates/*.md（若存在） > commands 内嵌默认模板
 
 | 我想要...  | 改什么                         |
 | ---------- | ------------------------------ |
-| 改输出格式 | `<specs_dir>/templates/*.md`   |
-| 改核心规则 | 本文件（AGENTS.md）            |
+| 改输出格式 | 在本文件追加"流程定制"章节     |
+| 改核心规则 | 修改本文件对应章节             |
 | 加新命令   | `.cursor/commands/` 下新建文件 |
-| 增强工作流 | 追加到 `AGENTS.md`             |
+| 增强工作流 | 追加到本文件                   |
+
+### 4.1 流程定制（可选）
+
+如需定制各阶段的输出格式，在此追加对应章节。示例：
+
+```markdown
+### spec 阶段
+
+#### 输出格式
+
+# 规格说明：[标题]
+
+## 背景与目标
+
+## 核心组成
+
+## 成功标志
+```

@@ -32,7 +32,7 @@ describe('config command', () => {
 			.spyOn(console, 'log')
 			.mockImplementation(() => {});
 
-		await configCommand('list');
+		await configCommand(undefined, undefined, undefined, {list: true});
 
 		expect(consoleLogSpy).toHaveBeenCalledWith(
 			expect.stringContaining('specs_root')
@@ -111,7 +111,7 @@ describe('config command', () => {
 			.spyOn(console, 'log')
 			.mockImplementation(() => {});
 
-		await configCommand('list');
+		await configCommand(undefined, undefined, undefined, {list: true});
 
 		expect(consoleLogSpy).toHaveBeenCalledWith(
 			expect.stringContaining('specs_root')
@@ -149,7 +149,7 @@ describe('config command', () => {
 			.spyOn(console, 'log')
 			.mockImplementation(() => {});
 
-		await configCommand('list');
+		await configCommand(undefined, undefined, undefined, {list: true});
 
 		// 应该显示默认配置
 		expect(consoleLogSpy).toHaveBeenCalledWith(
