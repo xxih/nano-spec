@@ -1,4 +1,4 @@
-import {existsSync, readFileSync} from 'fs';
+import {existsSync, readFileSync, readdirSync} from 'fs';
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
 import type {CommandFormat} from './index.js';
@@ -214,4 +214,34 @@ export function getFileExtension(format: CommandFormat): string {
 		yaml: '.yaml'
 	};
 	return extensions[format] || '.md';
+}
+
+/**
+ * 列出所有可用的命令
+ * 通过扫描 src/static/commands/ 目录，自动发现所有命令模板
+ *
+ * @returns 命令名称数组（不含扩展名）
+ */
+export function listAvailableCommands(): string[] {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+	const builtinCommandsDir = join(__dirname, '../static/commands');
+
+	if (!existsSync(builtinCommandsDir)) {
+		return [];
+	}
+
+	try {
+		const files = readdirSync(builtinCommandsDir);
+
+		// 过滤出 .toml 文件，并移除扩展名
+		const commands = files
+			.filter((file: string) => file.endsWith('.toml'))
+			.map((file: string) => file.replace(/\.toml$/, ''));
+
+		return commands.sort();
+	} catch (error) {
+		console.warn(`⚠️  扫描命令目录失败: ${error}`);
+		return [];
+	}
 }

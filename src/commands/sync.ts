@@ -1,11 +1,10 @@
 import { getAdapter, listAdapters } from '../adapters/index.js';
 import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = import.meta.dirname || (() => {
-	const url = new URL('.', import.meta.url);
-	return url.pathname;
-})();
+// sync.ts 位于 src/commands/，需要获取 src/ 目录作为 templatesDir
+const __dirname = dirname(dirname(__filename));
 
 interface SyncOptions {
 	adapter?: string;

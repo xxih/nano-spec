@@ -194,16 +194,19 @@ export function clearCurrentTask(cwd: string): void
 **修改文件**：`src/commands/init.ts`
 
 **变更点**：
-- 添加 `--interactive` / `-i` 选项（参考 OpenSpec 的交互式初始化体验）
-- 启动交互式向导，引导用户：
-  1. 选择 AI 工具（多选，支持 Claude Code、GitHub Copilot、Windsurf、Kilo Code 等主流工具）
-  2. 配置 `specs_root`、`cmd_prefix` 等参数
-  3. 生成配置文件
+- 启动交互式向导，仅引导用户选择 AI 工具（多选，支持 Claude Code、GitHub Copilot、Windsurf、Kilo Code 等主流工具）
+- 其他配置项（specs_root、cmd_prefix、default_adapter 等）使用默认值
+- 提示用户可通过 `nanospec config` 命令按需修改配置
 
 **新增交互逻辑**：
 ```typescript
 export async function interactiveInit(options: InitOptions): Promise<void>
 ```
+
+**简化后的交互流程**：
+1. 询问用户选择 AI 工具（多选）
+2. 使用默认配置创建项目
+3. 提示用户如何修改配置
 
 **修改文件**：`src/commands/switch.ts`
 
@@ -243,7 +246,77 @@ export async function syncCommands(options: SyncOptions): Promise<void>
 
 ---
 
-### 6. AI 工具适配器扩展
+### 6. 命令自动发现实现
+
+#### 6.1 新增自动扫描函数
+**修改文件**：`src/adapters/utils.ts`
+
+**新增函数**：`listAvailableCommands()`
+
+**功能**：
+- 自动扫描 `src/static/commands/` 目录
+- 过滤出 `.toml` 文件
+- 返回命令名称数组（不含扩展名），按字母顺序排序
+
+**实现逻辑**：
+```typescript
+export function listAvailableCommands(): string[] {
+  const builtinCommandsDir = join(__dirname, '../static/commands');
+
+  if (!existsSync(builtinCommandsDir)) {
+    return [];
+  }
+
+  const files = readdirSync(builtinCommandsDir);
+  const commands = files
+    .filter((file: string) => file.endsWith('.toml'))
+    .map((file: string) => file.replace(/\.toml$/, ''));
+
+  return commands.sort();
+}
+```
+
+#### 6.2 更新所有适配器
+**修改文件**：
+- `src/adapters/cursor.ts`
+- `src/adapters/iflow.ts`
+- `src/adapters/qwen.ts`
+- `src/adapters/cline.ts`
+- `src/adapters/claude-code.ts`
+- `src/adapters/copilot.ts`
+- `src/adapters/windsurf.ts`
+- `src/adapters/kilo-code.ts`
+
+**变更点**：
+- 导入 `listAvailableCommands` 函数
+- 移除硬编码的 `commands` 数组
+- 调用 `listAvailableCommands()` 获取命令列表
+
+**示例变更**：
+```typescript
+// 之前
+const commands = [
+  'spec.1-spec',
+  'spec.2-plan',
+  // ...
+];
+
+// 之后
+const commands = listAvailableCommands();
+```
+
+#### 6.3 单元测试
+**新增文件**：`src/adapters/utils.test.ts`
+
+**测试内容**：
+- 测试 `listAvailableCommands()` 能正确扫描命令目录
+- 测试返回的命令列表是排序的
+- 测试命令名称不含扩展名
+- 测试目录不存在时返回空数组
+
+---
+
+### 7. AI 工具适配器扩展
 
 #### 6.1 新增适配器
 **新增文件**：

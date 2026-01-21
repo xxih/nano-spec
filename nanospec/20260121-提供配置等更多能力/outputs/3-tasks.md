@@ -233,4 +233,8 @@
 - [x] /clarify 命令能正确扫描规格并生成问题队列
 - [x] AGENTS.md 已更新为新的结构（移�?templates/，新增任务记忆机制）
 - [x] 所有命令的 prompt 已更新为新的标准（强调环境感知、透传模式、及时更新状态等�?- [x] `nanospec init` 默认启用交互式向�?- [x] `nanospec init --ai <tool>` 支持非交互式快速初始化
-- [x] `nanospec config` 命令能正确查看、设置、获取、删除配�?- [x] `nanospec config --global` 能正确操作全局配置
+- [x] `nanospec config` 命令能正确查看、设置、获取、删除配�?- [x] `nanospec config --global` 能正确操作全局配置\
+- [x] \listAvailableCommands()\ ����ȷɨ�� \src/static/commands/\ Ŀ¼
+- [x] ����������ʹ���Զ�ɨ����ƣ�����Ӳ���������б�
+- [x] ��������ʱ��ֻ���� \src/static/commands/\ ���� \.toml\ �ļ�
+- [x] ��������������ͨ�������ƻ��Ա��\

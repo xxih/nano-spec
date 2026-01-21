@@ -72,7 +72,7 @@ async function quickInit(options: InitOptions): Promise<void> {
 
 	// 生成 AI 工具的命令文件（使用内置的 .iflow/commands/ 模板）
 	adapter.generateCommands(cwd, __dirname);
-	console.log(`✓ 创建 ${adapter.commandsDir} (6 个命令)`);
+	console.log(`✓ 创建 ${adapter.commandsDir} (9 个命令)`);
 
 	console.log('\n🎉 nanospec 初始化完成！');
 	console.log('\n下一步：');
@@ -100,7 +100,8 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 		};
 	});
 
-	const answers = await inquirer.prompt<InteractiveAnswers>([
+	// 只询问 AI 工具选择，其他配置项使用默认值
+	const answers = await inquirer.prompt<Pick<InteractiveAnswers, 'adapters'>>([
 		{
 			type: 'checkbox',
 			name: 'adapters',
@@ -113,61 +114,31 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 				return true;
 			},
 		},
-		{
-			type: 'input',
-			name: 'specs_root',
-			message: '规格根目录名称：',
-			default: config.specs_root || 'nanospec',
-			validate: (input: string) => {
-				if (!input.trim()) {
-					return '目录名称不能为空';
-				}
-				return true;
-			},
-		},
-		{
-			type: 'input',
-			name: 'cmd_prefix',
-			message: '命令前缀：',
-			default: config.cmd_prefix || 'spec',
-			validate: (input: string) => {
-				if (!input.trim()) {
-					return '命令前缀不能为空';
-				}
-				return true;
-			},
-		},
-		{
-			type: 'list',
-			name: 'default_adapter',
-			message: '默认 AI 工具：',
-			choices: (answers: InteractiveAnswers) => answers.adapters,
-			default: (answers: InteractiveAnswers) => answers.adapters[0],
-		},
 	]);
+
+	// 使用默认配置
+	const defaultConfig = {
+		specs_root: config.specs_root || 'nanospec',
+		cmd_prefix: config.cmd_prefix || 'spec',
+		default_adapter: answers.adapters[0] || 'cursor',
+		template_format: 'md' as const,
+		auto_sync: true,
+	};
 
 	// 创建配置文件
 	const configDir = join(cwd, '.nanospec');
 	mkdirSync(configDir, {recursive: true});
 
-	const configContent = {
-		specs_root: answers.specs_root,
-		cmd_prefix: answers.cmd_prefix,
-		default_adapter: answers.default_adapter,
-		template_format: 'md',
-		auto_sync: true,
-	};
-
 	writeFileSync(
 		join(configDir, 'config.json'),
-		JSON.stringify(configContent, null, 2),
+		JSON.stringify(defaultConfig, null, 2),
 		'utf-8',
 	);
 
 	console.log(`\n✓ 创建 .nanospec/config.json`);
 
 	// 创建 nanospec 目录结构
-	const nanospecDir = join(cwd, answers.specs_root);
+	const nanospecDir = join(cwd, defaultConfig.specs_root);
 	mkdirSync(nanospecDir, {recursive: true});
 
 	const __filename = fileURLToPath(import.meta.url);
@@ -177,7 +148,7 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 	const agentsSrc = join(__dirname, '../../dist/static/_AGENTS.md');
 	if (existsSync(agentsSrc)) {
 		copyFile(agentsSrc, join(nanospecDir, 'AGENTS.md'));
-		console.log(`✓ 创建 ${answers.specs_root}/AGENTS.md`);
+		console.log(`✓ 创建 ${defaultConfig.specs_root}/AGENTS.md`);
 	} else {
 		console.warn('⚠️  未找到 AGENTS.md，跳过复制');
 	}
@@ -187,16 +158,19 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 		const adapter = getAdapter(adapterName);
 		if (adapter) {
 			adapter.generateCommands(cwd, __dirname);
-			console.log(`✓ 创建 ${adapter.commandsDir} (6 个命令)`);
+			console.log(`✓ 创建 ${adapter.commandsDir} (9 个命令)`);
 		}
 	}
 
 	console.log('\n🎉 nanospec 初始化完成！');
-	console.log('\n配置信息：');
-	console.log(`  - 规格根目录: ${answers.specs_root}`);
-	console.log(`  - 命令前缀: ${answers.cmd_prefix}`);
-	console.log(`  - 默认 AI 工具: ${answers.default_adapter}`);
+	console.log('\n配置信息（使用默认值）：');
+	console.log(`  - 规格根目录: ${defaultConfig.specs_root}`);
+	console.log(`  - 命令前缀: ${defaultConfig.cmd_prefix}`);
+	console.log(`  - 默认 AI 工具: ${defaultConfig.default_adapter}`);
 	console.log(`  - 支持的 AI 工具: ${answers.adapters.join(', ')}`);
+	console.log('\n如需修改配置，可使用：');
+	console.log('  - nanospec config set <key> <value>');
+	console.log('  - nanospec config --list');
 	console.log('\n下一步：');
 	console.log('  1. nanospec new "任务名称"  创建任务目录');
 	console.log('  2. 编辑 brief.md 描述需求');

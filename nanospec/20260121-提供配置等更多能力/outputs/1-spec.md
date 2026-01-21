@@ -106,8 +106,9 @@ nano-spec 配置系统与增强能力
 
 #### 4. 交互式体验
 **交付物表现**：
-- `nanospec init` 支持交互式向导（工具选择、配置项确认），参考 OpenSpec 的交互式初始化体验
+- `nanospec init` 支持交互式向导，仅询问 AI 工具选择（多选），其他配置项使用默认值
 - 交互式工具选择支持多选，覆盖主流 AI 工具（包括 Claude Code、GitHub Copilot、Windsurf、Kilo Code）
+- 配置项（specs_root、cmd_prefix、default_adapter 等）使用默认值，用户可通过 `nanospec config` 命令按需修改
 - `nanospec switch` 无参数时显示任务列表供交互选择
 - `nanospec preset install` 无参数时显示预设列表供选择
 - 危险操作（覆盖、删除）前显示确认提示
@@ -118,7 +119,19 @@ nano-spec 配置系统与增强能力
 - 支持指定目标工具：`nanospec sync --adapter cursor`
 - 增量同步：仅更新内容变化的文件，避免不必要的写入
 
-#### 6. CLI 命令增强
+#### 6. 命令自动发现
+**交付物表现**：
+- 适配器自动扫描 `src/static/commands/` 目录，发现所有可用的命令模板
+- 新增命令时，只需在 `src/static/commands/` 添加 `.toml` 文件，无需修改适配器代码
+- 所有适配器（cursor、iflow、qwen、cline、claude-code、copilot、windsurf、kilo-code）统一使用自动扫描机制
+
+**技术实现**：
+- 在 `src/adapters/utils.ts` 中新增 `listAvailableCommands()` 函数
+- 函数扫描 `src/static/commands/` 目录，过滤出 `.toml` 文件
+- 返回命令名称数组（不含扩展名），按字母顺序排序
+- 各适配器的 `generateCommands()` 方法调用 `listAvailableCommands()` 获取命令列表
+
+#### 7. CLI 命令增强
 **交付物表现**：
 - `nanospec init` 默认启用交互式向导，无需 `--interactive` 参数
 - `nanospec init --ai <tool>` 支持非交互式快速初始化
