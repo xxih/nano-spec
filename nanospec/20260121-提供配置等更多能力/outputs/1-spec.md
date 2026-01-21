@@ -118,6 +118,17 @@ nano-spec 配置系统与增强能力
 - 支持指定目标工具：`nanospec sync --adapter cursor`
 - 增量同步：仅更新内容变化的文件，避免不必要的写入
 
+#### 6. CLI 命令增强
+**交付物表现**：
+- `nanospec init` 默认启用交互式向导，无需 `--interactive` 参数
+- `nanospec init --ai <tool>` 支持非交互式快速初始化
+- `nanospec config` 查看当前配置
+- `nanospec config set <key> <value>` 设置项目级配置
+- `nanospec config get <key>` 获取配置值
+- `nanospec config unset <key>` 删除配置项
+- `nanospec config --global` 操作全局配置（用户级）
+- `nanospec config --list` 列出所有配置项
+
 ---
 
 ## 成功标志
@@ -159,6 +170,10 @@ nano-spec 配置系统与增强能力
 - [ ] **测试覆盖**：
   - 新增功能需编写单元测试（使用 `vitest`）
   - 测试覆盖率不低于现有水平
+- [ ] **环境感知**：
+  - 新需求必须融入现有体系（是新增、修改还是重构？）
+  - 必须检查工作区现状（现有的代码、文档、资料或历史版本）
+  - 避免与现有功能冲突
 
 ### 技术债务与风险
 - [ ] **配置解析**：引入 `cosmiconfig` 增加依赖体积，需评估是否必要

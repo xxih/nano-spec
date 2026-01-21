@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, cpSync, mkdirSync, appendFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import inquirer from 'inquirer';
 import { loadConfig } from '../config/config.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -70,12 +71,49 @@ export async function listPresets(): Promise<void> {
 
 /**
  * 安装预设
- * @param name 预设名称
+ * @param name 预设名称（可选，不提供时使用交互式选择）
  */
-export async function installPreset(name: string): Promise<void> {
+export async function installPreset(name?: string): Promise<void> {
 	const cwd = process.cwd();
 	const config = await loadConfig(cwd);
 	const presetsDir = getPresetsDir();
+
+	// 如果未指定预设名称，使用交互式选择
+	if (!name) {
+		const entries = readdirSync(presetsDir, { withFileTypes: true });
+		const presets = entries.filter(entry => entry.isDirectory()).map(entry => entry.name);
+
+		if (presets.length === 0) {
+			console.log('暂无可用预设');
+			return;
+		}
+
+		const presetChoices = presets.map(preset => {
+			const metadata = getPresetMetadata(preset);
+			return {
+				name: metadata ? `${preset} - ${metadata.description}` : preset,
+				value: preset,
+			};
+		});
+
+		const answers = await inquirer.prompt([
+			{
+				type: 'list',
+				name: 'preset',
+				message: '选择要安装的预设:',
+				choices: presetChoices,
+			},
+		]);
+
+		name = answers.preset;
+	}
+
+	// 确保 name 不为 undefined
+	if (!name) {
+		console.log('❌ 未选择预设');
+		return;
+	}
+
 	const presetDir = join(presetsDir, name);
 
 	// 检查预设是否存在

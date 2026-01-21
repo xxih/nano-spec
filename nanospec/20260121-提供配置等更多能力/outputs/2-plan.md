@@ -15,6 +15,25 @@
 
 ---
 
+## 决策协议
+
+### 情况 A：涉及代码/工程实施 (Coding Task)
+
+> **特征**：需要修改代码、配置、脚本，或需要遵循现有项目架构。
+> **动作**：🔴 **严禁跳过 Plan**。即使 Spec 很详细，也需要明确如何在代码中落地。
+
+### 情况 B：纯内容创作/文档类 (Content/Writing Task)
+
+> **特征**：输出仅为 Markdown 文档、文案，不涉及代码逻辑，且 Spec 已包含详细大纲。注意！若判断任务相对复杂，需要在 Plan 中进行更详尽的分析，也不允许启用 "透传模式"。
+> **动作**：🟢 **启用 "透传模式" (Passthrough)**。
+> **硬性约束（必须遵守）：**
+> + outputs/2-plan.md 最多 3 行（含标题行），不得包含"详细执行方案/分点/步骤/风险/验收/里程碑"等任何扩写。
+> + 所有后续方案优化、结构调整、补充细节：一律回写到 outputs/1-spec.md（或 alignment.md 若属于待确认项），不得在 plan 展开。
+
+**本任务属于情况 A（Coding Task）**，因此需要详细的实施方案。
+
+---
+
 ## 详细执行方案
 
 ### 1. 配置系统实现
@@ -362,6 +381,90 @@ const adapters: Record<string, AIAdapter> = {
 | 交互式体验 | `inquirer` | 命令行交互式提示 |
 | 文件操作 | Node.js `fs`/`path` | 内置模块 |
 | CLI 框架 | `commander` | 现有依赖 |
+
+---
+
+## 10. CLI 命令增强
+
+### 10.1 init CLI 命令默认交互式
+
+**变更点**：
+- 移除 `--interactive` 参数
+- 默认行为就是交互式向导
+- 保留 `--ai` 参数用于直接指定 AI 工具（非交互式快速初始化）
+- 保留 `--force` 参数用于强制覆盖
+
+**实现逻辑**：
+```typescript
+export async function init(options: InitOptions): Promise<void> {
+  const cwd = process.cwd();
+
+  // 如果指定了 AI 工具，使用非交互式快速初始化
+  if (options.ai) {
+    await quickInit(options);
+    return;
+  }
+
+  // 默认使用交互式向导
+  await interactiveInit(options);
+}
+```
+
+### 10.2 config CLI 命令
+
+**命令结构**：
+```bash
+nanospec config                    # 查看当前配置
+nanospec config get <key>          # 获取配置值
+nanospec config set <key> <value>  # 设置配置
+nanospec config unset <key>        # 删除配置项
+nanospec config --list             # 列出所有配置项
+nanospec config --global           # 操作全局配置
+```
+
+**实现逻辑**：
+```typescript
+interface ConfigOptions {
+  global?: boolean;
+  list?: boolean;
+}
+
+export async function config(
+  action?: 'get' | 'set' | 'unset',
+  key?: string,
+  value?: string,
+  options: ConfigOptions = {}
+): Promise<void> {
+  const cwd = process.cwd();
+  const configPath = options.global
+    ? join(os.homedir(), '.nanospecrc')
+    : join(cwd, '.nanospec', 'config.json');
+
+  // 根据参数执行不同操作
+  if (options.list) {
+    await listConfig(configPath);
+  } else if (action === 'get' && key) {
+    await getConfig(configPath, key);
+  } else if (action === 'set' && key && value) {
+    await setConfig(configPath, key, value);
+  } else if (action === 'unset' && key) {
+    await unsetConfig(configPath, key);
+  } else {
+    await showCurrentConfig(configPath);
+  }
+}
+```
+
+**配置文件格式**：
+```json
+{
+  "specs_root": "nanospec",
+  "cmd_prefix": "spec",
+  "default_adapter": "cursor",
+  "template_format": "md",
+  "auto_sync": true
+}
+```
 
 ---
 

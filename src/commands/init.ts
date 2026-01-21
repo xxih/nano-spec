@@ -8,7 +8,6 @@ import {loadConfig} from '../config/config.js';
 interface InitOptions {
 	ai?: string;
 	force?: boolean;
-	interactive?: boolean;
 }
 
 interface InteractiveAnswers {
@@ -21,19 +20,27 @@ interface InteractiveAnswers {
 export async function init(options: InitOptions): Promise<void> {
 	const cwd = process.cwd();
 
-	// 如果启用了交互式模式，运行交互式向导
-	if (options.interactive) {
-		await interactiveInit(options);
+	// 如果指定了 AI 工具，使用非交互式快速初始化
+	if (options.ai) {
+		await quickInit(options);
 		return;
 	}
 
+	// 默认使用交互式向导
+	await interactiveInit(options);
+}
+
+/**
+ * 快速初始化（非交互式）
+ */
+async function quickInit(options: InitOptions): Promise<void> {
+	const cwd = process.cwd();
 	const config = await loadConfig(cwd);
 
-	// 如果未指定 AI 工具，使用配置中的默认值
+	// 使用指定的 AI 工具
 	const aiTool = options.ai || config.default_adapter || 'cursor';
 
 	const nanospecDir = join(cwd, config.specs_root || 'nanospec');
-	const templatesDir = join(nanospecDir, 'templates');
 
 	if (existsSync(nanospecDir) && !options.force) {
 		console.log('⚠️  nanospec/ 目录已存在，使用 --force 强制覆盖');
