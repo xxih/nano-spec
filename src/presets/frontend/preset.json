@@ -1,0 +1,1 @@
+{"name": "frontend", "version": "1.0.0", "description": "前端开发特化预设，包含组件、状态管理、交互设计规范", "commands": ["spec.clarify"], "templates": ["1-spec"], "extends": "AGENTS.md"}

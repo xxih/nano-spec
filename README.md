@@ -107,6 +107,8 @@ your-project/
 │           ├── 3-tasks.md
 │           ├── acceptance.md
 │           └── summary-*.md
+├── .nanospec/
+│   └── current-task                 # 当前任务指针
 ├── .cursor/commands/                # Cursor 命令（如果使用）
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -114,6 +116,7 @@ your-project/
 │   ├── spec.accept.md
 │   ├── spec.align.md
 │   └── spec.summary.md
+├── .nanospecrc                      # 项目级配置（可选）
 └── ... (其他项目文件)
 ```
 
@@ -144,6 +147,103 @@ nanospec new [名称]
 **参数：**
 
 - `名称`：任务名称（可选，默认："待命名"）
+
+#### nanospec switch
+
+切换当前任务。
+
+```bash
+nanospec switch [名称]
+```
+
+**参数：**
+
+- `名称`：任务名称（可选，不提供时显示当前任务和可用任务列表）
+
+**说明：**
+- 切换任务后，所有工作流命令将默认使用当前任务
+- 创建新任务时会自动设置为当前任务
+
+#### nanospec status
+
+显示当前状态。
+
+```bash
+nanospec status
+```
+
+**输出：**
+- 当前配置信息
+- 当前任务信息
+- 所有任务列表及进度
+
+#### nanospec preset
+
+预设包管理。
+
+```bash
+nanospec preset list          # 列出所有可用预设
+nanospec preset install <name>  # 安装预设
+nanospec preset uninstall <name> # 卸载预设
+```
+
+**可用预设：**
+- `frontend` - 前端开发特化预设
+- `backend` - 后端开发特化预设
+- `refactor` - 重构优化预设
+- `docs` - 文档写作预设
+
+#### nanospec sync
+
+同步命令到 AI 工具。
+
+```bash
+nanospec sync [选项]
+```
+
+**选项：**
+
+- `--adapter <name>`：指定 AI 工具（可选，默认同步所有工具）
+
+### 配置系统
+
+NanoSpec 支持通过配置文件自定义行为。配置文件优先级：项目级 > 用户级 > 默认。
+
+#### 配置文件位置
+
+- **项目级**：`.nanospecrc` 或 `nanospec.config.js`（项目根目录）
+- **用户级**：`~/.nanospecrc`（用户主目录）
+
+#### 配置项
+
+```json
+{
+  "specs_root": "nanospec",        // 规格根目录名（默认：nanospec）
+  "cmd_prefix": "spec",            // 命令前缀（默认：spec）
+  "default_adapter": "cursor",     // 默认 AI 工具（默认：cursor）
+  "template_format": "md",         // 模板格式（默认：md）
+  "auto_sync": true                // init 时自动同步（默认：true）
+}
+```
+
+#### 配置示例
+
+**JSON 格式（.nanospecrc）：**
+```json
+{
+  "specs_root": "specs",
+  "default_adapter": "qwen"
+}
+```
+
+**JavaScript 格式（nanospec.config.js）：**
+```javascript
+module.exports = {
+  specs_root: 'specs',
+  default_adapter: 'qwen',
+  template_format: 'toml'
+};
+```
 
 ### 工作流指南
 
@@ -343,6 +443,8 @@ your-project/
 │           ├── 3-tasks.md
 │           ├── acceptance.md
 │           └── summary-*.md
+├── .nanospec/
+│   └── current-task                 # Current task pointer
 ├── .cursor/commands/                # Cursor commands (if used)
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -350,6 +452,7 @@ your-project/
 │   ├── spec.accept.md
 │   ├── spec.align.md
 │   └── spec.summary.md
+├── .nanospecrc                      # Project-level configuration (optional)
 └── ... (other project files)
 ```
 
@@ -380,6 +483,103 @@ nanospec new [name]
 **Arguments:**
 
 - `name`: Task name (optional, default: "待命名")
+
+#### nanospec switch
+
+Switch current task.
+
+```bash
+nanospec switch [name]
+```
+
+**Arguments:**
+
+- `name`: Task name (optional, displays current task and available tasks if not provided)
+
+**Description:**
+- After switching tasks, all workflow commands will use the current task by default
+- Creating a new task automatically sets it as the current task
+
+#### nanospec status
+
+Display current status.
+
+```bash
+nanospec status
+```
+
+**Output:**
+- Current configuration
+- Current task information
+- List of all tasks and their progress
+
+#### nanospec preset
+
+Preset package management.
+
+```bash
+nanospec preset list          # List all available presets
+nanospec preset install <name>  # Install preset
+nanospec preset uninstall <name> # Uninstall preset
+```
+
+**Available Presets:**
+- `frontend` - Frontend development specialization
+- `backend` - Backend development specialization
+- `refactor` - Refactoring optimization
+- `docs` - Documentation writing
+
+#### nanospec sync
+
+Sync commands to AI tools.
+
+```bash
+nanospec sync [options]
+```
+
+**Options:**
+
+- `--adapter <name>`: Specify AI tool (optional, syncs all tools by default)
+
+### Configuration System
+
+NanoSpec supports customization through configuration files. Configuration priority: project-level > user-level > default.
+
+#### Configuration File Locations
+
+- **Project-level**: `.nanospecrc` or `nanospec.config.js` (project root)
+- **User-level**: `~/.nanospecrc` (user home directory)
+
+#### Configuration Options
+
+```json
+{
+  "specs_root": "nanospec",        // Specs root directory name (default: nanospec)
+  "cmd_prefix": "spec",            // Command prefix (default: spec)
+  "default_adapter": "cursor",     // Default AI tool (default: cursor)
+  "template_format": "md",         // Template format (default: md)
+  "auto_sync": true                // Auto sync on init (default: true)
+}
+```
+
+#### Configuration Examples
+
+**JSON format (.nanospecrc):**
+```json
+{
+  "specs_root": "specs",
+  "default_adapter": "qwen"
+}
+```
+
+**JavaScript format (nanospec.config.js):**
+```javascript
+module.exports = {
+  specs_root: 'specs',
+  default_adapter: 'qwen',
+  template_format: 'toml'
+};
+```
 
 ### Workflow Guide
 

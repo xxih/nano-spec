@@ -145,3 +145,6 @@ my-test-folder/
 
 # dist
 dist
+
+# nanospec
+.nanospec/current-task

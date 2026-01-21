@@ -1,0 +1,1 @@
+{"name": "backend", "version": "1.0.0", "description": "后端开发特化预设，包含 API 设计、数据模型、服务架构规范", "commands": ["spec.api"], "templates": ["1-spec"], "extends": "AGENTS.md"}

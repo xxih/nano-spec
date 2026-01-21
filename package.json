@@ -14,7 +14,7 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "tsc && xcopy /E /I /Y src\\static dist\\static",
+		"build": "tsc && xcopy /E /I /Y src\\static dist\\static && xcopy /E /I /Y src\\presets dist\\presets",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",
@@ -43,14 +43,16 @@
 	},
 	"homepage": "https://github.com/xxih/nano-spec#readme",
 	"dependencies": {
-		"commander": "^12.0.0"
+		"commander": "^12.0.0",
+		"inquirer": "^9.2.0"
 	},
 	"devDependencies": {
+		"@types/inquirer": "^9.0.9",
 		"@types/node": "^22.0.0",
-		"typescript": "^5.5.0",
+		"@vitest/coverage-v8": "^2.0.0",
 		"tsx": "^4.0.0",
-		"vitest": "^2.0.0",
-		"@vitest/coverage-v8": "^2.0.0"
+		"typescript": "^5.5.0",
+		"vitest": "^2.0.0"
 	},
 	"engines": {
 		"node": ">=18"

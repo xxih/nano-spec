@@ -1,9 +1,11 @@
 import {existsSync, mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
+import {loadConfig} from '../config/config.js';
 
 export async function newTask(name?: string): Promise<void> {
 	const cwd = process.cwd();
-	const nanospecDir = join(cwd, 'nanospec');
+	const config = await loadConfig(cwd);
+	const nanospecDir = join(cwd, config.specs_root || 'nanospec');
 
 	if (!existsSync(nanospecDir)) {
 		console.log('❌ 请先运行 nanospec init 初始化项目');
@@ -29,7 +31,7 @@ export async function newTask(name?: string): Promise<void> {
 		'utf-8'
 	);
 
-	console.log(`✓ 创建任务目录: nanospec/${dirName}/`);
+	console.log(`✓ 创建任务目录: ${config.specs_root || 'nanospec'}/${dirName}/`);
 	console.log('  ├── brief.md');
 	console.log('  ├── assets/');
 	console.log('  └── outputs/');
