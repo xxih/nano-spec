@@ -341,3 +341,60 @@ sh: 1: xcopy: not found
 - `package.json`：修改 `build` 脚本
 - 可能需要安装 `fs-extra` 依赖并编写构建脚本
 - 确保 Windows 和 Linux 环境都能正常构建
+
+### [已确认] 设计完整的 CI/CD 方案和开发规范 `@2026-01-28`
+**问题**：项目需要一套完整的 CI/CD 方案，包括版本管理、npm 发布流程、开发规范等，以确保代码质量和发布流程的规范性。
+
+**结论**：设计并记录完整的 CI/CD 方案，包括以下内容：
+
+1. **版本管理策略**
+   - 遵循语义化版本（SemVer）规范
+   - 定义版本号变化规则（MAJOR/MINOR/PATCH）
+   - 建立分支策略（main/develop/feature/hotfix）
+
+2. **CI/CD 流程设计**
+   - CI 阶段：自动测试、构建、覆盖率检查
+   - CD 阶段：版本更新、构建、发布到 npm、创建 GitHub Release
+   - 使用 GitHub Actions 实现自动化
+
+3. **GitHub Actions 配置**
+   - Test Job：多版本 Node.js 测试（18.x, 20.x）
+   - Build Job：编译 TypeScript 并复制静态资源
+   - Publish Job：自动发布到 npm（通过 GitHub Release 触发）
+   - Coverage Job：上传覆盖率报告到 Codecov
+
+4. **NPM 发布流程**
+   - 前置准备：注册 npm 账号、配置 NPM_TOKEN
+   - 发布方式：使用 GitHub Release 触发自动发布
+   - 验证发布：查看包信息、测试安装
+   - 紧急撤回：24 小时内可撤回版本
+
+5. **开发规范**
+   - 提交规范：遵循 Conventional Commits
+   - 代码审查清单：测试、覆盖率、类型检查等
+   - 本地开发流程：分支管理、提交、PR 流程
+   - 发布前检查清单：文档、版本号、构建测试等
+
+6. **故障排查**
+   - 常见问题：CI 构建失败、npm 发布失败、覆盖率不达标等
+   - 调试技巧：本地模拟 CI 环境、查看发布内容等
+
+7. **最佳实践**
+   - 版本管理：使用 SemVer、遵循 Conventional Commits
+   - 代码质量：高测试覆盖率、类型检查、依赖更新
+   - CI/CD：自动化测试、多版本测试、优化构建速度
+   - 发布流程：使用 GitHub Release、充分测试、清晰文档
+   - 安全：不硬编码敏感信息、定期审计、启用 2FA
+
+**理由**：
+- 建立规范化的开发和发布流程，提高代码质量
+- 自动化 CI/CD 减少人为错误，提高效率
+- 完善的文档便于团队协作和知识传承
+- 规范的版本管理便于用户理解变更
+
+**影响范围**：
+- 新增 `Q&A/CI-CD完整方案.md`：完整的 CI/CD 方案文档
+- `.github/workflows/ci-cd.yml`：已存在的 CI/CD 配置（验证符合方案）
+- `package.json`：已配置的 scripts 和 publishConfig（验证符合方案）
+- 开发团队：遵循新的开发规范和发布流程
+- 用户：获得更稳定和规范的版本更新
