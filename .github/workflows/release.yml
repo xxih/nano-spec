@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+on:
+  # 1. 监听所有分支的 Push (包括 feature/*, fix/*)
+  # 目的：你在任何分支提交代码，CI 都会帮你跑测试
+  push:
+    branches:
+      - '**' # 监听所有分支
+    tags:
+      - 'v*' # 监听打版标签 (用来触发发布)
+
+  # 2. 监听 PR (双重保险)
+  pull_request:
+    branches:
+      - 'main'
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  # Job 1: 质量检查 (测试)
+  # 无论你在哪个分支，只要提交代码就跑测试，给你兜底
+  check:
+    name: Quality Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  # Job 2: 构建与发布 (发布)
+  # 🔥 严防死守：只有打了 v* 标签，且 check 通过了，才会执行这里
+  publish:
+    name: Build & Publish
+    needs: check
+    runs-on: ubuntu-latest
+    # 核心判断：只有是 Tag 推送时才跑
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          make_latest: true
+          generate_release_notes: true

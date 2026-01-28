@@ -1,0 +1,1 @@
+{"name": "docs", "version": "1.0.0", "description": "文档写作预设，包含信息架构、受众分析、交付物模板", "commands": ["spec.outline"], "templates": ["1-spec"], "extends": "AGENTS.md"}

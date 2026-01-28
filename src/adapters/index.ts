@@ -2,6 +2,10 @@ import { cursorAdapter } from './cursor.js';
 import { qwenAdapter } from './qwen.js';
 import { iflowAdapter } from './iflow.js';
 import { clineAdapter } from './cline.js';
+import { claudeCodeAdapter } from './claude-code.js';
+import { copilotAdapter } from './copilot.js';
+import { windsurfAdapter } from './windsurf.js';
+import { kiloCodeAdapter } from './kilo-code.js';
 
 /**
  * 支持的命令文件格式
@@ -37,6 +41,10 @@ const adapters: Record<string, AIAdapter> = {
   qwen: qwenAdapter,
   iflow: iflowAdapter,
   cline: clineAdapter,
+  'claude-code': claudeCodeAdapter,
+  copilot: copilotAdapter,
+  windsurf: windsurfAdapter,
+  'kilo-code': kiloCodeAdapter,
 };
 
 export function getAdapter(name: string): AIAdapter | null {

@@ -9,7 +9,11 @@ describe('adapters index', () => {
     expect(adapters).toContain('qwen');
     expect(adapters).toContain('iflow');
     expect(adapters).toContain('cline');
-    expect(adapters.length).toBe(4);
+    expect(adapters).toContain('claude-code');
+    expect(adapters).toContain('copilot');
+    expect(adapters).toContain('windsurf');
+    expect(adapters).toContain('kilo-code');
+    expect(adapters.length).toBe(8);
   });
 
   it('应该能获取已注册的适配器', () => {
@@ -29,6 +33,22 @@ describe('adapters index', () => {
     const clineAdapter = getAdapter('cline');
     expect(clineAdapter).toBeDefined();
     expect(clineAdapter?.name).toBe('cline');
+
+    const claudeCodeAdapter = getAdapter('claude-code');
+    expect(claudeCodeAdapter).toBeDefined();
+    expect(claudeCodeAdapter?.name).toBe('claude-code');
+
+    const copilotAdapter = getAdapter('copilot');
+    expect(copilotAdapter).toBeDefined();
+    expect(copilotAdapter?.name).toBe('copilot');
+
+    const windsurfAdapter = getAdapter('windsurf');
+    expect(windsurfAdapter).toBeDefined();
+    expect(windsurfAdapter?.name).toBe('windsurf');
+
+    const kiloCodeAdapter = getAdapter('kilo-code');
+    expect(kiloCodeAdapter).toBeDefined();
+    expect(kiloCodeAdapter?.name).toBe('kilo-code');
   });
 
   it('应该对未注册的适配器返回 null', () => {
@@ -78,13 +98,21 @@ describe('adapters index', () => {
     expect(iflowAdapter.fileFormat).toBe('toml');
   });
 
-  it('cursor、qwen、cline 适配器应该使用 Markdown 格式', () => {
+  it('cursor、qwen、cline、claude-code、copilot、windsurf、kilo-code 适配器应该使用 Markdown 格式', () => {
     const cursorAdapter = getAdapter('cursor') as AIAdapter;
     const qwenAdapter = getAdapter('qwen') as AIAdapter;
     const clineAdapter = getAdapter('cline') as AIAdapter;
+    const claudeCodeAdapter = getAdapter('claude-code') as AIAdapter;
+    const copilotAdapter = getAdapter('copilot') as AIAdapter;
+    const windsurfAdapter = getAdapter('windsurf') as AIAdapter;
+    const kiloCodeAdapter = getAdapter('kilo-code') as AIAdapter;
 
     expect(cursorAdapter.fileFormat).toBe('md');
     expect(qwenAdapter.fileFormat).toBe('md');
     expect(clineAdapter.fileFormat).toBe('md');
+    expect(claudeCodeAdapter.fileFormat).toBe('md');
+    expect(copilotAdapter.fileFormat).toBe('md');
+    expect(windsurfAdapter.fileFormat).toBe('md');
+    expect(kiloCodeAdapter.fileFormat).toBe('md');
   });
 });

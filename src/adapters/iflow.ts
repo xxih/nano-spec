@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import type { AIAdapter } from './index.js';
-import { getCommandTemplate, getFileExtension } from './utils.js';
+import { getCommandTemplate, getFileExtension, listAvailableCommands } from './utils.js';
 
 export const iflowAdapter: AIAdapter = {
   name: 'iflow',
@@ -13,14 +13,8 @@ export const iflowAdapter: AIAdapter = {
     const commandsDir = join(cwd, '.iflow', 'commands');
     mkdirSync(commandsDir, { recursive: true });
 
-    const commands = [
-      'spec.1-spec',
-      'spec.2-plan',
-      'spec.3-execute',
-      'spec.accept',
-      'spec.align',
-      'spec.summary',
-    ];
+    // 自动扫描所有可用的命令
+    const commands = listAvailableCommands();
 
     for (const cmd of commands) {
       // 获取模板内容（TOML 格式）

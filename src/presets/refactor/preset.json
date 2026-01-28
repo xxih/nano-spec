@@ -1,0 +1,1 @@
+{"name": "refactor", "version": "1.0.0", "description": "重构优化预设，包含代码评审、风险控制清单", "commands": ["spec.review"], "templates": ["2-plan"], "extends": "AGENTS.md"}

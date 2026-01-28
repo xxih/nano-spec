@@ -35,7 +35,7 @@ prompt = """
 
 ## Output
 
-> 若 `<specs_dir>/templates/summary.md` 有定制则以其为准
+> AGENTS.md 中的"流程定制 > summary 阶段 > 输出格式"若有定义，优先级高于以下默认格式
 
 ```markdown
 # Summary：[主题]
