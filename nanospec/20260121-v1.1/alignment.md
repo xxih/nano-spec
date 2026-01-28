@@ -307,20 +307,37 @@ const commands = [
 11. src/adapters/kilo-code.test.ts
 
 **目标**：测试覆盖率从 37.65% 提升到 66.95%，共 128 个测试全部通过
-**影响范围**：所有未测试的模块\
-## ��������
-### [��ȷ��] �� CLI init �������� @2026-01-22`r
-**����**����ǰ \
-anospec init\ ����ʽ��ʼ����ѯ��̫�����⣨AI���ߡ�specs_root��cmd_prefix��default_adapter�����û����鲻�ѡ�
-**����**���򻯽������̣�ֻѯ�� AI ����ѡ������������ʹ��Ĭ��ֵ��
-**���**��
-- ����ʽ��ʼ��ֻѯ�� AI ����ѡ�񣨶�ѡ��
-- specs_root��cmd_prefix��default_adapter ��������ʹ��Ĭ��ֵ
-- �û������޸����ã���ʹ�� \
-anospec config\ ���������
-**����**�����ٽ����ִΣ������û����飬����ѧϰ�ɱ������������ͨ�� \
-anospec config\ ������޸ġ�
-**Ӱ�췶Χ**��
-- \src/commands/init.ts\���򻯽���ʽ�򵼣��Ƴ����������
-- �����ļ��Իᴴ������ʹ��Ĭ��ֵ
-- �ĵ����£�˵���򻯺�Ľ�������\
+**影响范围**：所有未测试的模块
+
+### [偏差] 简化 init CLI 指令交互式流程 `@2026-01-22`
+**问题**：当前 `nanospec init` 交互式初始化询问太多问题（AI 工具、specs_root、cmd_prefix、default_adapter），用户容易不选择
+**解决方案**：简化交互式流程，只询问 AI 工具选择（单选），其他配置项使用默认值
+**变更**：
+- 交互式初始化只询问 AI 工具选择（单选）
+- specs_root、cmd_prefix、default_adapter 等配置使用默认值
+- 用户后续如需修改配置，使用 `nanospec config` 命令单独修改
+**理由**：减少交互步骤，提升用户体验，降低学习成本，用户后续可通过 `nanospec config` 命令按需修改
+**影响范围**：
+- `src/commands/init.ts`：简化交互式向导，移除多余问题
+- 配置文件会自动创建并使用默认值
+- 文档更新，说明简化后的交互流程
+
+### [偏差] GitHub CI/CD 构建失败：xcopy 命令在 Linux 环境不可用 `@2026-01-28`
+**问题**：GitHub Actions 使用 `ubuntu-latest` 运行环境，`package.json` 中的 `build` 脚本使用了 Windows 特定的 `xcopy` 命令：
+```json
+"build": "tsc && xcopy /E /I /Y src\\static dist\\static && xcopy /E /I /Y src\\presets dist\\presets"
+```
+导致构建失败，错误信息：
+```
+sh: 1: xcopy: not found
+```
+
+**正确做法**：使用跨平台的文件复制方案，例如：
+- 使用 Node.js 的 `fs-extra` 库（推荐）
+- 或使用 `npm run build` 配合 TypeScript 配置自动处理
+- 或使用 `cpx` 等跨平台复制工具
+
+**影响范围**：
+- `package.json`：修改 `build` 脚本
+- 可能需要安装 `fs-extra` 依赖并编写构建脚本
+- 确保 Windows 和 Linux 环境都能正常构建

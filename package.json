@@ -14,7 +14,7 @@
 		"LICENSE"
 	],
 	"scripts": {
-		"build": "tsc && xcopy /E /I /Y src\\static dist\\static && xcopy /E /I /Y src\\presets dist\\presets",
+		"build": "node scripts/build.js",
 		"dev": "tsx src/index.ts",
 		"test": "vitest run",
 		"test:watch": "vitest",
@@ -51,6 +51,7 @@
 		"@types/inquirer": "^9.0.9",
 		"@types/node": "^22.0.0",
 		"@vitest/coverage-v8": "^2.0.0",
+		"fs-extra": "^11.3.3",
 		"tsx": "^4.0.0",
 		"typescript": "^5.5.0",
 		"vitest": "^2.0.0"
