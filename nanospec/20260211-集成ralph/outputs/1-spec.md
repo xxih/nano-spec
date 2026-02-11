@@ -38,60 +38,43 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   Ralph 外层把控者架构                            │
+│                   Ralph 外层把控者架构（简化版）                   │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  用户层面:                                                       │
 │    ┌──────────────┐                                             │
-│    │ 宏观目标描述   │  (goals.md / prd.json)                    │
+│    │ prd.json     │  (核心状态对象，由内层 AI 管理)            │
 │    └──────────────┘                                             │
 │           ↓                                                     │
 │                                                                 │
-│  Ralph 控制层:                                                  │
+│  Ralph 控制层 (scripts/ralph.ts):                                │
 │    ┌────────────────────────────────────────────────────────┐   │
 │    │  [循环开始]                                              │   │
 │    │      ↓                                                  │   │
-│    │  读取宏观目标                                             │   │
+│    │  调用 iflow                                              │   │
 │    │      ↓                                                  │   │
-│    │  分析并分解任务 ───────→ 未完成任务列表                   │   │
+│    │  检测 <promise>COMPLETE</promise>                        │   │
 │    │      ↓                                                  │   │
-│    │  选择下一个任务 ───────→ 任务指针更新                     │   │
-│    │      ↓                                                  │   │
-│    │  创建任务 (nanospec new) ───────→ nanospec/子任务目录/   │   │
-│    │      ↓                                                  │   │
-│    │  切换任务 (nanospec switch)                              │   │
-│    │      ↓                                                  │   │
-│    │  执行 NanoSpec 流程:                                     │   │
-│    │    • 1-spec: 规格撰写                                    │   │
-│    │    • 2-plan: 方案规划                                    │   │
-│    │    • 3-execute: 执行交付                                 │   │
-│    │      ↓                                                  │   │
-│    │  运行质量检查                                             │   │
-│    │      ↓                                                  │   │
-│    │  提取可重用模式 ───────→ progress.txt / AGENTS.md        │   │
-│    │      ↓                                                  │   │
-│    │  记录进度日志 ───────→ progress.txt                      │   │
-│    │      ↓                                                  │   │
-│    │  提交更改（可选）                                         │   │
-│    │      ↓                                                  │   │
-│    │  [所有目标完成?] ──────否──→ 继续循环                     │   │
+│    │  [完成?] ──────否──→ 继续循环                             │   │
 │    │        │                                                 │   │
 │    │       是 ↓                                                │   │
 │    │  [循环结束]                                              │   │
 │    └────────────────────────────────────────────────────────┘   │
 │                                                                 │
-│  NanoSpec 任务层面 (多个并发或串行):                             │
-│    ┌────────────────┐  ┌────────────────┐  ┌────────────────┐ │
-│    │ 子任务 A:       │  │ 子任务 B:       │  │ 子任务 C:       │ │
-│    │ - brief.md     │  │ - brief.md     │  │ - brief.md     │ │
-│    │ - 1-spec.md   │  │ - 1-spec.md   │  │ - 1-spec.md   │ │
-│    │ - 2-plan.md   │  │ - 2-plan.md   │  │ - 2-plan.md   │ │
-│    │ - 3-tasks.md  │  │ - 3-tasks.md  │  │ - 3-tasks.md  │ │
-│    │ - summary.md  │  │ - summary.md  │  │ - summary.md  │ │
-│    └────────────────┘  └────────────────┘  └────────────────┘ │
+│  内层 AI (iflow) - 由 Ralph 脚本循环调用:                        │
+│    • 读取 prd.json 获取当前任务状态                             │
+│    • 根据需要创建任务 (nanospec new)                            │
+│    • 切换任务 (nanospec switch)                                 │
+│    • 执行 NanoSpec 流程 (1-spec → 2-plan → 3-execute)          │
+│    • 更新 prd.json (phase / progress_note)                     │
+│    • 检测完成，输出 <promise>COMPLETE</promise>                 │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+**核心职责分工：**
+- **Ralph 脚本**：循环调用 iflow、检测完成标志、记录日志
+- **内层 AI**：任务创建、任务切换、NanoSpec 流程执行、prd.json 更新
 
 ### 2. 目录结构
 
@@ -99,7 +82,7 @@
 project-root/
 ├── .nanospec/
 │   ├── config.json              # 项目配置
-│   └── .current                 # 当前任务指针（被 Ralph 管理）
+│   └── .current                 # 当前任务指针（由内层 AI 管理）
 │
 ├── scripts/
 │   └── ralph.ts                 # Ralph 外层控制器脚本（TypeScript）
@@ -107,16 +90,9 @@ project-root/
 ├── nanospec/
 │   ├── ralph/
 │   │   ├── prd.json             # 核心状态对象（任务队列 + 状态）
-│   │   ├── prompt.md            # amp 工具的 prompt 模板
-│   │   ├── CLAUDE.md            # Claude 工具的 prompt 模板
-│   │   ├── IFLOW.md             # iFlow 工具的 prompt 模板
-│   │   ├── progress.txt         # 进度日志
-│   │   ├── .last-branch         # 上次分支记录
-│   │   └── archive/             # 完成任务的归档
-│   │       ├── 20260211-task-a/
-│   │       └── 20260211-task-b/
+│   │   └── progress.txt         # 进度日志（可选）
 │   │
-│   ├── <task-a>/                # Ralph 创建的子任务 A
+│   ├── <task-a>/                # 内层 AI 创建的子任务 A
 │   │   ├── brief.md
 │   │   ├── alignment.md
 │   │   └── outputs/
@@ -125,8 +101,8 @@ project-root/
 │   │       ├── 3-tasks.md
 │   │       └── summary.md
 │   │
-│   ├── <task-b>/                # Ralph 创建的子任务 B
-│   └── <task-c>/                # Ralph 创建的子任务 C
+│   ├── <task-b>/                # 内层 AI 创建的子任务 B
+│   └── <task-c>/                # 内层 AI 创建的子任务 C
 │
 └── ... (项目代码)
 ```

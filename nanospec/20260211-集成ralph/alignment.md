@@ -231,3 +231,49 @@ def main():
 - 2-plan 需要更新：基于 ralph.ps1 设计 TS 脚本实现方案
 - 3-tasks 需要更新：移除 CLI command 开发任务，改为 TS 脚本开发任务
 - 新增脚本文件：`scripts/ralph.ts`
+
+---
+
+## [简化] Ralph 功能简化 - 移除归档、仅支持 iflow `@2026-02-11`
+
+**用户决策**：
+1. **不需要归档机制** - 移除分支变更归档、分支跟踪、archive/ 目录
+2. **一期仅支持 iflow** - 移除 amp/claude 多工具支持
+3. **Ralph 只是脚本** - 不需要管理 current、new 等任务创建逻辑
+4. **任务创建由内层 AI 负责** - Ralph 只负责启动 AI、监控、Kill、重启
+
+**简化后的 Ralph 核心功能**：
+1. 读取 prd.json（可选，用于显示状态）
+2. 循环调用 iflow
+3. 检测 `<promise>COMPLETE</promise>` 标志
+4. 到达最大迭代次数后退出
+5. 进度日志（可选）
+
+**简化后的脚本逻辑**：
+```typescript
+async function main() {
+  const maxIterations = 50;
+
+  for (let i = 1; i <= maxIterations; i++) {
+    console.log(`Iteration ${i} of ${maxIterations}`);
+
+    try {
+      const output = await execPromise('iflow -y');
+
+      if (output.includes('<promise>COMPLETE</promise>')) {
+        console.log('Ralph completed all tasks!');
+        process.exit(0);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    await sleep(2000);
+  }
+}
+```
+
+**影响范围**：
+- 1-spec.md 需要大幅简化：移除归档、多工具、分支管理等章节
+- 3-tasks 需要简化：移除归档、多工具、分支跟踪等任务
+- 目录结构简化：移除 archive/、.last-branch 等文件
