@@ -50,7 +50,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           # 🔥🔥🔥 关键点 2：删掉 registry-url 这一行
           # registry-url: 'https://registry.npmjs.org'  <-- 删掉它！不要让它生成依赖 Token 的配置文件
 
