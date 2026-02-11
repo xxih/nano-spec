@@ -1,6 +1,6 @@
 # AGENTS (Generic)
 
-本文档定义 Nano Spec 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
+本文档定义 NanoSpec 流水线的**通用规范**，供各 AI 工具的 slash commands 或 `<specs_dir>/` 下的命令统一引用，避免在每个 command 里重复"目录约定/通用规则"。
 
 ---
 
@@ -8,11 +8,12 @@
 
 ### 1.1 变量定义
 
-| 变量           | 值         | 说明       |
-| -------------- | ---------- | ---------- |
-| `<cmd_prefix>` | `spec`     | 命令前缀   |
-| `<specs_dir>`  | `nanospec` | 规格根目录 |
-| `<task_name>`  | -          | 任务名称   |
+| 变量           | 值               | 说明                 |
+| -------------- | ---------------- | -------------------- |
+| `<cmd_prefix>` | `{{cmd_prefix}}` | 命令前缀             |
+| `<specs_dir>`  | `{{specs_dir}}`  | 用户产出目录         |
+| `<config_dir>` | `.nanospec`      | 工具配置目录（固定） |
+| `<task_name>`  | -                | 任务名称             |
 
 ### 1.2 命令速查
 
@@ -32,15 +33,12 @@
 ### 2.1 目录结构
 
 ```
-<specs_dir>/
+<config_dir>/                    # 工具配置目录
 ├── AGENTS.md                    # 本文件
-├── templates/                   # 输出模板（定制这里）
-│   ├── 1-spec.md
-│   ├── 2-plan.md
-│   ├── 3-tasks.md
-│   ├── acceptance.md
-│   ├── alignment.md
-│   └── summary.md
+├── scripts/                     # 脚本文件
+└── .current                     # 当前任务状态
+
+<specs_dir>/                     # 用户产出目录
 └── <task_name>/                 # 任务目录
     ├── brief.md / prd.md        # 需求描述（二选一）
     ├── assets/                  # 辅助素材
@@ -81,16 +79,17 @@ alignment.md > brief.md / prd.md > assets/* > 现状
 
 #### 写入格式
 
-参考 `<specs_dir>/templates/alignment.md`，使用标准标签：
+使用标准标签（问题类型）：
 
-| 标签       | 含义                 |
-| ---------- | -------------------- |
-| `[冲突]`   | 多来源信息存在矛盾   |
-| `[缺失]`   | 缺少必要信息         |
-| `[歧义]`   | 描述模糊可作多种理解 |
-| `[偏差]`   | 实现与预期不符       |
-| `[待确认]` | 需要相关方确认       |
-| `[已确认]` | 已获确认结论         |
+| 标签     | 含义                 |
+| -------- | -------------------- |
+| `[偏差]` | 实现与预期不符       |
+| `[变更]` | 范围/方向主动调整    |
+| `[缺失]` | 遗漏了需求/场景      |
+| `[歧义]` | 描述模糊可作多种理解 |
+| `[冲突]` | 多处信息矛盾         |
+
+需要用户行动/确认的条目，在标签后加 `` `⏳ 待确认` `` 标记。用户确认后移除。
 
 #### 变更传播
 
@@ -114,23 +113,24 @@ alignment.md > brief.md / prd.md > assets/* > 现状
 
 #### 3.3.1 当前任务文件
 
-`.nanospec/current-task` 记录当前工作中的 task_name。
+`<config_dir>/.current` 记录当前工作中的 task_name。
 
 #### 3.3.2 读取规则
 
-每个 command 开始时：
+每个 command 开始时，按优先级确定工作目录：
 
-1. 若用户指定了 task_name → 使用指定值，更新 `current-task`
-2. 若用户未指定 → 读取 `current-task`
-3. 若 `current-task` 不存在 → 提示用户指定任务
+1. 若用户在对话中显式指定了目录路径或任务名 → 使用指定值（不更新 `.current`）
+2. 若用户未指定 → 读取 `<config_dir>/.current`
+3. 若 `.current` 不存在 → 提示用户指定任务
 
-### 3.3.3 写入规则
+**关键点**：显式指定不自动更新 `.current`，支持多对话并行工作在不同任务。
 
-以下情况更新 `current-task`：
+#### 3.3.3 写入规则
 
-- `spec.1-spec` 创建新任务
-- 任意 command 指定了新的 task_name
-- `spec.switch` 显式切换
+以下情况更新 `.current`：
+
+- `nanospec new` 创建新任务
+- `nanospec switch` 显式切换
 
 ---
 
