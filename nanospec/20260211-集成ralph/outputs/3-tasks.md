@@ -1,19 +1,72 @@
 # Ralph 技术集成 - 任务清单
 
-## 待确认事项（需要用户决策）
+## 已完成对齐
 
-- [ ] 确认宏观目标的表达方式（goals.md / prd.json / 其他）
-- [ ] 确认任务分解的策略（完全自主 / 用户辅助 / 混合模式）
-- [ ] 确认子任务完成后的验证机制（acceptance / 测试 / 质量检查 / AI 验证）
-- [ ] 确认进度跟踪方式（progress.txt / JSON 状态 / 混合）
+- [x] **[对齐]** 确认使用 prd.json 作为核心状态对象 `@2026-02-11`
+- [x] **[对齐]** 确认 Ralph-Aware AI 系统提示设计 `@2026-02-11`
+- [x] **[对齐]** 确认外层控制器实现方案 `@2026-02-11`
+- [x] 更新 1-spec.md，整合 prd.json 核心架构
 
 ## 后续工作步骤
 
-- [ ] 用户确认待确认事项的决策方向
-- [ ] 根据用户确认更新 1-spec.md 中的模糊设计
-- [ ] 进入 2-plan 阶段，制定详细技术方案
-- [ ] 设计 Ralph 控制器的核心逻辑
-- [ ] 设计任务分解算法
-- [ ] 设计状态管理和持久化机制
-- [ ] 设计进度日志系统
-- [ ] 设计可重用模式提取机制
+### Phase 1: 核心数据模型
+
+- [ ] 设计 prd.json 数据结构（TypeScript 接口）
+- [ ] 实现 prd.json 验证器（JSON Schema）
+- [ ] 实现 prd.json 读写工具函数
+- [ ] 实现任务状态管理工具函数
+
+### Phase 2: AI 系统提示
+
+- [ ] 创建系统提示模板文件
+- [ ] 实现系统提示注入机制
+- [ ] 在 `nanospec switch` 时注入系统提示
+- [ ] 在 `/spec.*` 命令中携带系统提示上下文
+
+### Phase 3: 外层控制器
+
+- [ ] 设计 ralph_runner.py 脚本结构
+- [ ] 实现任务选择逻辑
+- [ ] 实现上下文注入逻辑
+- [ ] 实现 AI 启动和监控
+- [ ] 实现 Kill 策略（时间限制 / 不活跃检测）
+- [ ] 实现循环控制逻辑
+
+### Phase 4: CLI 命令
+
+- [ ] 实现 `nanospec ralph init` 命令
+- [ ] 实现 `nanospec ralph start` 命令
+- [ ] 实现 `nanospec ralph stop` 命令
+- [ ] 实现 `nanospec ralph status` 命令
+- [ ] 实现 `nanospec ralph resume` 命令
+- [ ] 实现 `nanospec ralph summary` 命令
+
+### Phase 5: 斜杠命令
+
+- [ ] 创建 `/spec.ralph-init` 斜杠命令
+- [ ] 创建 `/spec.ralph-status` 斜杠命令
+- [ ] 创建 `/spec.ralph-decompose` 斜杠命令
+- [ ] 创建 `/spec.ralph-next` 斜杠命令
+- [ ] 创建 `/spec.ralph-add` 斜杠命令
+- [ ] 创建 `/spec.ralph-sync` 斜杠命令
+
+### Phase 6: 集成测试
+
+- [ ] 编写 prd.json 单元测试
+- [ ] 编写系统提示注入测试
+- [ ] 编写控制器流程测试
+- [ ] 编写端到端集成测试
+
+### Phase 7: 文档和示例
+
+- [ ] 更新 README.md，添加 Ralph 使用说明
+- [ ] 创建 prd.json 示例文件
+- [ ] 创建系统提示模板示例
+- [ ] 创建控制器使用示例
+
+### Phase 8: 代码质量
+
+- [ ] 运行类型检查
+- [ ] 运行 lint 检查
+- [ ] 运行所有测试
+- [ ] 更新 CHANGELOG.md

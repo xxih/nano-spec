@@ -101,12 +101,17 @@ project-root/
 │   ├── config.json              # 项目配置
 │   └── .current                 # 当前任务指针（被 Ralph 管理）
 │
+├── scripts/
+│   └── ralph.ts                 # Ralph 外层控制器脚本（TypeScript）
+│
 ├── nanospec/
 │   ├── ralph/
-│   │   ├── goals.md             # 宏观目标描述
-│   │   ├── prd.json             # 结构化目标定义（可选）
-│   │   ├── progress.txt         # Ralph 进度日志
-│   │   ├── ralph-state.json     # 状态快照
+│   │   ├── prd.json             # 核心状态对象（任务队列 + 状态）
+│   │   ├── prompt.md            # amp 工具的 prompt 模板
+│   │   ├── CLAUDE.md            # Claude 工具的 prompt 模板
+│   │   ├── IFLOW.md             # iFlow 工具的 prompt 模板
+│   │   ├── progress.txt         # 进度日志
+│   │   ├── .last-branch         # 上次分支记录
 │   │   └── archive/             # 完成任务的归档
 │   │       ├── 20260211-task-a/
 │   │       └── 20260211-task-b/
@@ -128,187 +133,349 @@ project-root/
 
 ### 3. 核心组件
 
-#### 3.1 goals.md - 宏观目标描述
+#### 3.1 prd.json - 核心状态对象
 
-**结构示例：**
-```markdown
-# 宏观目标：[项目/功能名称]
-
-## 目标概述
-描述整体目标和成功标准
-
-## 核心要求
-- 要求 1
-- 要求 2
-- 要求 3
-
-## 约束条件
-- 技术约束
-- 时间约束
-- 资源约束
-
-## 成功标准
-- [ ] 标准 1
-- [ ] 标准 2
-- [ ] 标准 3
-
-## 上下文信息
-- 相关文档
-- 参考资料
-- 现有系统状态
-```
-
-#### 3.2 prd.json - 结构化目标定义（可选）
+**作用**：Ralph 和 AI 之间的共享内存，包含任务队列、当前焦点、phase 细分状态、progress_note。
 
 **结构：**
 ```json
 {
-  "projectName": "项目名称",
-  "branchName": "ralph/project-name",
-  "goals": [
+  "project": "MySuperApp",
+  "version": "1.0.0",
+  "last_updated": "2023-10-27 10:00:00",
+  "ralph_instruction": "当前上下文已重置。请检查 active_task_id 并从那里继续。",
+  "tasks": [
     {
-      "id": "goal-1",
-      "title": "目标标题",
-      "description": "详细描述",
-      "priority": 1,
-      "status": "pending",
-      "acceptanceCriteria": [
-        "验收标准 1",
-        "验收标准 2"
-      ]
-    }
-  ],
-  "constraints": {
-    "maxIterations": 50,
-    "qualityChecks": {
-      "typecheck": true,
-      "lint": true,
-      "test": true
+      "id": "T-1",
+      "title": "设计用户鉴权系统",
+      "status": "completed",
+      "nanospec_file": "specs/auth.nano"
     },
-    "autoCommit": false
-  }
-}
-```
-
-#### 3.3 progress.txt - 进度日志
-
-**结构：**
-```
-## Codebase Patterns
-- 可重用模式 1
-- 可重用模式 2
-
-## Ralph Session Log
-开始时间: 2026-02-11 10:00:00
-宏观目标: [项目名称]
-
----
-
-## 2026-02-11 10:05:00 - 任务创建
-- 创建任务: task-a (用户登录功能)
-- 任务描述: 实现基本的用户登录和注册流程
-- 预期产出: 完整的登录表单、API 接口、测试用例
-
----
-
-## 2026-02-11 10:45:00 - 任务完成
-- 完成任务: task-a
-- 修改文件: src/auth/login.ts, src/auth/register.ts
-- 测试结果: 通过 (12/12)
-- **学习点:**
-  - 认证流程使用 JWT token
-  - 密码加密使用 bcrypt
-  - API 错误处理统一格式
-
----
-
-## 2026-02-11 11:00:00 - 任务创建
-- 创建任务: task-b (用户权限管理)
-- 依赖: task-a
-```
-
-#### 3.4 ralph-state.json - 状态快照
-
-**结构：**
-```json
-{
-  "session": {
-    "id": "session-20260211-100000",
-    "startTime": "2026-02-11T10:00:00Z",
-    "status": "running",
-    "iteration": 3
-  },
-  "goals": {
-    "total": 5,
-    "completed": 1,
-    "pending": 4
-  },
-  "currentTask": "task-b",
-  "completedTasks": ["task-a"],
-  "pendingTasks": ["task-b", "task-c", "task-d", "task-e"],
-  "patterns": [
-    "认证流程使用 JWT token",
-    "密码加密使用 bcrypt"
+    {
+      "id": "T-2",
+      "title": "实现登录接口",
+      "status": "in_progress",
+      "nanospec_file": "specs/login.nano",
+      "phase": "execute",
+      "progress_note": "Plan 已生成，测试用例写了一半，上次中断在 test_login_fail.ts"
+    },
+    {
+      "id": "T-3",
+      "title": "前端登录页",
+      "status": "pending"
+    }
   ]
 }
+```
+
+**关键字段说明：**
+- `project` - 项目名称
+- `version` - 项目版本
+- `last_updated` - 最后更新时间
+- `ralph_instruction` - AI 重启时的上下文注入信息
+- `tasks` - 任务队列数组
+  - `id` - 任务唯一标识
+  - `title` - 任务标题
+  - `status` - 任务状态（pending / in_progress / completed）
+  - `nanospec_file` - 关联的 nanospec 任务目录路径
+  - `phase` - 当前阶段（spec / plan / execute / review）
+  - `progress_note` - 进度备注（用于断点续执行）
+
+**更新规则：**
+- AI 每完成一个原子操作必须立即更新 `phase` 和 `progress_note`
+- AI 可以添加新任务或拆分现有任务
+- Ralph 定期检查 `prd.json` 的更新时间，判断 AI 是否僵死
+
+#### 3.2 AI 系统提示（Ralph-Aware Skill）
+
+**作用**：让 AI 感知无状态执行环境，支持 checkpoint 机制和任务扩展。
+
+**系统提示内容：**
+```
+Role: 你是 Ralph 自动化流水线中的 Worker。
+
+Environment: 你的上下文内存是有限的，外部脚本（Ralph）会在你运行一段时间后强制杀死你（Kill）。
+
+Primary Rule: Stateless Execution (无状态执行)。
+
+Workflow:
+1. 启动 (On Boot): 立即读取根目录下的 prd.json。
+2. 定位 (Locate): 找到状态为 in_progress 的任务。
+3. 如果没有 nanospec_file，创建它 (nanospec new)，并立即更新 prd.json。
+4. 执行 (Execute): 根据 nanospec 的标准流程 (Spec -> Plan -> Code) 工作。
+5. 同步 (Sync): 每当你完成一个原子操作（如写完一个 Spec，或通过一个 Test），必须更新 prd.json 中的 progress_note 和 phase。这是你的"存档点"。
+6. 扩展 (Expand): 如果你发现当前任务需要拆分，请直接修改 prd.json，将任务拆分或添加新任务。
+```
+
+**实现方式：**
+- 在 `nanospec switch` 时自动注入系统提示
+- 在 `/spec.*` 命令中携带系统提示上下文
+- 在 prd.json 中通过 `ralph_instruction` 字段传递
+
+#### 3.3 外层控制器（scripts/ralph.ts）
+
+**作用**：外层监控者，负责循环启动 AI、监控执行状态、强制 Kill 重置上下文。
+
+**核心功能（基于 ralph.ps1）：**
+1. 多 AI 工具支持（amp/claude/iflow）
+2. Prompt 文件读取（prompt.md/CLAUDE.md/IFLOW.md）
+3. PRD 文件管理（读取 branchName，检测变更）
+4. 进度日志（读取/写入 progress.txt）
+5. 分支变更归档（检测分支变化，复制到 archive/）
+6. 分支跟踪（记录 .last-branch 文件）
+7. 循环控制（最大迭代次数，检测 `<promise>COMPLETE</promise>`）
+8. AI 工具调用（child_process，捕获输出）
+9. UTF-8 编码（Node.js 默认支持）
+
+**核心逻辑：**
+```typescript
+import * as fs from 'fs';
+import * as path from 'path';
+import { exec } from 'child_process';
+
+interface Task {
+  id: string;
+  title: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  nanospec_file?: string;
+  phase?: 'spec' | 'plan' | 'execute' | 'review';
+  progress_note?: string;
+}
+
+interface Prd {
+  project: string;
+  version: string;
+  last_updated: string;
+  branchName?: string;
+  ralph_instruction: string;
+  tasks: Task[];
+}
+
+async function main() {
+  const scriptDir = path.dirname(__filename);
+  const prdFile = path.join(scriptDir, '../nanospec/ralph/prd.json');
+  const progressFile = path.join(scriptDir, '../nanospec/ralph/progress.txt');
+  const archiveDir = path.join(scriptDir, '../nanospec/ralph/archive');
+  const lastBranchFile = path.join(scriptDir, '../nanospec/ralph/.last-branch');
+
+  // 分支变更归档
+  if (fs.existsSync(prdFile) && fs.existsSync(lastBranchFile)) {
+    const prd = JSON.parse(fs.readFileSync(prdFile, 'utf-8')) as Prd;
+    const lastBranch = fs.readFileSync(lastBranchFile, 'utf-8').trim();
+
+    if (prd.branchName && lastBranch && prd.branchName !== lastBranch) {
+      const date = new Date().toISOString().split('T')[0];
+      const folderName = lastBranch.replace('ralph/', '');
+      const archiveFolder = path.join(archiveDir, `${date}-${folderName}`);
+
+      fs.mkdirSync(archiveFolder, { recursive: true });
+      fs.copyFileSync(prdFile, path.join(archiveFolder, 'prd.json'));
+      if (fs.existsSync(progressFile)) {
+        fs.copyFileSync(progressFile, path.join(archiveFolder, 'progress.txt'));
+      }
+
+      fs.writeFileSync(progressFile, `# Ralph Progress Log\nStarted: ${new Date()}\n---\n`);
+    }
+  }
+
+  // 记录当前分支
+  if (fs.existsSync(prdFile)) {
+    const prd = JSON.parse(fs.readFileSync(prdFile, 'utf-8')) as Prd;
+    if (prd.branchName) {
+      fs.writeFileSync(lastBranchFile, prd.branchName);
+    }
+  }
+
+  // 初始化进度文件
+  if (!fs.existsSync(progressFile)) {
+    fs.writeFileSync(progressFile, `# Ralph Progress Log\nStarted: ${new Date()}\n---\n`);
+  }
+
+  const maxIterations = 50;
+  const tool = 'iflow';
+
+  for (let i = 1; i <= maxIterations; i++) {
+    console.log(`\n==============================================================`);
+    console.log(`  Ralph Iteration ${i} of ${maxIterations} (${tool})`);
+    console.log(`==============================================================`);
+
+    const promptFile = path.join(scriptDir, '../nanospec/ralph/IFLOW.md');
+    const prompt = fs.readFileSync(promptFile, 'utf-8');
+
+    try {
+      const output = await execPromise(`${tool} -y`, { input: prompt });
+
+      if (output.includes('<promise>COMPLETE</promise>')) {
+        console.log('\nRalph completed all tasks!');
+        process.exit(0);
+      }
+    } catch (error) {
+      console.error('Error running tool:', error);
+    }
+
+    console.log(`Iteration ${i} complete. Continuing...`);
+    await sleep(2000);
+  }
+
+  console.log(`\nRalph reached max iterations (${maxIterations}) without completing all tasks.`);
+  console.log(`Check ${progressFile} for status.`);
+}
+
+function execPromise(command: string, options: { input?: string }): Promise<string> {
+  return new Promise((resolve, reject) => {
+    exec(command, options, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(stdout + stderr);
+      }
+    });
+  });
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+main();
+```
+
+**使用方式：**
+```bash
+# 编译并运行
+npx tsx scripts/ralph.ts
+
+# 或先编译再运行
+npm run build
+node dist/ralph.js
+```
+
+**Kill 策略：**
+- 基于迭代次数（默认 50 次）
+- 检测 `<promise>COMPLETE</promise>` 标志提前退出
+- （未来可扩展）基于 prd.json 更新时间
+- （未来可扩展）基于输出模式检测
+
+#### 3.4 归档目录（archive/）
+
+**作用**：存储已完成的子任务，保持工作目录整洁。
+
+**结构：**
+```
+archive/
+├── 20260211-task-a/
+│   ├── brief.md
+│   ├── alignment.md
+│   └── outputs/
+│       ├── 1-spec.md
+│       ├── 2-plan.md
+│       ├── 3-tasks.md
+│       └── summary.md
+└── 20260211-task-b/
 ```
 
 ### 4. Ralph 工作流程
 
 #### 阶段 1: 初始化
-1. 读取 goals.md 或 prd.json
-2. 分析目标，识别核心需求
-3. 初始化 progress.txt
-4. 创建 ralph-state.json
+1. 读取或创建 `prd.json`
+2. 初始化任务队列（从用户输入或现有配置）
+3. 设置第一个任务为 `in_progress`
 
-#### 阶段 2: 任务分解
-1. 分析宏观目标的结构和依赖关系
-2. 分解为可执行的子任务
-3. 确定任务优先级和执行顺序
-4. 记录到状态文件
+#### 阶段 2: 任务分解（可选）
+1. Ralph 分析宏观目标的结构和依赖关系
+2. 将大任务分解为可执行的子任务
+3. 直接修改 `prd.json`，添加新的任务条目
+4. 确定任务优先级和执行顺序
 
-#### 阶段 3: 循环执行
-对每个子任务：
-1. 检查任务状态（已完成/进行中/待开始）
-2. 创建任务目录（`nanospec new`）
-3. 切换到该任务（`nanospec switch`）
-4. 执行完整 NanoSpec 流程：
-   - `/spec.1-spec` - 撰写规格
-   - `/spec.2-plan` - 制定方案
-   - `/spec.3-execute` - 执行交付
-   - `/spec.accept` - 验收（可选）
-5. 运行质量检查
-6. 提取可重用模式
-7. 更新 progress.txt
-8. 提交更改（可选）
-9. 归档任务（可选）
+#### 阶段 3: 外层控制器循环
+```
+while True:
+    1. 读取 prd.json
+    2. 找到第一个 status="in_progress" 的任务
+    3. 如果没有，找到第一个 status="pending" 的任务并设置为 in_progress
+    4. 如果没有任务，退出循环
+    5. 构造上下文注入信息
+    6. 启动 AI（iflow + 系统提示）
+    7. 监控 AI 执行
+    8. 到达 Kill 条件后终止 AI
+    9. 休眠一段时间
+    10. 继续循环
+```
 
-#### 阶段 4: 完成检查
-1. 检查所有目标是否完成
+#### 阶段 4: AI 执行流程（单次会话）
+```
+1. 启动时读取 prd.json
+2. 定位当前 in_progress 任务
+3. 如果没有 nanospec_file，执行 nanospec new，更新 prd.json
+4. 根据 phase 状态决定执行步骤：
+   - phase="spec": 执行 /spec.1-spec，完成后更新 phase="plan"
+   - phase="plan": 执行 /spec.2-plan，完成后更新 phase="execute"
+   - phase="execute": 执行 /spec.3-execute，完成后更新 phase="review"
+   - phase="review": 运行质量检查，完成后更新 status="completed"
+5. 每完成一步立即更新 prd.json 的 phase 和 progress_note
+6. 如果发现任务需要拆分，直接修改 prd.json 添加新任务
+7. 被 Ralph Kill 后，下一个会话从 progress_note 恢复
+```
+
+#### 阶段 5: 完成检查
+1. 检查所有任务的 status 是否为 "completed"
 2. 验证整体成功标准
 3. 生成最终总结
-4. 更新 ralph-state.json
+4. 归档所有已完成的子任务
 
-### 5. 命令扩展
+### 5. 使用方式
 
-#### 5.1 新增 CLI 命令
+#### 5.1 Ralph 外层控制器脚本
 
-| 命令 | 说明 | 参数 |
-|------|------|------|
-| `nanospec ralph start` | 启动 Ralph 控制循环 | `--max-iterations`, `--goals-file` |
-| `nanospec ralph stop` | 停止当前 Ralph 会话 | 无 |
-| `nanospec ralph status` | 查看 Ralph 会话状态 | 无 |
-| `nanospec ralph resume` | 恢复中断的会话 | 无 |
-| `nanospec ralph summary` | 生成会话总结 | 无 |
+**运行脚本：**
+```bash
+# 使用 tsx 直接运行
+npx tsx scripts/ralph.ts
 
-#### 5.2 新增斜杠命令
+# 或先编译再运行
+npm run build
+node dist/ralph.js
+```
+
+**脚本参数（通过环境变量或配置文件）：**
+- `RALPH_TOOL` - AI 工具选择（amp/claude/iflow），默认 iflow
+- `RALPH_MAX_ITERATIONS` - 最大迭代次数，默认 50
+- `RALPH_PRD_FILE` - PRD 文件路径，默认 nanospec/ralph/prd.json
+
+**示例：**
+```bash
+# 使用 amp 工具，最大迭代 20 次
+RALPH_TOOL=amp RALPH_MAX_ITERATIONS=20 npx tsx scripts/ralph.ts
+```
+
+#### 5.2 辅助脚本（可选）
+
+**初始化 Ralph 环境：**
+```bash
+# scripts/ralph-init.ts
+npx tsx scripts/ralph-init.ts --project-name "MyProject"
+```
+
+**查看 Ralph 状态：**
+```bash
+# scripts/ralph-status.ts
+npx tsx scripts/ralph-status.ts
+```
+
+**手动归档：**
+```bash
+# scripts/ralph-archive.ts
+npx tsx scripts/ralph-archive.ts
+```
+
+#### 5.3 斜杠命令（AI 工具内使用）
 
 | 命令 | 说明 |
 |------|------|
-| `/spec.ralph-start` | 在 AI 工具中启动 Ralph |
-| `/spec.ralph-decompose` | 手动触发任务分解 |
-| `/spec.ralph-next` | 处理下一个任务 |
-| `/spec.ralph-status` | 查看当前状态 |
+| `/spec.ralph-status` | 查看当前任务状态（从 prd.json 读取） |
+| `/spec.ralph-add` | 添加新任务到 prd.json |
+| `/spec.ralph-sync` | 同步 prd.json 状态 |
+| `/spec.ralph-complete` | 标记当前任务为完成 |
 
 ### 6. 配置扩展
 
@@ -317,10 +484,12 @@ project-root/
 {
   "ralph": {
     "enabled": true,
-    "goals_file": "nanospec/ralph/goals.md",
+    "prd_file": "nanospec/ralph/prd.json",
+    "runner_script": "scripts/ralph.ts",
     "max_iterations": 50,
-    "auto_commit": false,
+    "default_tool": "iflow",
     "archive_completed": true,
+    "sleep_between_iterations": 2000,
     "quality_checks": {
       "typecheck": "npm run typecheck || tsc --noEmit",
       "lint": "npm run lint || eslint .",
@@ -331,9 +500,9 @@ project-root/
       "prefix": "task",
       "auto_switch": true
     },
-    "pattern_extraction": {
+    "system_prompt": {
       "enabled": true,
-      "update_agents_md": true
+      "template": "nanospec/ralph/system-prompt.md"
     }
   }
 }
@@ -343,12 +512,13 @@ project-root/
 
 ### 1. 功能完整性
 
-- Ralph 能够读取并理解宏观目标
-- 能够自主分解目标为多个可执行的子任务
-- 能够对每个子任务执行完整的 NanoSpec 流程
-- progress.txt 能够正确记录详细的迭代日志
-- ralph-state.json 能够准确反映当前状态
-- 可重用模式能够被正确提取和记录
+- prd.json 能够正确存储任务队列、状态、phase 和 progress_note
+- Ralph 外层控制器能够读取 prd.json 并启动 AI
+- AI 能够感知无状态执行环境，执行 checkpoint 机制
+- AI 能够根据 phase 状态正确恢复和继续工作
+- AI 能够拆分任务并更新 prd.json
+- 控制器能够根据 Kill 策略正确终止 AI
+- 完成的任务能够正确归档
 
 ### 2. 兼容性
 
@@ -359,6 +529,7 @@ project-root/
 
 ### 3. 可维护性
 
+- prd.json 结构清晰，易于理解和扩展
 - 代码结构清晰，易于扩展
 - 配置项有合理的默认值
 - 错误处理完善，有清晰的错误提示
@@ -366,9 +537,17 @@ project-root/
 
 ### 4. 可中断和恢复
 
-- Ralph 会话可以随时中断
-- 可以从中断点恢复继续执行
-- 状态持久化，不丢失进度
+- AI 会话可以随时被 Ralph 终止
+- AI 可以从 prd.json 的 progress_note 恢复工作
+- 状态持久化到 prd.json，不丢失进度
+- 支持 phase 级别的断点续执行
+
+### 5. 性能
+
+- Kill 策略能够有效防止 Context 污染
+- AI 能够在有限时间内产出到 prd.json（checkpoint）
+- prd.json 的更新不影响执行速度
+- 控制器循环不会造成资源泄漏
 
 ## 约束与注意
 
