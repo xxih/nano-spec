@@ -342,3 +342,47 @@ main();
 **影响范围**：
 - 1-spec.md 工作流程需要更新
 - 3-tasks 需要更新脚本实现任务
+
+---
+
+## [x] [歧义] Slash Command 位置明确化 `@2026-02-11`
+
+**问题**：注入的 prompt 中必须明确指明 slash command 在哪里，因为 AI 是不知道 spec plan 对应的指令的。
+
+**用户决策**：
+- 在 1-spec.md 中明确指出使用 iflow 工具的 slash commands
+- Slash commands 位于 `.iflow/commands/` 目录下：
+  - `.iflow/commands/spec.1-spec.toml` - 规格撰写
+  - `.iflow/commands/spec.2-plan.toml` - 方案设计
+  - `.iflow/commands/spec.3-execute.toml` - 执行交付
+- 在内层 AI 的职责说明中，明确指定使用这些 slash command
+
+**影响范围**：
+- 1-spec.md 需要更新"内层 AI 的职责"部分
+- 需要明确 slash command 的完整路径
+
+**Resolved:** 已更新 1-spec.md，明确指出 slash commands 的位置和完整路径。 `@2026-02-11`
+
+---
+
+## [x] [变更] 测试验证要求 - 集成测试必须在子文件夹中完成 `@2026-02-11`
+
+**问题**：当前 3-tasks.md 中的集成测试任务不够明确，需要定义具体的测试场景。
+
+**用户决策**：
+- 任务完成后，必须在一个子文件夹中进行测试
+- 成功地跑一个 ralph + nano-spec 流程，才算成功
+- 测试应该包含完整的流程：创建任务 → 执行 Ralph 脚本 → 验证结果
+
+**测试要求**：
+1. 创建一个测试子文件夹（如 `test-ralph/`）
+2. 在测试子文件夹中初始化 nanospec
+3. 创建一个简单的测试任务
+4. 运行 ralph.ts 脚本
+5. 验证任务是否按预期完成
+
+**影响范围**：
+- 3-tasks.md 需要新增集成测试任务
+- 需要明确测试步骤和验收标准
+
+**Resolved:** 已在 3-tasks.md 中新增 Phase 8 测试验证任务，明确了测试步骤和验收标准。 `@2026-02-11`

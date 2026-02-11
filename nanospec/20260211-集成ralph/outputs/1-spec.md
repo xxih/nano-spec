@@ -241,12 +241,24 @@ node dist/ralph.js
 ```
 
 **内层 AI 的职责（由 Ralph 脚本循环调用）：**
+
+内层 AI 运行在 iflow 环境中，需要使用 iflow 的 slash commands 来执行 NanoSpec 流程。
+
+**Slash Commands 位置：**
+- `.iflow/commands/spec.1-spec.toml` - 规格撰写命令
+- `.iflow/commands/spec.2-plan.toml` - 方案设计命令
+- `.iflow/commands/spec.3-execute.toml` - 执行交付命令
+
+**内层 AI 工作流程：**
 1. 读取 prd.json 获取当前任务状态
 2. 根据需要创建任务 (nanospec new)
 3. 切换任务 (nanospec switch)
-4. 执行 NanoSpec 流程 (1-spec → 2-plan → 3-execute)
+4. 执行 NanoSpec 流程：
+   - 使用 iflow 的 slash command `/spec.1-spec` 执行规格撰写
+   - 使用 iflow 的 slash command `/spec.2-plan` 执行方案设计
+   - 使用 iflow 的 slash command `/spec.3-execute` 执行交付
 5. 更新 prd.json (phase / progress_note)
-6. 完成所有任务后，输出 `<promise>COMPLETE</promise>`
+6. 完成所有任务后，等待用户手动停止 Ralph 脚本（Ctrl+C）
 
 ### 4. Ralph 工作流程
 
