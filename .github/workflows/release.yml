@@ -61,16 +61,16 @@ jobs:
           TAG_NAME="${{ github.ref_name }}"
           if [[ "$TAG_NAME" == *"alpha"* ]]; then
             echo "Publishing to alpha channel..."
-            npm publish --tag alpha --provenance --access public
+            npm publish --tag alpha --access public
           elif [[ "$TAG_NAME" == *"beta"* ]]; then
             echo "Publishing to beta channel..."
-            npm publish --tag beta --provenance --access public
+            npm publish --tag beta --access public
           elif [[ "$TAG_NAME" == *"rc"* ]]; then
             echo "Publishing to rc channel..."
-            npm publish --tag rc --provenance --access public
+            npm publish --tag rc --access public
           else
             echo "Publishing to latest channel..."
-            npm publish --provenance --access public
+            npm publish --access public
           fi
         shell: bash
 
