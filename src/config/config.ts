@@ -7,6 +7,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 /**
+ * Ralph 配置接口
+ */
+export interface RalphConfig {
+	/** 是否启用 Ralph（默认：false） */
+	enabled?: boolean;
+	/** prd.json 文件路径（默认：nanospec/ralph/prd.json） */
+	prd_file?: string;
+	/** Ralph 脚本路径（默认：scripts/ralph.ts） */
+	runner_script?: string;
+	/** 单次会话时间限制（毫秒，默认：300000） */
+	time_limit?: number;
+	/** 会话间休眠时间（毫秒，默认：2000） */
+	sleep_between?: number;
+}
+
+/**
  * nanospec 配置接口
  */
 export interface NanospecConfig {
@@ -20,6 +36,8 @@ export interface NanospecConfig {
 	template_format?: 'md' | 'toml' | 'json';
 	/** init 时自动同步（默认：true） */
 	auto_sync?: boolean;
+	/** Ralph 配置（可选） */
+	ralph?: RalphConfig;
 }
 
 /**

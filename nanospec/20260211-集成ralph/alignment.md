@@ -386,3 +386,21 @@ main();
 - 需要明确测试步骤和验收标准
 
 **Resolved:** 已在 3-tasks.md 中新增 Phase 8 测试验证任务，明确了测试步骤和验收标准。 `@2026-02-11`
+
+---
+
+## [x] [变更] 移除斜杠命令 - Ralph 仅作为脚本运行 `@2026-02-11`
+
+**问题**：原计划需要新增 Ralph 相关的斜杠命令（spec.ralph-status、spec.ralph-add、spec.ralph-sync、spec.ralph-complete）。
+
+**用户决策**：
+- 不需要新增斜杠命令
+- Ralph 仅作为独立脚本运行
+- 内层 AI 直接使用现有的 nanospec 命令（new、switch 等）
+
+**影响范围**：
+- 2-plan.md 需要移除"斜杠命令实现"章节
+- 3-tasks.md 需要移除 Phase 3 斜杠命令任务
+- 已创建的 .iflow/commands/spec.ralph-*.toml 文件需要删除
+
+**Resolved:** 已删除斜杠命令相关内容，Ralph 简化为独立脚本。 `@2026-02-11`
