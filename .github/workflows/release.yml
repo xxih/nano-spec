@@ -40,10 +40,10 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
 
-    # 🔥🔥🔥 关键点 1：确保 id-token 写权限存在（你原本代码里有，这里再次确认）
+    # 1. 修正权限
     permissions:
-      contents: read
-      id-token: write
+      contents: write # 允许创建 Release
+      id-token: write # 允许 npm provenance 证明
 
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +51,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          # 👇 必须加回来！这告诉 action 我们要和 npm 仓库交互，并生成 .npmrc
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
@@ -61,29 +60,24 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
-        # 👇 这里必须注入 Token，否则 npm 无法登录
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           TAG_NAME="${{ github.ref_name }}"
           if [[ "$TAG_NAME" == *"alpha"* ]]; then
-            echo "Publishing to alpha channel..."
             npm publish --provenance --tag alpha --access public
           elif [[ "$TAG_NAME" == *"beta"* ]]; then
-            echo "Publishing to beta channel..."
-            # 注意：--verbose 写在这里
-            npm publish --provenance --tag beta --access public --verbose
+            npm publish --provenance --tag beta --access public
           elif [[ "$TAG_NAME" == *"rc"* ]]; then
-            echo "Publishing to rc channel..."
             npm publish --provenance --tag rc --access public
           else
-            echo "Publishing to latest channel..."
             npm publish --provenance --access public
           fi
         shell: bash
 
+      # 2. 升级 Action 版本并保留参数
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: Release ${{ github.ref_name }}
           make_latest: true
