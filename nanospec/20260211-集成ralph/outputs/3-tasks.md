@@ -21,11 +21,13 @@
 ### Phase 2: Ralph 脚本（scripts/ralph.ts）
 
 - [ ] 设计 scripts/ralph.ts 脚本结构
-- [ ] 实现循环调用 iflow
-- [ ] 实现完成标志检测（`<promise>COMPLETE</promise>`）
-- [ ] 实现进度日志记录（可选）
-- [ ] 实现参数解析（环境变量：RALPH_MAX_ITERATIONS）
+- [ ] 实现循环调用 iflow（while true）
+- [ ] 实现时间限制策略（5 分钟后强制终止）
+- [ ] 实现实时输出 iflow 的 stdout 和 stderr
+- [ ] 实现进程正确终止（避免僵尸进程）
+- [ ] 实现参数解析（环境变量：RALPH_TIME_LIMIT）
 - [ ] 添加错误处理和日志输出
+- [ ] 实现 Ctrl+C 优雅退出
 
 ### Phase 3: 斜杠命令
 
@@ -43,9 +45,9 @@
 ### Phase 5: 集成测试
 
 - [ ] 编写 prd.json 单元测试
-- [ ] 编写 ralph.ts 流程测试
-- [ ] 编写 AI 工具调用测试
-- [ ] 编写端到端集成测试
+- [ ] 编写 ralph.ts 流程测试（时间限制、进程终止）
+- [ ] 编写 iflow 调用测试
+- [ ] 编写端到端集成测试（模拟完整循环）
 
 ### Phase 6: 文档和示例
 

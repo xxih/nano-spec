@@ -174,44 +174,53 @@ project-root/
 
 **核心逻辑：**
 ```typescript
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 
 async function main() {
-  const maxIterations = 50;
+  const TIME_LIMIT = 5 * 60 * 1000; // 5 分钟
+  const SLEEP_BETWEEN = 2000; // 2 秒
 
-  for (let i = 1; i <= maxIterations; i++) {
-    console.log(`\n==============================================================`);
-    console.log(`  Ralph Iteration ${i} of ${maxIterations}`);
-    console.log(`==============================================================`);
+  console.log('Ralph started. Press Ctrl+C to stop.');
 
-    try {
-      const output = await execPromise('iflow -y');
+  while (true) {
+    console.log('\n==============================================================');
+    console.log('  Starting iflow session...');
+    console.log('==============================================================');
 
-      if (output.includes('<promise>COMPLETE</promise>')) {
-        console.log('\nRalph completed all tasks!');
-        process.exit(0);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    const startTime = Date.now();
+    const iflowProcess = spawn('iflow', ['-y']);
 
-    console.log(`Iteration ${i} complete. Continuing...`);
-    await sleep(2000);
-  }
-
-  console.log(`\nRalph reached max iterations (${maxIterations}) without completing all tasks.`);
-}
-
-function execPromise(command: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(stdout + stderr);
-      }
+    // 监控 iflow 输出
+    iflowProcess.stdout.on('data', (data) => {
+      console.log(data.toString());
     });
-  });
+
+    iflowProcess.stderr.on('data', (data) => {
+      console.error(data.toString());
+    });
+
+    // 超时终止
+    const timeoutId = setTimeout(() => {
+      if (!iflowProcess.killed) {
+        console.log('\n⏰ Time limit reached, killing iflow...');
+        iflowProcess.kill();
+      }
+    }, TIME_LIMIT);
+
+    // 等待进程结束
+    await new Promise<void>((resolve) => {
+      iflowProcess.on('close', () => {
+        clearTimeout(timeoutId);
+        resolve();
+      });
+    });
+
+    const elapsed = Date.now() - startTime;
+    console.log(`\nSession ended (elapsed: ${elapsed / 1000}s).`);
+
+    console.log('Sleeping before next session...');
+    await sleep(SLEEP_BETWEEN);
+  }
 }
 
 function sleep(ms: number): Promise<void> {
@@ -244,13 +253,20 @@ node dist/ralph.js
 #### 阶段 1: Ralph 脚本循环
 
 ```
-for (let i = 1; i <= maxIterations; i++) {
-    1. 调用 iflow -y
-    2. 检测输出中是否包含 <promise>COMPLETE</promise>
-    3. 如果包含，退出循环（所有任务完成）
-    4. 否则，休眠 2 秒，继续下一次循环
+while (true) {
+    1. 启动 iflow -y
+    2. 实时输出 iflow 的 stdout 和 stderr
+    3. 5 分钟后强制终止 iflow（防止 Context 污染）
+    4. 等待 iflow 进程结束
+    5. 休眠 2 秒
+    6. 继续下一次循环（直到用户手动 Ctrl+C 停止）
 }
 ```
+
+**核心机制：**
+- 时间限制：每次 iflow 会话最多运行 5 分钟
+- 持续循环：无限循环，直到用户手动停止
+- 自动重置：每次循环都是全新的 iflow 会话，Context 重置
 
 #### 阶段 2: 内层 AI 执行流程（每次 iflow 调用）
 
@@ -265,9 +281,13 @@ for (let i = 1; i <= maxIterations; i++) {
    - phase="review": 运行质量检查，完成后更新 status="completed"
 5. 每完成一步立即更新 prd.json 的 phase 和 progress_note
 6. 如果发现任务需要拆分，直接修改 prd.json 添加新任务
-7. 如果所有任务完成，输出 <promise>COMPLETE</promise>
-8. 如果当前会话结束但任务未完成，内层 AI 被 Kill，下次 iflow 调用时从 progress_note 恢复
+7. 如果当前会话被 Kill（5 分钟到），下次 iflow 调用时从 progress_note 恢复
 ```
+
+**核心机制：**
+- Checkpoint 机制：每完成一步立即更新 prd.json
+- 断点续执行：被 Kill 后可以从 progress_note 恢复
+- 无状态执行：每次会话独立，依赖 prd.json 恢复状态
 
 ### 5. 使用方式
 
@@ -327,12 +347,12 @@ RALPH_MAX_ITERATIONS=20 npx tsx scripts/ralph.ts
 ### 1. 功能完整性
 
 - Ralph 脚本能够循环调用 iflow
+- Ralph 脚本能够在 5 分钟后强制终止 iflow
 - 内层 AI 能够读取和更新 prd.json
 - 内层 AI 能够创建任务 (nanospec new)
 - 内层 AI 能够切换任务 (nanospec switch)
 - 内层 AI 能够执行完整的 NanoSpec 流程
-- 内层 AI 完成所有任务后输出 `<promise>COMPLETE</promise>`
-- Ralph 脚本能够检测完成标志并退出
+- 内层 AI 可以从 prd.json 的 progress_note 恢复工作
 
 ### 2. 兼容性
 
@@ -351,17 +371,19 @@ RALPH_MAX_ITERATIONS=20 npx tsx scripts/ralph.ts
 
 ### 4. 可中断和恢复
 
-- 内层 AI 会话可以随时被 Ralph 脚本终止
+- 内层 AI 会话可以随时被 Ralph 脚本终止（5 分钟超时）
 - 内层 AI 可以从 prd.json 的 progress_note 恢复工作
 - 状态持久化到 prd.json，不丢失进度
 - 支持 phase 级别的断点续执行
+- 用户可以随时通过 Ctrl+C 停止 Ralph 脚本
 
 ### 5. 性能
 
-- 循环执行有最大迭代次数限制
+- 每次会话有时间限制（5 分钟），防止无限运行
 - 内层 AI 能够在有限时间内产出到 prd.json（checkpoint）
 - prd.json 的更新不影响执行速度
 - 脚本循环不会造成资源泄漏
+- 进程被正确终止，不会留下僵尸进程
 
 ## 约束与注意
 
@@ -391,8 +413,9 @@ RALPH_MAX_ITERATIONS=20 npx tsx scripts/ralph.ts
 
 ### 性能考虑
 
-- 循环执行有最大迭代次数限制（默认 50 次）
+- 每次会话有时间限制（5 分钟），防止 Context 污染
 - 进度日志追加模式，避免文件过大
+- 进程正确终止，不会留下僵尸进程
 
 ### 用户体验
 

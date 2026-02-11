@@ -277,3 +277,68 @@ async function main() {
 - 1-spec.md 需要大幅简化：移除归档、多工具、分支管理等章节
 - 3-tasks 需要简化：移除归档、多工具、分支跟踪等任务
 - 目录结构简化：移除 archive/、.last-branch 等文件
+
+---
+
+## [变更] Ralph 循环策略 - 时间限制替代标志检测 `@2026-02-11`
+
+**问题**：
+- 检测 `<promise>COMPLETE</promise>` 标志不靠谱，读取可能不准确
+- AI 输出格式变化或解析错误导致检测失败
+
+**用户决策**：
+- 移除标志检测机制
+- 改用时间限制策略：5 分钟 kill 一次
+- Ralph 持续循环，直到用户手动停止（Ctrl+C）
+
+**更新后的脚本逻辑**：
+```typescript
+import { spawn } from 'child_process';
+
+async function main() {
+  const TIME_LIMIT = 5 * 60 * 1000; // 5 分钟
+  const SLEEP_BETWEEN = 2000; // 2 秒
+
+  while (true) {
+    console.log('Starting iflow session...');
+
+    const startTime = Date.now();
+    const iflowProcess = spawn('iflow', ['-y']);
+
+    // 监控 iflow 输出
+    iflowProcess.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    iflowProcess.stderr.on('data', (data) => {
+      console.error(data.toString());
+    });
+
+    // 超时终止
+    setTimeout(() => {
+      if (!iflowProcess.killed) {
+        console.log('Time limit reached, killing iflow...');
+        iflowProcess.kill();
+      }
+    }, TIME_LIMIT);
+
+    // 等待进程结束
+    await new Promise<void>((resolve) => {
+      iflowProcess.on('close', resolve);
+    });
+
+    console.log('Session ended. Sleeping before next session...');
+    await sleep(SLEEP_BETWEEN);
+  }
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+main();
+```
+
+**影响范围**：
+- 1-spec.md 工作流程需要更新
+- 3-tasks 需要更新脚本实现任务
