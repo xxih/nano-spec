@@ -60,12 +60,16 @@ async function quickInit(options: InitOptions): Promise<void> {
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
 
+	// 创建 .nanospec 目录
+	const configDir = join(cwd, '.nanospec');
+	mkdirSync(configDir, {recursive: true});
+
 	// 复制 AGENTS.md（从 dist/static/_AGENTS.md 查找）
 	const agentsSrc = join(__dirname, '../../dist/static/_AGENTS.md');
 
 	if (existsSync(agentsSrc)) {
-		copyFile(agentsSrc, join(nanospecDir, 'AGENTS.md'));
-		console.log(`✓ 创建 ${config.specs_root || 'nanospec'}/AGENTS.md`);
+		copyFile(agentsSrc, join(configDir, 'AGENTS.md'));
+		console.log(`✓ 创建 .nanospec/AGENTS.md`);
 	} else {
 		console.warn('⚠️  未找到 AGENTS.md，跳过复制');
 	}
@@ -144,11 +148,11 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 	const __filename = fileURLToPath(import.meta.url);
 	const __dirname = dirname(__filename);
 
-	// 复制 AGENTS.md
+	// 复制 AGENTS.md（从 dist/static/_AGENTS.md 查找）
 	const agentsSrc = join(__dirname, '../../dist/static/_AGENTS.md');
 	if (existsSync(agentsSrc)) {
-		copyFile(agentsSrc, join(nanospecDir, 'AGENTS.md'));
-		console.log(`✓ 创建 ${defaultConfig.specs_root}/AGENTS.md`);
+		copyFile(agentsSrc, join(configDir, 'AGENTS.md'));
+		console.log(`✓ 创建 .nanospec/AGENTS.md`);
 	} else {
 		console.warn('⚠️  未找到 AGENTS.md，跳过复制');
 	}

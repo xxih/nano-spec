@@ -176,7 +176,8 @@ export async function installPreset(name?: string): Promise<void> {
 	if (metadata.extends) {
 		const extendsFile = join(presetDir, metadata.extends);
 		if (existsSync(extendsFile)) {
-			const agentsFile = join(nanospecDir, 'AGENTS.md');
+			const configDir = join(cwd, '.nanospec');
+			const agentsFile = join(configDir, 'AGENTS.md');
 			const content = readFileSync(extendsFile, 'utf-8');
 			appendFileSync(agentsFile, `\n\n${content}\n`);
 			console.log(`  ✓ 扩展: ${metadata.extends}`);
@@ -239,7 +240,7 @@ export async function uninstallPreset(name: string): Promise<void> {
 
 	// 3. 提示 AGENTS.md 需要手动编辑
 	if (metadata.extends) {
-		const agentsFile = join(cwd, config.specs_root || 'nanospec', 'AGENTS.md');
+		const agentsFile = join(cwd, '.nanospec', 'AGENTS.md');
 		console.log(`  - 扩展: 请手动编辑 ${agentsFile} 删除预设添加的内容`);
 	}
 

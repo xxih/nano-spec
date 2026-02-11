@@ -148,3 +148,6 @@ dist
 
 # nanospec
 .nanospec/current-task
+
+.test-nanospec-sync
+.test-*

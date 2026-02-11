@@ -8,6 +8,7 @@ describe('preset command', () => {
 	const nanospecDir = join(testDir, 'nanospec');
 	const iflowDir = join(testDir, '.iflow');
 	const commandsDir = join(iflowDir, 'commands');
+	const nanospecConfigDir = join(testDir, '.nanospec');
 
 	beforeEach(() => {
 		// 清理测试目录
@@ -62,6 +63,8 @@ describe('preset command', () => {
 		it('应该安装预设（frontend）', async () => {
 			mkdirSync(nanospecDir, {recursive: true});
 			mkdirSync(iflowDir, {recursive: true});
+			mkdirSync(nanospecConfigDir, {recursive: true});
+			writeFileSync(join(nanospecConfigDir, 'AGENTS.md'), '# AGENTS.md\n');
 
 			const consoleLogSpy = vi
 				.spyOn(console, 'log')
@@ -82,6 +85,8 @@ describe('preset command', () => {
 		it('应该安装预设（backend）', async () => {
 			mkdirSync(nanospecDir, {recursive: true});
 			mkdirSync(iflowDir, {recursive: true});
+			mkdirSync(nanospecConfigDir, {recursive: true});
+			writeFileSync(join(nanospecConfigDir, 'AGENTS.md'), '# AGENTS.md\n');
 
 			const consoleLogSpy = vi
 				.spyOn(console, 'log')
@@ -99,6 +104,8 @@ describe('preset command', () => {
 		it('应该安装预设（docs）', async () => {
 			mkdirSync(nanospecDir, {recursive: true});
 			mkdirSync(iflowDir, {recursive: true});
+			mkdirSync(nanospecConfigDir, {recursive: true});
+			writeFileSync(join(nanospecConfigDir, 'AGENTS.md'), '# AGENTS.md\n');
 
 			const consoleLogSpy = vi
 				.spyOn(console, 'log')
@@ -116,6 +123,8 @@ describe('preset command', () => {
 		it('应该安装预设（refactor）', async () => {
 			mkdirSync(nanospecDir, {recursive: true});
 			mkdirSync(iflowDir, {recursive: true});
+			mkdirSync(nanospecConfigDir, {recursive: true});
+			writeFileSync(join(nanospecConfigDir, 'AGENTS.md'), '# AGENTS.md\n');
 
 			const consoleLogSpy = vi
 				.spyOn(console, 'log')

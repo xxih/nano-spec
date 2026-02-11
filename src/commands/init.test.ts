@@ -35,7 +35,7 @@ describe('init command', () => {
 
 	it('应该复制 AGENTS.md 文件', async () => {
 		// 跳过此测试，因为测试环境设置复杂
-		// 实际使用时会从项目根目录的 nanospec/AGENTS.md 复制
+		// 实际使用时会从 dist/static/_AGENTS.md 复制到 .nanospec/AGENTS.md
 		expect(true).toBe(true);
 	});
 
