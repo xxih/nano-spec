@@ -1,0 +1,151 @@
+# Command: release
+# Description: 发布 npm 包版本 - 支持正式版和预发布版
+# Category: nanospec
+
+description = "发布 npm 包版本 - 支持正式版和预发布版（alpha/beta/rc）"
+
+prompt = """
+# Release Command
+
+你是"发布助手"，帮助用户发布 nano-spec npm 包。
+
+## 项目信息
+
+- **包名**: nano-spec
+- **当前版本**: 检查 `package.json` 中的 `version` 字段
+- **发布方式**: GitHub Actions CI/CD（通过 tag 触发）
+- **认证方式**: OIDC（无需配置 NPM_TOKEN）
+
+## 发布流程
+
+### Step 1: 检查前置条件
+
+在开始发布前，必须确认：
+
+1. **Git 工作区干净**
+   ```bash
+   git status
+   ```
+   没有未提交的更改
+
+2. **本地测试通过**
+   ```bash
+   npm test
+   ```
+
+3. **构建成功**
+   ```bash
+   npm run build
+   ```
+
+4. **已同步远程代码**
+   ```bash
+   git pull origin main
+   ```
+
+### Step 2: 选择发布类型
+
+与用户确认发布类型：
+
+- **patch**: 小版本修复（例如：1.0.0 → 1.0.1）
+- **minor**: 新增功能（例如：1.0.0 → 1.1.0）
+- **major**: 破坏性变更（例如：1.0.0 → 2.0.0）
+- **alpha**: 内测版（例如：1.0.0-alpha.0）
+- **beta**: 公测版（例如：1.0.0-beta.0）
+- **rc**: 候选发布版（例如：1.0.0-rc.0）
+
+### Step 3: 执行发布命令
+
+根据用户选择的类型，执行对应的 npm version 命令：
+
+```bash
+# 正式版
+npm version patch/minor/major
+
+# 预发布版
+npm version prerelease --preid=alpha
+npm version prerelease --preid=beta
+npm version prerelease --preid=rc
+```
+
+### Step 4: 推送 Tag 触发 CI/CD
+
+```bash
+# 推送代码和 tag
+git push origin main
+git push origin v<新版本号>
+```
+
+### Step 5: 验证发布
+
+1. 查看 GitHub Actions 运行状态
+2. 检查 npm 发布结果：
+   ```bash
+   npm view nano-spec versions --json
+   ```
+
+## CI/CD 自动识别规则
+
+当前 `.github/workflows/release.yml` 已配置自动识别：
+
+- Tag 包含 `alpha` → 发布到 `alpha` 通道
+- Tag 包含 `beta` → 发布到 `beta` 通道
+- Tag 包含 `rc` → 发布到 `rc` 通道
+- 其他 → 发布到 `latest` 通道
+
+## 版本号规范
+
+遵循语义化版本 + 预发布标识：
+
+```
+主版本号.次版本号.修订号-预发布标识.预发布版本号
+
+示例：
+- 1.0.1           # patch
+- 1.1.0           # minor
+- 2.0.0           # major
+- 1.1.0-alpha.0   # alpha.0
+- 1.1.0-beta.0    # beta.0
+- 1.1.0-beta.1    # beta.1（第二个 beta 版）
+- 1.1.0-rc.0      # rc.0
+```
+
+## Checklist
+
+在执行发布前，确保：
+
+- [ ] Git 工作区干净（`git status` 没有未提交更改）
+- [ ] 本地测试通过（`npm test`）
+- [ ] 构建成功（`npm run build`）
+- [ ] 已同步远程代码（`git pull origin main`）
+- [ ] 已准备好变更说明（用于 Release Notes）
+
+## 输出格式
+
+完成发布后，输出以下信息：
+
+```
+✅ 发布成功
+
+📦 版本信息:
+   - 旧版本: <旧版本号>
+   - 新版本: <新版本号>
+   - 发布通道: <alpha/beta/rc/latest>
+
+🚀 已推送:
+   - git push origin main
+   - git push origin v<新版本号>
+
+🔗 下一步:
+   1. 查看 CI/CD: https://github.com/xxih/nano-spec/actions
+   2. 验证发布: npm view nano-spec@<发布通道>
+   3. 安装测试: npm install nano-spec@<发布通道>
+```
+
+## 注意事项
+
+1. **预发布版本**: 如果当前已经是预发布版本（如 1.0.0-beta.0），再次执行 `npm version prerelease --preid=beta` 会递增为 1.0.0-beta.1
+2. **Tag 命名**: 所有 tag 必须以 `v` 开头（如 v1.0.0）
+3. **撤回发布**: 如果需要撤回发布，只能在 72 小时内执行 `npm unpublish`
+4. **权限**: 确保有 npm 包发布权限和 GitHub Actions 配置权限
+"""

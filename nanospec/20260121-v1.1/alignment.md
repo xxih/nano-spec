@@ -398,3 +398,98 @@ sh: 1: xcopy: not found
 - `package.json`：已配置的 scripts 和 publishConfig（验证符合方案）
 - 开发团队：遵循新的开发规范和发布流程
 - 用户：获得更稳定和规范的版本更新
+
+---
+
+## 新增优化需求
+
+### [待确认] 优化 CI/CD 流程支持 beta 版本自动发布 `@2026-02-11`
+**问题**：当前 CI/CD 流程（`.github/workflows/release.yml`）只支持发布 `latest` 标签的版本，无法自动识别和发布 beta、alpha、rc 等预发布版本到对应的 npm 标签通道。
+
+**现状**：
+- `.github/workflows/release.yml:45` 使用固定命令 `npm publish --provenance --access public`
+- 无论标签是 `v1.0.0` 还是 `v1.1.0-beta.0`，都会发布到 `latest` 通道
+
+**期望**：
+- 标签包含 `beta` 时，自动发布到 `beta` 通道：`npm publish --tag beta`
+- 标签包含 `alpha` 时，自动发布到 `alpha` 通道：`npm publish --tag alpha`
+- 标签包含 `rc` 时，自动发布到 `rc` 通道：`npm publish --tag rc`
+- 其他标签发布到 `latest` 通道
+
+**影响范围**：
+- `.github/workflows/release.yml`：修改 Publish 步骤的判断逻辑
+- `docs/CI-CD完整方案.md`：更新 beta 发布流程文档
+
+### [待确认] 整理 beta 发版流程并沉淀到项目文档 `@2026-02-11`
+**问题**：beta 版本的发版流程散落在 Q&A 文档中，需要一个标准化的流程沉淀到项目规范中。
+
+**期望产出**：
+1. **标准化 beta 发布流程文档**：
+   - 本地手动发布 beta 的步骤
+   - CI/CD 自动发布 beta 的步骤
+   - 版本号命名规范（SemVer + 预发布标识）
+   - beta 版本生命周期管理（创建 → 测试 → 正式发布）
+
+2. **用户指南**：
+   - 如何安装 beta 版本
+   - 如何从 beta 升级到正式版
+   - beta 版本和 latest 版本的关系说明
+
+**影响范围**：
+- `docs/` 目录：新增或更新 beta 发布流程文档
+- `nanospec/AGENTS.md`：补充发布规范章节
+
+### [待确认] 沉淀一个 slash command 用于发布版本 `@2026-02-11`
+**问题**：当前发布版本需要手动执行多个步骤（更新版本号、打标签、推送、等待 CI/CD），容易出错且流程不统一。
+
+**期望**：新增 `/spec.release` slash command，沉淀在 `.iflow/commands/` 中，供 AI 工具调用，提供标准化的版本发布流程：
+
+**功能设计**：
+```toml
+# .iflow/commands/spec.release.toml
+[command]
+name = "release"
+description = "发布新版本到 npm"
+```
+
+**执行流程**：
+1. **环境检查**
+   - 检查当前是否在 Git 仓库中
+   - 检查工作区是否干净（`git status`）
+   - 检查是否有未推送的提交
+   - 检查 npm 登录状态（`npm whoami`）
+
+2. **版本选择**
+   - 显示当前版本（从 `package.json` 读取）
+   - 提供版本选项：
+     - `patch` - 修复版本（1.0.0 → 1.0.1）
+     - `minor` - 次版本（1.0.0 → 1.1.0）
+     - `major` - 主版本（1.0.0 → 2.0.0）
+     - `beta` - Beta 预发布（1.0.0 → 1.1.0-beta.0）
+     - `alpha` - Alpha 预发布（1.0.0 → 1.1.0-alpha.0）
+     - `rc` - 发布候选（1.0.0 → 1.1.0-rc.0）
+   - 支持自定义版本号
+
+3. **变更摘要**
+   - 显示自上次标签以来的提交日志（`git log <last-tag>..HEAD --oneline`）
+   - 提示用户确认变更内容
+
+4. **发布执行**
+   - 执行 `npm version <version>`（自动创建 git tag 和提交）
+   - 执行 `git push origin main`
+   - 执行 `git push origin <tag>`
+   - 提示用户 CI/CD 将自动完成后续发布
+
+5. **状态跟踪**
+   - 提供 GitHub Actions 运行链接
+   - 提示如何查看发布状态
+
+**安全考虑**：
+- 每个步骤都需用户确认
+- 支持 `--dry-run` 模式预览操作
+- 失败时提供清晰的错误提示和恢复建议
+
+**影响范围**：
+- `.iflow/commands/spec.release.toml`：新增 release slash command 模板
+- 无需修改 CLI 代码，完全通过 AI 工具执行
+- `docs/`：更新发布流程文档，说明如何通过 AI 工具调用
