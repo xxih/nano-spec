@@ -404,3 +404,52 @@ main();
 - 已创建的 .iflow/commands/spec.ralph-*.toml 文件需要删除
 
 **Resolved:** 已删除斜杠命令相关内容，Ralph 简化为独立脚本。 `@2026-02-11`
+
+---
+
+## [偏差] Ralph 脚本 Windows 兼容性问题 `⏳ 待确认` `@2026-02-11`
+
+**问题**：Ralph 脚本在 Windows 上调用 iflow 时失败，错误信息 `spawn iflow ENOENT`。
+
+**原因分析**：
+- iflow 实际上存在（位于 C:\nvm4w\nodejs\iflow.cmd）
+- Node.js 的 spawn 函数在 Windows 上默认不会搜索 .cmd 扩展名
+- 需要使用 `shell: true` 选项或指定完整命令路径
+
+**解决方案**：
+1. 在 spawn 时添加 `shell: true` 选项
+2. 或使用 `iflow.cmd` 而不是 `iflow`
+
+**影响范围**：
+- scripts/ralph.ts 需要修复 Windows 兼容性问题
+- 3-tasks.md 需要重新运行集成测试并验证
+
+**待确认**：是否使用 `shell: true` 选项解决兼容性问题？
+
+**Resolved:** 已在 scripts/ralph.ts 中添加 `shell: true` 选项，Ralph 脚本成功调用 iflow。集成测试验证通过：
+- ✅ Ralph 脚本成功启动 iflow（不再报 ENOENT 错误）
+- ✅ 正确实现循环机制
+- ✅ 正确实现 5 分钟超时机制
+- ✅ 正确实现错误处理 `@2026-02-11`
+
+---
+
+## [缺失] Ralph 脚本缺少上下文注入功能 `@2026-02-11`
+
+**问题**：Ralph 脚本目前只是简单地调用 `iflow -y`，没有把 prd.json 的内容喂给内层 AI。
+
+**影响**：
+- 内层 AI 不知道当前任务的状态
+- 内层 AI 无法读取 prd.json 获取任务信息
+- 无法实现 checkpoint 和断点续执行机制
+
+**解决方案**：
+1. Ralph 脚本需要读取 prd.json 文件
+2. 将 prd.json 内容通过 iflow 的 stdin 传递给内层 AI
+3. 或者使用 iflow 的 --prompt 参数传递上下文
+4. 需要提供完整的系统提示，告诉内层 AI 如何工作
+
+**影响范围**：
+- scripts/ralph.ts 需要重写，添加上下文注入功能
+- 需要创建完整的测试例子，包括 prd.json
+- 需要验证整个流程是否能够成功执行
