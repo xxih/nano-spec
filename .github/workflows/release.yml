@@ -69,7 +69,7 @@ jobs:
             npm publish --provenance --tag alpha --access public
           elif [[ "$TAG_NAME" == *"beta"* ]]; then
             echo "Publishing to beta channel..."
-            npm publish --provenance --tag beta --access public
+            npm publish --provenance --tag beta --access public --verbose
           elif [[ "$TAG_NAME" == *"rc"* ]]; then
             echo "Publishing to rc channel..."
             npm publish --provenance --tag rc --access public
