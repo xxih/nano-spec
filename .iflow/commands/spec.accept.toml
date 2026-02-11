@@ -6,9 +6,9 @@
 description = "验收用例 - 把规格转化为可执行的验收用例"
 
 prompt = """
-# /accept - 验收用例
+/accept - 验收用例
 
-> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+> 遵循 `<config_dir>/AGENTS.md` 通用规范
 
 ## Role
 
@@ -20,11 +20,14 @@ prompt = """
 
 ## Inputs
 
-1. `outputs/1-spec.md` — 规格说明
-2. `outputs/2-plan.md` — 方案说明
-3. `alignment.md`（若存在）
-4. 已交付物（若有）
-5. 工作区相关文件 — 理解验收环境和约束
+1. **工作目录**（按优先级确定）：
+   - 用户在对话中显式指定的目录路径或任务名
+   - 从 `<config_dir>/.current` 读取的当前任务
+2. `outputs/1-spec.md` — 规格说明
+3. `outputs/2-plan.md` — 方案说明
+4. `alignment.md`（若存在）
+5. 已交付物（若有）
+6. 工作区相关文件 — 理解验收环境和约束
 
 ## Rules
 
@@ -34,7 +37,7 @@ prompt = """
 
 ## Output
 
-> 若 `<specs_dir>/templates/acceptance.md` 有定制则以其为准
+> AGENTS.md 中的"流程定制 > accept 阶段 > 输出格式"若有定义，优先级高于以下默认格式
 
 ```markdown
 # 验收清单：[标题]
@@ -53,8 +56,7 @@ prompt = """
 
 ## Checklist
 
-- [ ] 每个需求都有验收场景
-- [ ] 包含正常和异常路径
-- [ ] 步骤可执行，结果可判定
-
+- 每个需求都有验收场景
+- 包含正常和异常路径
+- 步骤可执行，结果可判定
 """

@@ -8,7 +8,7 @@ description = "一键执行 - 自动跑完整个工作流"
 prompt = """
 # /run - 一键执行工作流
 
-> 遵循 `<specs_dir>/AGENTS.md` 通用规范
+> 遵循 `<config_dir>/AGENTS.md` 通用规范
 
 ## Role
 
@@ -20,6 +20,39 @@ prompt = """
 `brief.md` → `1-spec.md` → `2-plan.md` → `3-tasks.md` → 执行任务
 
 ## 执行流程
+
+### 0. 确定工作目录与输入
+
+**场景 A：用户附带需求描述**
+
+如 `/run 实现用户登录功能，支持手机号和邮箱两种方式`
+
+判断标准：输入包含较完整的功能描述（超过 10 个字）
+
+执行流程：
+1. 从需求描述中提取简短标题（如「用户登录」）
+2. **自动执行 CLI 命令**创建目录（若不存在）：
+   ```bash
+   specflow new 用户登录
+   ```
+3. 将需求描述写入 `brief.md`（覆盖模板内容）
+4. 直接从 1-spec 开始执行，**无需任何用户干预**
+
+**场景 B：无需求描述**
+
+如 `/run` 或 `/run 20260202-用户登录`
+
+执行流程：
+1. 确定工作目录：
+   - 用户显式指定的目录/任务名
+   - 或从 `<config_dir>/.current` 读取
+2. 如果目录不存在或无效 → 提示用户提供需求描述：
+   ```
+   未找到有效任务目录。请使用以下方式之一：
+   1. /run 你的需求描述（将自动创建任务并执行）
+   2. specflow new 任务名（手动创建后再执行 /run）
+   ```
+3. 如果目录有效 → 检测进度并继续执行
 
 ### 1. 检测当前进度
 
@@ -35,15 +68,17 @@ prompt = """
 
 ### 2. 确定起始点
 
-根据检测结果，确定从哪一步开始：
+根据场景和检测结果：
 
 ```
-无 brief → 提示用户先创建任务或编写 brief
-有 brief，无 spec → 从 1-spec 开始
-有 spec，无 plan → 从 2-plan 开始
-有 plan，无 tasks → 从 3-execute 开始
-有 tasks，未完成 → 继续执行任务
-全部完成 → 提示工作流已完成
+场景 A（有需求描述）→ 创建目录 + 写入 brief，从 1-spec 开始
+场景 B + 无效目录  → 提示用户提供需求描述
+场景 B + 无 brief  → 从 1-spec 开始（使用模板 brief）
+场景 B + 有 brief  → 从 1-spec 开始
+场景 B + 有 spec   → 从 2-plan 开始
+场景 B + 有 plan   → 从 3-execute 开始
+场景 B + 有 tasks  → 继续执行未完成任务
+全部完成           → 提示工作流已完成
 ```
 
 ### 3. 顺序执行
@@ -52,18 +87,18 @@ prompt = """
 
 **执行 1-spec**（如需）：
 - 读取 `brief.md`/`prd.md` 和 `assets/*`
-- 按 `/<cmd_prefix>.1-spec` 规范生成规格说明
+- 按 `/{{cmd_prefix}}.1-spec` 规范生成规格说明
 - 输出到 `outputs/1-spec.md`
 - 处理 `alignment.md` 中的待确认项
 
 **执行 2-plan**（如需）：
 - 读取 `outputs/1-spec.md`
-- 按 `/<cmd_prefix>.2-plan` 规范生成实施方案
+- 按 `/{{cmd_prefix}}.2-plan` 规范生成实施方案
 - 输出到 `outputs/2-plan.md`
 
 **执行 3-execute**（如需）：
 - 读取 `outputs/2-plan.md`
-- 按 `/<cmd_prefix>.3-execute` 规范生成并执行任务
+- 按 `/{{cmd_prefix}}.3-execute` 规范生成并执行任务
 - 输出到 `outputs/3-tasks.md`
 - 逐个完成任务，更新 checkbox 状态
 
@@ -96,8 +131,8 @@ prompt = """
 
 ### 建议
 
-- 运行 `/<cmd_prefix>.accept` 进行验收
-- 或运行 `/<cmd_prefix>.summary` 生成总结
+- 运行 `/{{cmd_prefix}}.accept` 进行验收
+- 或运行 `/{{cmd_prefix}}.summary` 生成总结
 ```
 
 ## Rules
@@ -110,9 +145,9 @@ prompt = """
 
 ## Checklist
 
-- [ ] 已检测当前进度
-- [ ] 已确定起始点
-- [ ] 每个步骤完整执行
-- [ ] 输出文件已保存
-- [ ] 最终汇总已输出
+- 已检测当前进度
+- 已确定起始点
+- 每个步骤完整执行
+- 输出文件已保存
+- 最终汇总已输出
 """
