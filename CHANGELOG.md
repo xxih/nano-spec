@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 1.2.1 (2026-03-01)
+
+### Changed
+- Relaxed project-level commit cadence guidance in `AGENTS.md` from hard enforcement to a lightweight recommendation model, while keeping core history-safety constraints.
+
 ## 1.2.0 (2026-03-01)
 
 ### Changed

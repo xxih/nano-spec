@@ -1,6 +1,6 @@
 {
 	"name": "nano-spec",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "A minimal extendable Spec-Driven framework. Not just for code -- for writing, research, and anything you want to get done.",
 	"type": "module",
 	"main": "dist/index.js",
