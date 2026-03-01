@@ -107,6 +107,14 @@ describe('config module', () => {
 		expect(config).toEqual(testConfig);
 	});
 
+	it('default_adapter 应该支持 codex', async () => {
+		const configPath = join(testDir, '.nanospecrc');
+		writeFileSync(configPath, JSON.stringify({default_adapter: 'codex'}), 'utf-8');
+
+		const config = await loadConfig();
+		expect(config.default_adapter).toBe('codex');
+	});
+
 	it('应该处理布尔值配置', async () => {
 		const configPath = join(testDir, '.nanospecrc');
 		writeFileSync(configPath, JSON.stringify({auto_sync: false}), 'utf-8');

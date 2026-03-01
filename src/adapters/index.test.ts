@@ -6,6 +6,7 @@ describe('adapters index', () => {
     const adapters = listAdapters();
 
     expect(adapters).toContain('cursor');
+    expect(adapters).toContain('codex');
     expect(adapters).toContain('qwen');
     expect(adapters).toContain('iflow');
     expect(adapters).toContain('cline');
@@ -13,7 +14,7 @@ describe('adapters index', () => {
     expect(adapters).toContain('copilot');
     expect(adapters).toContain('windsurf');
     expect(adapters).toContain('kilo-code');
-    expect(adapters.length).toBe(8);
+    expect(adapters.length).toBe(9);
   });
 
   it('应该能获取已注册的适配器', () => {
@@ -21,6 +22,11 @@ describe('adapters index', () => {
     expect(cursorAdapter).toBeDefined();
     expect(cursorAdapter?.name).toBe('cursor');
     expect(cursorAdapter?.commandsDir).toBe('.cursor/commands/');
+
+    const codexAdapter = getAdapter('codex');
+    expect(codexAdapter).toBeDefined();
+    expect(codexAdapter?.name).toBe('codex');
+    expect(codexAdapter?.commandsDir).toBe('.codex/commands/');
 
     const qwenAdapter = getAdapter('qwen');
     expect(qwenAdapter).toBeDefined();
@@ -98,8 +104,9 @@ describe('adapters index', () => {
     expect(iflowAdapter.fileFormat).toBe('toml');
   });
 
-  it('cursor、qwen、cline、claude-code、copilot、windsurf、kilo-code 适配器应该使用 Markdown 格式', () => {
+  it('cursor、codex、qwen、cline、claude-code、copilot、windsurf、kilo-code 适配器应该使用 Markdown 格式', () => {
     const cursorAdapter = getAdapter('cursor') as AIAdapter;
+    const codexAdapter = getAdapter('codex') as AIAdapter;
     const qwenAdapter = getAdapter('qwen') as AIAdapter;
     const clineAdapter = getAdapter('cline') as AIAdapter;
     const claudeCodeAdapter = getAdapter('claude-code') as AIAdapter;
@@ -108,6 +115,7 @@ describe('adapters index', () => {
     const kiloCodeAdapter = getAdapter('kilo-code') as AIAdapter;
 
     expect(cursorAdapter.fileFormat).toBe('md');
+    expect(codexAdapter.fileFormat).toBe('md');
     expect(qwenAdapter.fileFormat).toBe('md');
     expect(clineAdapter.fileFormat).toBe('md');
     expect(claudeCodeAdapter.fileFormat).toBe('md');

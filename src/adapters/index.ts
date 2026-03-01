@@ -1,4 +1,5 @@
 import { cursorAdapter } from './cursor.js';
+import { codexAdapter } from './codex.js';
 import { qwenAdapter } from './qwen.js';
 import { iflowAdapter } from './iflow.js';
 import { clineAdapter } from './cline.js';
@@ -38,6 +39,7 @@ export interface AIAdapter {
 
 const adapters: Record<string, AIAdapter> = {
   cursor: cursorAdapter,
+  codex: codexAdapter,
   qwen: qwenAdapter,
   iflow: iflowAdapter,
   cline: clineAdapter,

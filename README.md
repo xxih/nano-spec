@@ -32,7 +32,7 @@ nanospec new "用户登录功能"
 
 **🎯 专注工作流，不绑定工具**
 
-- 支持 8 个主流 AI 工具：Cursor、Qwen、iFlow、Cline、Claude Code、GitHub Copilot、Windsurf、Kilo Code
+- 支持 9 个主流 AI 工具：Cursor、Codex、Qwen、iFlow、Cline、Claude Code、GitHub Copilot、Windsurf、Kilo Code
 - 团队成员用不同工具，依然保持统一的协作规范
 - 随时切换工具，无缝衔接
 
@@ -243,6 +243,7 @@ your-project/
 ├── .nanospec/
 │   ├── current-task                 # 当前任务指针
 │   └── config.json                  # 项目级配置（可选）
+├── .codex/commands/                 # Codex 命令（如果使用）
 ├── .cursor/commands/                # Cursor 命令（如果使用）
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -257,6 +258,7 @@ your-project/
 NanoSpec 支持以下 AI 工具，通过适配器自动生成对应的命令文件：
 
 - ✅ Cursor
+- ✅ Codex
 - ✅ Qwen
 - ✅ iFlow
 - ✅ Cline
@@ -570,6 +572,7 @@ your-project/
 ├── .nanospec/
 │   ├── current-task                 # Current task pointer
 │   └── config.json                  # Project-level config (optional)
+├── .codex/commands/                 # Codex commands (if used)
 ├── .cursor/commands/                # Cursor commands (if used)
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -584,6 +587,7 @@ your-project/
 NanoSpec supports the following AI tools, automatically generating corresponding command files through adapters:
 
 - ✅ Cursor
+- ✅ Codex
 - ✅ Qwen
 - ✅ iFlow
 - ✅ Cline
@@ -683,6 +687,7 @@ your-project/
 │           └── summary-*.md
 ├── .nanospec/
 │   └── current-task                 # 当前任务指针
+├── .codex/commands/                 # Codex 命令（如果使用）
 ├── .cursor/commands/                # Cursor 命令（如果使用）
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -707,7 +712,7 @@ nanospec init [选项]
 **选项：**
 
 - `--ai <tool>`：AI 工具类型（默认：cursor）
-  - 可用：cursor, qwen, iflow, cline
+  - 可用：cursor, codex, qwen, iflow, cline, claude-code, copilot, windsurf, kilo-code
 - `-f, --force`：强制覆盖已存在的文件
 
 #### nanospec new
@@ -925,7 +930,7 @@ A minimal extendable Spec-Driven framework. Not just for code -- for writing, re
 
 ### Overview
 
-NanoSpec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, qwen, iflow, cline) and provides a standardized workflow for specification, planning, execution, and acceptance.
+NanoSpec CLI is a lightweight command-line tool that helps you quickly initialize a Spec-Driven Development workflow project structure. It supports multiple AI tools (Cursor, codex, qwen, iflow, cline, claude-code, copilot, windsurf, kilo-code) and provides a standardized workflow for specification, planning, execution, and acceptance.
 
 ### Features
 
@@ -968,6 +973,7 @@ npm link
 nanospec init
 
 # Initialize with specific AI tool
+nanospec init --ai codex
 nanospec init --ai qwen
 nanospec init --ai iflow
 nanospec init --ai cline
@@ -1024,6 +1030,7 @@ your-project/
 │           └── summary-*.md
 ├── .nanospec/
 │   └── current-task                 # Current task pointer
+├── .codex/commands/                 # Codex commands (if used)
 ├── .cursor/commands/                # Cursor commands (if used)
 │   ├── spec.1-spec.md
 │   ├── spec.2-plan.md
@@ -1048,7 +1055,7 @@ nanospec init [options]
 **Options:**
 
 - `--ai <tool>`: AI tool type (default: cursor)
-  - Available: cursor, qwen, iflow, cline
+  - Available: cursor, codex, qwen, iflow, cline, claude-code, copilot, windsurf, kilo-code
 - `-f, --force`: Force overwrite existing files
 
 #### nanospec new

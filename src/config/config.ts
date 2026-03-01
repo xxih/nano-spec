@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { homedir } from 'os';
+import { listAdapters } from '../adapters/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -152,7 +153,7 @@ function parseValue(value: string): any {
  * 验证配置
  */
 function validateConfig(config: NanospecConfig): void {
-	const validAdapters = ['cursor', 'qwen', 'iflow', 'cline'];
+	const validAdapters = listAdapters();
 
 	if (config.default_adapter && !validAdapters.includes(config.default_adapter)) {
 		console.warn(`⚠️  无效的 default_adapter: ${config.default_adapter}`);
