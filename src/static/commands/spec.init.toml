@@ -17,8 +17,8 @@ prompt = """
 ## Objective
 
 根据当前环境状态执行不同操作：
-1. **未初始化**：执行 `specflow init` 初始化目录结构
-2. **已初始化**：执行 `specflow new` 创建任务，并根据用户意图填写 brief.md
+1. **未初始化**：执行 `nanospec init` 初始化目录结构
+2. **已初始化**：执行 `nanospec new` 创建任务，并根据用户意图填写 brief.md
 
 ## Decision Protocol
 
@@ -30,14 +30,14 @@ prompt = """
 
 ### Step 2A: 初始化流程（未初始化时）
 
-1. 执行 shell 命令：`specflow init --tools cursor`
+1. 执行 shell 命令：`nanospec init --ai cursor`
 2. 确认生成了 `<config_dir>/AGENTS.md`
 3. 提示用户初始化完成，可以开始创建任务
 
 ### Step 2B: 创建任务流程（已初始化时）
 
 1. 从用户输入中提取任务名称和意图
-2. 执行 shell 命令：`specflow new "<任务名称>"`
+2. 执行 shell 命令：`nanospec new "<任务名称>"`
 3. 根据用户意图，填写 `<specs_dir>/<task_name>/brief.md`：
    - 背景：用户的原始描述
    - 目标：从意图中提炼的目标
@@ -46,7 +46,7 @@ prompt = """
 ## Input
 
 用户的自然语言描述，例如：
-- "初始化 specflow"
+- "初始化 nano-spec"
 - "创建一个用户认证功能"
 - "我要做一个支持暗黑模式的设置页面"
 
@@ -58,7 +58,7 @@ prompt = """
 
 ### 创建任务场景
 
-1. 执行 `specflow new` 命令
+1. 执行 `nanospec new` 命令
 2. 填写 brief.md，格式：
 
 ```markdown
@@ -78,7 +78,7 @@ prompt = """
 ## Checklist
 
 - 正确判断了环境状态
-- 执行了相应的 specflow 命令
+- 执行了相应的 nanospec 命令
 - （创建任务时）brief.md 已填写用户意图
 
 """
