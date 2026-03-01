@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const clineAdapter: AIAdapter = {
   name: 'cline',
+  supportedAssets: ['commands'],
   commandsDir: '.cline/commands/',
   fileFormat: 'md',
   supportsVariables: false,

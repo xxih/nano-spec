@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const claudeCodeAdapter: AIAdapter = {
   name: 'claude-code',
+  supportedAssets: ['commands'],
   commandsDir: '.claude/commands/',
   fileFormat: 'md',
   supportsVariables: true,

@@ -99,12 +99,29 @@ describe('config module', () => {
 			default_adapter: 'qwen',
 			template_format: 'md' as const,
 			auto_sync: false,
+			default_assets: 'both' as const,
+			codex_scope: 'project' as const,
+			enabled_skills: ['nanospec-align'],
 		};
 		writeFileSync(configPath, JSON.stringify(testConfig), 'utf-8');
 
 		const config = await loadConfig();
 
 		expect(config).toEqual(testConfig);
+	});
+
+	it('应该加载 .nanospec/config.json', async () => {
+		const configDir = join(testDir, '.nanospec');
+		mkdirSync(configDir, {recursive: true});
+		writeFileSync(
+			join(configDir, 'config.json'),
+			JSON.stringify({default_assets: 'skills', codex_scope: 'project'}, null, 2),
+			'utf-8',
+		);
+
+		const config = await loadConfig();
+		expect(config.default_assets).toBe('skills');
+		expect(config.codex_scope).toBe('project');
 	});
 
 	it('default_adapter 应该支持 codex', async () => {

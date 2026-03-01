@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const qwenAdapter: AIAdapter = {
   name: 'qwen',
+  supportedAssets: ['commands'],
   commandsDir: '.qwen/commands/',
   fileFormat: 'md',
   supportsVariables: false,

@@ -1,21 +1,26 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import {existsSync, mkdirSync, writeFileSync} from 'fs';
+import {homedir} from 'os';
 import { join } from 'path';
-import type { AIAdapter } from './index.js';
+import type {AIAdapter, AdapterGenerateOptions} from './index.js';
 import {
   getCommandTemplate,
   getFileExtension,
   parseTomlCommand,
-  listAvailableCommands
+  listAvailableCommands,
+  listAvailableSkills,
+  copySkillToDir,
 } from './utils.js';
 
 export const codexAdapter: AIAdapter = {
   name: 'codex',
-  commandsDir: '.codex/commands/',
+  supportedAssets: ['commands', 'skills'],
+  commandsDir: '.codex/prompts/',
   fileFormat: 'md',
   supportsVariables: true,
 
-  generateCommands(cwd: string, templatesDir: string): void {
-    const commandsDir = join(cwd, '.codex', 'commands');
+  generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
+    const codexRoot = resolveCodexRoot(cwd, options?.scope);
+    const commandsDir = join(codexRoot, 'prompts');
     mkdirSync(commandsDir, { recursive: true });
 
     // 自动扫描所有可用的命令
@@ -39,6 +44,22 @@ export const codexAdapter: AIAdapter = {
     }
   },
 
+  generateSkills(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
+    const codexRoot = resolveCodexRoot(cwd, options?.scope);
+    const skillsDir = join(codexRoot, 'skills');
+    mkdirSync(skillsDir, {recursive: true});
+
+    const availableSkills = listAvailableSkills();
+    const selectedSkills =
+      options?.skills && options.skills.length > 0
+        ? availableSkills.filter((skill) => options.skills?.includes(skill))
+        : availableSkills;
+
+    for (const skillName of selectedSkills) {
+      copySkillToDir(skillName, skillsDir);
+    }
+  },
+
   transformCommand(content: string, commandName: string): string {
     const parsed = parseTomlCommand(content, commandName);
 
@@ -53,3 +74,12 @@ export const codexAdapter: AIAdapter = {
     return lines.join('\n');
   }
 };
+
+function resolveCodexRoot(cwd: string, scope?: 'project' | 'user'): string {
+  if (scope === 'user') {
+    const homeDir = process.env.NANOSPEC_HOME_DIR || homedir();
+    return join(homeDir, '.codex');
+  }
+
+  return join(cwd, '.codex');
+}

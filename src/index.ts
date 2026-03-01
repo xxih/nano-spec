@@ -22,6 +22,8 @@ export function createProgram(): Command {
 		.alias('i')
 		.description('初始化 nanospec 项目结构')
 		.option('--ai <tool>', 'AI 工具类型（非交互式快速初始化）')
+		.option('--assets <mode>', '同步资产类型（commands|skills|both）')
+		.option('--scope <scope>', 'codex 作用域（project|user）')
 		.option('-f, --force', '强制覆盖已存在的文件')
 		.action((options) => init(options));
 
@@ -69,8 +71,10 @@ export function createProgram(): Command {
 	program
 		.command('sync')
 		.alias('sy')
-		.description('同步命令到 AI 工具')
+		.description('同步资产到 AI 工具')
 		.option('--adapter <name>', '指定 AI 工具')
+		.option('--assets <mode>', '同步资产类型（commands|skills|both）')
+		.option('--scope <scope>', 'codex 作用域（project|user）')
 		.action((options) => syncCommands(options));
 
 	const configCmd = program

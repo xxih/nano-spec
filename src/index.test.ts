@@ -28,4 +28,15 @@ describe('cli command registration', () => {
 		expect(switchCommand).toBeDefined();
 		expect(switchCommand?.aliases()).toContain('s');
 	});
+
+	it('should register assets and scope options on init and sync', () => {
+		const program = createProgram();
+		const initCommand = program.commands.find((cmd) => cmd.name() === 'init');
+		const syncCommand = program.commands.find((cmd) => cmd.name() === 'sync');
+
+		expect(initCommand?.options.map((opt) => opt.long)).toContain('--assets');
+		expect(initCommand?.options.map((opt) => opt.long)).toContain('--scope');
+		expect(syncCommand?.options.map((opt) => opt.long)).toContain('--assets');
+		expect(syncCommand?.options.map((opt) => opt.long)).toContain('--scope');
+	});
 });

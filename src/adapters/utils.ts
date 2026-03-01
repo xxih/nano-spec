@@ -1,4 +1,4 @@
-import {existsSync, readFileSync, readdirSync} from 'fs';
+import {cpSync, existsSync, readFileSync, readdirSync} from 'fs';
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
 import type {CommandFormat} from './index.js';
@@ -244,4 +244,63 @@ export function listAvailableCommands(): string[] {
 		console.warn(`⚠️  扫描命令目录失败: ${error}`);
 		return [];
 	}
+}
+
+/**
+ * 列出所有可用 skills
+ * 通过扫描 src/static/skills/ 目录，自动发现所有包含 SKILL.md 的技能目录
+ *
+ * @returns skills 名称数组（目录名）
+ */
+export function listAvailableSkills(): string[] {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+	const builtinSkillsDir = join(__dirname, '../static/skills');
+
+	if (!existsSync(builtinSkillsDir)) {
+		return [];
+	}
+
+	try {
+		const entries = readdirSync(builtinSkillsDir, {withFileTypes: true});
+		const skills = entries
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => entry.name)
+			.filter((name) => existsSync(join(builtinSkillsDir, name, 'SKILL.md')));
+
+		return skills.sort();
+	} catch (error) {
+		console.warn(`⚠️  扫描 skills 目录失败: ${error}`);
+		return [];
+	}
+}
+
+/**
+ * 获取内置 skill 目录路径
+ */
+export function getSkillSourceDir(skillName: string): string | null {
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = dirname(__filename);
+	const sourceDir = join(__dirname, '../static/skills', skillName);
+	const skillFile = join(sourceDir, 'SKILL.md');
+
+	if (!existsSync(skillFile)) {
+		return null;
+	}
+
+	return sourceDir;
+}
+
+/**
+ * 复制 skill 到目标目录
+ */
+export function copySkillToDir(skillName: string, destRoot: string): boolean {
+	const sourceDir = getSkillSourceDir(skillName);
+	if (!sourceDir) {
+		return false;
+	}
+
+	const destDir = join(destRoot, skillName);
+	cpSync(sourceDir, destDir, {recursive: true, force: true});
+	return true;
 }

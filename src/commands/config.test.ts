@@ -139,6 +139,22 @@ describe('config command', () => {
 		expect(config.auto_sync).toBe(true);
 	});
 
+	it('应该支持设置 default_assets', async () => {
+		mkdirSync(nanospecDir, {recursive: true});
+		await configCommand('set', 'default_assets', 'both');
+		const content = readFileSync(configPath, 'utf-8');
+		const config = JSON.parse(content);
+		expect(config.default_assets).toBe('both');
+	});
+
+	it('应该支持设置 enabled_skills(JSON 数组)', async () => {
+		mkdirSync(nanospecDir, {recursive: true});
+		await configCommand('set', 'enabled_skills', '["nanospec-align"]');
+		const content = readFileSync(configPath, 'utf-8');
+		const config = JSON.parse(content);
+		expect(config.enabled_skills).toEqual(['nanospec-align']);
+	});
+
 	it('应该处理无效的 JSON 配置文件', async () => {
 		mkdirSync(nanospecDir, {recursive: true});
 

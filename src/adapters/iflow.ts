@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, listAvailableCommands } from './u
 
 export const iflowAdapter: AIAdapter = {
   name: 'iflow',
+  supportedAssets: ['commands'],
   commandsDir: '.iflow/commands/',
   fileFormat: 'toml',
   supportsVariables: false,

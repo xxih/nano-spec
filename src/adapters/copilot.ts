@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const copilotAdapter: AIAdapter = {
   name: 'copilot',
+  supportedAssets: ['commands'],
   commandsDir: '.github/copilot/commands/',
   fileFormat: 'md',
   supportsVariables: true,

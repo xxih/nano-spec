@@ -13,6 +13,9 @@ interface NanospecConfig {
 	default_adapter?: string;
 	template_format?: 'md' | 'toml' | 'json';
 	auto_sync?: boolean;
+	default_assets?: 'commands' | 'skills' | 'both';
+	codex_scope?: 'project' | 'user';
+	enabled_skills?: string[];
 }
 
 const DEFAULT_CONFIG: NanospecConfig = {
@@ -21,6 +24,9 @@ const DEFAULT_CONFIG: NanospecConfig = {
 	default_adapter: 'cursor',
 	template_format: 'md',
 	auto_sync: true,
+	default_assets: 'commands',
+	codex_scope: 'project',
+	enabled_skills: [],
 };
 
 /**
@@ -122,6 +128,9 @@ function listConfig(config: NanospecConfig, configPath: string, global: boolean)
 	console.log(`  default_adapter = ${mergedConfig.default_adapter}`);
 	console.log(`  template_format = ${mergedConfig.template_format}`);
 	console.log(`  auto_sync       = ${mergedConfig.auto_sync ?? DEFAULT_CONFIG.auto_sync}`);
+	console.log(`  default_assets  = ${mergedConfig.default_assets}`);
+	console.log(`  codex_scope     = ${mergedConfig.codex_scope}`);
+	console.log(`  enabled_skills  = ${JSON.stringify(mergedConfig.enabled_skills ?? [])}`);
 }
 
 /**
@@ -154,6 +163,16 @@ function setConfig(configPath: string, config: NanospecConfig, key: string, valu
 		parsedValue = true;
 	} else if (value === 'false') {
 		parsedValue = false;
+	} else if (
+		(value.startsWith('[') && value.endsWith(']')) ||
+		(value.startsWith('{') && value.endsWith('}'))
+	) {
+		try {
+			parsedValue = JSON.parse(value);
+		} catch {
+			console.log(`⚠️  无法解析 JSON 值: ${value}`);
+			return;
+		}
 	}
 
 	config[key as keyof NanospecConfig] = parsedValue;
@@ -201,6 +220,9 @@ function showCurrentConfig(config: NanospecConfig, configPath: string, global: b
 		console.log(`  default_adapter = ${DEFAULT_CONFIG.default_adapter}`);
 		console.log(`  template_format = ${DEFAULT_CONFIG.template_format}`);
 		console.log(`  auto_sync       = ${DEFAULT_CONFIG.auto_sync}`);
+		console.log(`  default_assets  = ${DEFAULT_CONFIG.default_assets}`);
+		console.log(`  codex_scope     = ${DEFAULT_CONFIG.codex_scope}`);
+		console.log(`  enabled_skills  = ${JSON.stringify(DEFAULT_CONFIG.enabled_skills)}`);
 	} else {
 		const mergedConfig = {...DEFAULT_CONFIG, ...config};
 
@@ -210,5 +232,8 @@ function showCurrentConfig(config: NanospecConfig, configPath: string, global: b
 		console.log(`  default_adapter = ${mergedConfig.default_adapter}${config.default_adapter ? ' (自定义)' : ''}`);
 		console.log(`  template_format = ${mergedConfig.template_format}${config.template_format ? ' (自定义)' : ''}`);
 		console.log(`  auto_sync       = ${mergedConfig.auto_sync ?? DEFAULT_CONFIG.auto_sync}${config.auto_sync !== undefined ? ' (自定义)' : ''}`);
+		console.log(`  default_assets  = ${mergedConfig.default_assets}${config.default_assets ? ' (自定义)' : ''}`);
+		console.log(`  codex_scope     = ${mergedConfig.codex_scope}${config.codex_scope ? ' (自定义)' : ''}`);
+		console.log(`  enabled_skills  = ${JSON.stringify(mergedConfig.enabled_skills ?? [])}${config.enabled_skills ? ' (自定义)' : ''}`);
 	}
 }

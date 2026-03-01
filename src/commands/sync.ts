@@ -1,6 +1,12 @@
-import { getAdapter, listAdapters } from '../adapters/index.js';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import {homedir} from 'os';
+import {fileURLToPath} from 'url';
+import {dirname, join} from 'path';
+import {getAdapter, listAdapters} from '../adapters/index.js';
+import {listAvailableCommands, listAvailableSkills} from '../adapters/utils.js';
+import {loadConfig} from '../config/config.js';
+
+type AssetMode = 'commands' | 'skills' | 'both';
+type CodexScope = 'project' | 'user';
 
 const __filename = fileURLToPath(import.meta.url);
 // sync.ts 位于 src/commands/，需要获取 src/ 目录作为 templatesDir
@@ -9,17 +15,22 @@ const __dirname = dirname(dirname(__filename));
 interface SyncOptions {
 	adapter?: string;
 	force?: boolean;
+	assets?: string;
+	scope?: string;
 }
 
 /**
- * 同步命令到 AI 工具
+ * 同步资产到 AI 工具
  * @param options 同步选项
  */
 export async function syncCommands(options: SyncOptions = {}): Promise<void> {
 	const cwd = process.cwd();
+	const config = await loadConfig(cwd);
 	const adapters = options.adapter ? [options.adapter] : listAdapters();
+	const assetMode = resolveAssetMode(options.assets, config.default_assets || 'commands');
+	const scope = resolveCodexScope(options.scope, config.codex_scope || 'user');
 
-	console.log('开始同步命令...\n');
+	console.log(`开始同步资产（${assetMode}）...\n`);
 
 	for (const adapterName of adapters) {
 		const adapter = getAdapter(adapterName);
@@ -31,12 +42,71 @@ export async function syncCommands(options: SyncOptions = {}): Promise<void> {
 		console.log(`同步到 ${adapter.name}...`);
 
 		try {
-			adapter.generateCommands(cwd, __dirname);
-			console.log(`  ✓ 已更新 ${adapter.commandsDir}`);
+			if (supportsCommands(assetMode)) {
+				adapter.generateCommands(cwd, __dirname, {scope});
+				const targetDir =
+					adapterName === 'codex'
+						? join(resolveCodexRoot(cwd, scope), 'prompts')
+						: join(cwd, adapter.commandsDir);
+				console.log(`  ✓ 已更新 ${targetDir} (${listAvailableCommands().length} 个命令)`);
+			}
+
+			if (supportsSkills(assetMode)) {
+				if (adapter.generateSkills) {
+					const availableSkills = listAvailableSkills();
+					const selectedSkills =
+						config.enabled_skills && config.enabled_skills.length > 0
+							? availableSkills.filter((skill) =>
+								config.enabled_skills?.includes(skill))
+							: availableSkills;
+					adapter.generateSkills(cwd, __dirname, {
+						scope,
+						skills: config.enabled_skills,
+					});
+					const targetDir =
+						adapterName === 'codex'
+							? join(resolveCodexRoot(cwd, scope), 'skills')
+							: join(cwd, '.skills');
+					console.log(`  ✓ 已更新 ${targetDir} (${selectedSkills.length} 个 skills)`);
+				} else {
+					console.log(`  ⚠️  ${adapter.name} 暂不支持 skills，已跳过`);
+				}
+			}
 		} catch (error) {
 			console.log(`  ❌ 同步失败: ${error}`);
 		}
 	}
 
-	console.log('\n✅ 命令同步完成！');
+	console.log('\n✅ 资产同步完成！');
+}
+
+function resolveAssetMode(input: string | undefined, fallback: AssetMode): AssetMode {
+	if (input === 'commands' || input === 'skills' || input === 'both') {
+		return input;
+	}
+	return fallback;
+}
+
+function resolveCodexScope(input: string | undefined, fallback: CodexScope): CodexScope {
+	if (input === 'project' || input === 'user') {
+		return input;
+	}
+	return fallback;
+}
+
+function supportsCommands(mode: AssetMode): boolean {
+	return mode === 'commands' || mode === 'both';
+}
+
+function supportsSkills(mode: AssetMode): boolean {
+	return mode === 'skills' || mode === 'both';
+}
+
+function resolveCodexRoot(cwd: string, scope: CodexScope): string {
+	if (scope === 'user') {
+		const homeDir = process.env.NANOSPEC_HOME_DIR || homedir();
+		return join(homeDir, '.codex');
+	}
+
+	return join(cwd, '.codex');
 }

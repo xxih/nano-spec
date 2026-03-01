@@ -22,10 +22,10 @@ describe('sync command', () => {
 		await syncCommands();
 
 		expect(consoleLogSpy).toHaveBeenCalledWith(
-			expect.stringContaining('开始同步命令')
+			expect.stringContaining('开始同步资产')
 		);
 		expect(consoleLogSpy).toHaveBeenCalledWith(
-			expect.stringContaining('命令同步完成')
+			expect.stringContaining('资产同步完成')
 		);
 
 		consoleLogSpy.mockRestore();
@@ -39,7 +39,7 @@ describe('sync command', () => {
 		await syncCommands({adapter: 'cursor'});
 
 		expect(consoleLogSpy).toHaveBeenCalledWith(
-			expect.stringContaining('开始同步命令')
+			expect.stringContaining('开始同步资产')
 		);
 
 		consoleLogSpy.mockRestore();
@@ -69,7 +69,19 @@ describe('sync command', () => {
 
 		// 如果没有错误，应该显示完成
 		expect(consoleLogSpy).toHaveBeenCalledWith(
-			expect.stringContaining('命令同步完成')
+			expect.stringContaining('资产同步完成')
+		);
+
+		consoleLogSpy.mockRestore();
+	});
+
+	it('应该支持仅同步 codex skills', async () => {
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+		await syncCommands({adapter: 'codex', assets: 'skills', scope: 'project'});
+
+		expect(consoleLogSpy).toHaveBeenCalledWith(
+			expect.stringContaining('skills')
 		);
 
 		consoleLogSpy.mockRestore();

@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## 1.2.0 (2026-03-01)
+
+### Changed
+- Expanded asset model from command-only to `commands | skills | both` in `init` and `sync`.
+- Added Codex scope routing (`project|user`) so assets can be generated to `./.codex/*` or `~/.codex/*`.
+- Extended config with `default_assets`, `codex_scope`, and `enabled_skills`, and updated loader to read `.nanospec/config.json`.
+- Updated README to document dual-asset sync and Codex scope options.
+
+### Added
+- Added built-in skills templates under `src/static/skills/` (`nanospec-workflow`, `nanospec-align`).
+- Added skills utility functions and Codex adapter support for syncing skills to `.codex/skills/`.
+- Added regression tests for new CLI options, config keys, skills discovery/copy, and Codex scope behavior.
+
 ## 1.1.3 (2026-03-01)
 
 ### Changed

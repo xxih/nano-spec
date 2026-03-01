@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const kiloCodeAdapter: AIAdapter = {
   name: 'kilo-code',
+  supportedAssets: ['commands'],
   commandsDir: '.kilo/commands/',
   fileFormat: 'md',
   supportsVariables: true,

@@ -26,7 +26,7 @@ describe('adapters index', () => {
     const codexAdapter = getAdapter('codex');
     expect(codexAdapter).toBeDefined();
     expect(codexAdapter?.name).toBe('codex');
-    expect(codexAdapter?.commandsDir).toBe('.codex/commands/');
+    expect(codexAdapter?.commandsDir).toBe('.codex/prompts/');
 
     const qwenAdapter = getAdapter('qwen');
     expect(qwenAdapter).toBeDefined();
@@ -70,6 +70,7 @@ describe('adapters index', () => {
       expect(adapter).toBeDefined();
       expect(typeof adapter?.generateCommands).toBe('function');
       expect(typeof adapter?.transformCommand).toBe('function');
+      expect(Array.isArray(adapter?.supportedAssets)).toBe(true);
     }
   });
 
@@ -80,6 +81,7 @@ describe('adapters index', () => {
       const adapter = getAdapter(name) as AIAdapter;
 
       expect(adapter).toHaveProperty('name');
+      expect(adapter).toHaveProperty('supportedAssets');
       expect(adapter).toHaveProperty('commandsDir');
       expect(adapter).toHaveProperty('fileFormat');
       expect(adapter).toHaveProperty('supportsVariables');
@@ -87,6 +89,7 @@ describe('adapters index', () => {
       expect(adapter).toHaveProperty('transformCommand');
 
       expect(typeof adapter.name).toBe('string');
+      expect(Array.isArray(adapter.supportedAssets)).toBe(true);
       expect(typeof adapter.commandsDir).toBe('string');
       expect(typeof adapter.fileFormat).toBe('string');
       expect(typeof adapter.supportsVariables).toBe('boolean');
@@ -94,9 +97,17 @@ describe('adapters index', () => {
       expect(typeof adapter.transformCommand).toBe('function');
 
       expect(adapter.name.length).toBeGreaterThan(0);
+      expect(adapter.supportedAssets.length).toBeGreaterThan(0);
       expect(adapter.commandsDir.length).toBeGreaterThan(0);
       expect(['md', 'toml', 'json', 'yaml']).toContain(adapter.fileFormat);
     }
+  });
+
+  it('codex 适配器应该支持 commands 和 skills', () => {
+    const codexAdapter = getAdapter('codex') as AIAdapter;
+    expect(codexAdapter.supportedAssets).toContain('commands');
+    expect(codexAdapter.supportedAssets).toContain('skills');
+    expect(typeof codexAdapter.generateSkills).toBe('function');
   });
 
   it('iflow 适配器应该使用 TOML 格式', () => {

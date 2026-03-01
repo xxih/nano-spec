@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const windsurfAdapter: AIAdapter = {
   name: 'windsurf',
+  supportedAssets: ['commands'],
   commandsDir: '.windsurf/commands/',
   fileFormat: 'md',
   supportsVariables: true,

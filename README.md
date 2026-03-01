@@ -31,11 +31,11 @@ nanospec new
 
 | 命令 | 简写 | 说明 |
 |---|---|---|
-| `nanospec init` | `nanospec i` | 初始化项目结构与命令模板 |
+| `nanospec init [--assets <commands\|skills\|both>] [--scope <project\|user>]` | `nanospec i` | 初始化项目结构并同步资产（commands/skills） |
 | `nanospec new [name]` | `nanospec n [name]` | 创建任务目录并设为当前任务；不带 `name` 时进入交互输入（默认“待命名”） |
 | `nanospec switch [name]` | `nanospec s [name]` | 切换当前任务 |
 | `nanospec status` | `nanospec st` | 查看当前任务状态 |
-| `nanospec sync [--adapter <name>]` | `nanospec sy [--adapter <name>]` | 同步命令到 AI 工具目录 |
+| `nanospec sync [--adapter <name>] [--assets <commands\|skills\|both>] [--scope <project\|user>]` | `nanospec sy [--adapter <name>]` | 同步资产到 AI 工具目录 |
 | `nanospec preset list/install/uninstall` | `nanospec p ls/add/rm` | 预设包管理 |
 | `nanospec config` | `nanospec c` | 查看当前配置 |
 | `nanospec config get/set/unset/list` | `nanospec c g/s/u/ls` | 读写配置（支持 `--global`） |
@@ -77,10 +77,18 @@ nanospec config set default_adapter codex
 
 常用配置项：`specs_root`、`cmd_prefix`、`default_adapter`、`template_format`、`auto_sync`。
 
+新增配置项：
+
+- `default_assets`：默认同步资产类型（`commands` / `skills` / `both`）
+- `codex_scope`：codex 输出作用域（`project` / `user`）
+- `enabled_skills`：仅同步指定 skills（JSON 数组；空数组表示全部内置 skills）
+
 ## 支持的 AI 工具
 
 - `cursor`
 - `codex`
+  - `commands`：`./.codex/prompts/`（`--scope project`）或 `~/.codex/prompts/`（`--scope user`）
+  - `skills`：`./.codex/skills/`（`--scope project`）或 `~/.codex/skills/`（`--scope user`）
 - `qwen`
 - `iflow`
 - `cline`
@@ -105,18 +113,23 @@ project-root/
 │           ├── 1-spec.md
 │           ├── 2-plan.md
 │           └── 3-tasks.md
-└── .<ai-tool>/commands/
+├── .<ai-tool>/commands/
+└── .codex/
+    ├── prompts/
+    └── skills/
 ```
 
 ## 常见问题
 
-### `nanospec init` 后没有命令文件？
+### `nanospec init` 后没有资产文件？
 
 运行：
 
 ```bash
 nanospec sync
 ```
+
+如果使用 `codex` 且指定了 `--scope user`，请检查 `~/.codex/prompts/` 与 `~/.codex/skills/`。
 
 ### 如何继续上次任务？
 

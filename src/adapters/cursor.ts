@@ -5,6 +5,7 @@ import { getCommandTemplate, getFileExtension, parseTomlCommand, listAvailableCo
 
 export const cursorAdapter: AIAdapter = {
   name: 'cursor',
+  supportedAssets: ['commands'],
   commandsDir: '.cursor/commands/',
   fileFormat: 'md',
   supportsVariables: false,

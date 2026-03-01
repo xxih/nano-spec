@@ -8,6 +8,14 @@ import { copilotAdapter } from './copilot.js';
 import { windsurfAdapter } from './windsurf.js';
 import { kiloCodeAdapter } from './kilo-code.js';
 
+export type AssetType = 'commands' | 'skills';
+export type CodexScope = 'project' | 'user';
+
+export interface AdapterGenerateOptions {
+  scope?: CodexScope;
+  skills?: string[];
+}
+
 /**
  * 支持的命令文件格式
  */
@@ -20,6 +28,8 @@ export type CommandFormat = 'md' | 'toml' | 'json' | 'yaml';
 export interface AIAdapter {
   /** AI 工具名称 */
   name: string;
+  /** 支持的资产类型 */
+  supportedAssets: AssetType[];
   /** 命令文件目录（相对于项目根目录） */
   commandsDir: string;
   /** 命令文件格式 */
@@ -27,7 +37,9 @@ export interface AIAdapter {
   /** 是否支持变量替换 */
   supportsVariables: boolean;
   /** 生成命令文件 */
-  generateCommands(cwd: string, templatesDir: string): void;
+  generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void;
+  /** 生成 skills（仅部分适配器支持） */
+  generateSkills?(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void;
   /**
    * 格式转换：将通用 Markdown 模板转换为特定 AI 工具格式
    * @param content Markdown 格式的命令内容

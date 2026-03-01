@@ -21,6 +21,12 @@ export interface NanospecConfig {
 	template_format?: 'md' | 'toml' | 'json';
 	/** init 时自动同步（默认：true） */
 	auto_sync?: boolean;
+	/** 默认同步资产类型（默认：commands） */
+	default_assets?: 'commands' | 'skills' | 'both';
+	/** codex 输出作用域（默认：project） */
+	codex_scope?: 'project' | 'user';
+	/** 启用的 skills（空数组表示全部内置 skills） */
+	enabled_skills?: string[];
 }
 
 /**
@@ -32,6 +38,9 @@ export const DEFAULT_CONFIG: NanospecConfig = {
 	default_adapter: 'cursor',
 	template_format: 'md',
 	auto_sync: true,
+	default_assets: 'commands',
+	codex_scope: 'project',
+	enabled_skills: [],
 };
 
 /**
@@ -55,6 +64,7 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<NanospecC
 	// 2. 加载项目级配置 (.nanospecrc 或 nanospec.config.js)
 	const projectConfigPath = join(cwd, '.nanospecrc');
 	const projectConfigJsPath = join(cwd, 'nanospec.config.js');
+	const projectJsonConfigPath = join(cwd, '.nanospec', 'config.json');
 
 	if (existsSync(projectConfigPath)) {
 		try {
@@ -74,7 +84,17 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<NanospecC
 		}
 	}
 
-	// 3. 验证配置
+	// 3. 加载项目级 JSON 配置（由 nanospec config 命令写入）
+	if (existsSync(projectJsonConfigPath)) {
+		try {
+			const projectJsonConfig = parseConfigFile(projectJsonConfigPath);
+			Object.assign(config, projectJsonConfig);
+		} catch (error) {
+			console.warn(`⚠️  无法加载项目配置: ${projectJsonConfigPath}`);
+		}
+	}
+
+	// 4. 验证配置
 	validateConfig(config);
 
 	return config;
@@ -146,6 +166,21 @@ function validateConfig(config: NanospecConfig): void {
 	if (config.template_format && !['md', 'toml', 'json'].includes(config.template_format)) {
 		console.warn(`⚠️  无效的 template_format: ${config.template_format}`);
 		config.template_format = DEFAULT_CONFIG.template_format;
+	}
+
+	if (config.default_assets && !['commands', 'skills', 'both'].includes(config.default_assets)) {
+		console.warn(`⚠️  无效的 default_assets: ${config.default_assets}`);
+		config.default_assets = DEFAULT_CONFIG.default_assets;
+	}
+
+	if (config.codex_scope && !['project', 'user'].includes(config.codex_scope)) {
+		console.warn(`⚠️  无效的 codex_scope: ${config.codex_scope}`);
+		config.codex_scope = DEFAULT_CONFIG.codex_scope;
+	}
+
+	if (!Array.isArray(config.enabled_skills)) {
+		console.warn('⚠️  无效的 enabled_skills，已重置为空数组');
+		config.enabled_skills = DEFAULT_CONFIG.enabled_skills;
 	}
 }
 

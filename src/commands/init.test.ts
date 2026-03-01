@@ -28,7 +28,7 @@ describe('init command', () => {
 	});
 
 	it('应该创建 nanospec/ 目录结构', async () => {
-		await init({ai: 'cursor'});
+		await init({ai: 'cursor', scope: 'project'});
 
 		expect(existsSync(nanospecDir)).toBe(true);
 	});
@@ -43,28 +43,28 @@ describe('init command', () => {
 		const adapter = getAdapter('cursor');
 		expect(adapter).toBeDefined();
 
-		await init({ai: 'cursor'});
+		await init({ai: 'cursor', scope: 'project'});
 
 		expect(existsSync(join(testDir, '.cursor', 'commands'))).toBe(true);
 	});
 
 	it('应该支持 --force 参数覆盖已存在目录', async () => {
 		// 第一次初始化
-		await init({ai: 'cursor'});
+		await init({ai: 'cursor', scope: 'project'});
 		expect(existsSync(nanospecDir)).toBe(true);
 
 		// 第二次初始化不使用 --force 应该警告
 		const consoleWarnSpy = vi
 			.spyOn(console, 'log')
 			.mockImplementation(() => {});
-		await init({ai: 'cursor'});
+		await init({ai: 'cursor', scope: 'project'});
 		expect(consoleWarnSpy).toHaveBeenCalledWith(
 			expect.stringContaining('nanospec/ 目录已存在')
 		);
 		consoleWarnSpy.mockRestore();
 
 		// 使用 --force 应该成功覆盖
-		await init({ai: 'cursor', force: true});
+		await init({ai: 'cursor', force: true, scope: 'project'});
 		expect(existsSync(nanospecDir)).toBe(true);
 	});
 
@@ -96,10 +96,17 @@ describe('init command', () => {
 			mkdirSync(testDir, {recursive: true});
 
 			// 每个适配器单独测试，避免单个测试超时
-			await init({ai});
+			await init({ai, scope: 'project', assets: 'commands'});
 
 			const adapter = getAdapter(ai);
 			expect(existsSync(join(testDir, adapter!.commandsDir))).toBe(true);
 		}
 	}, 30000); // 30秒超时
+
+	it('应该支持初始化 codex skills 资产', async () => {
+		await init({ai: 'codex', assets: 'skills', scope: 'project'});
+		expect(
+			existsSync(join(testDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))
+		).toBe(true);
+	});
 });
