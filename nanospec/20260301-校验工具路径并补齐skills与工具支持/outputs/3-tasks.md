@@ -21,4 +21,4 @@
 
 - [x] 4.1 更新 README（路径、工具、skills 说明）
 - [x] 4.2 更新 CHANGELOG
-- [ ] 4.3 完成 commit 并回填任务状态
+- [x] 4.3 完成 commit 并回填任务状态
