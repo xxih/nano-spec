@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed
+- Simplified internal CI/CD docs under `guides/` to one authoritative release flow aligned with `.github/workflows/release.yml`.
+- Updated project-level `AGENTS.md` with a stricter release SOP (CI/CD tag release, preflight checks, and package content verification).
+- Added a multi-agent collaboration SOP in `AGENTS.md`, covering branch/worktree naming, startup flow, sync strategy, PR requirements, and cleanup.
+
 ## 1.1.1 (2026-03-01)
 
 ### Added

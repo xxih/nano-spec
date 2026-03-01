@@ -4,9 +4,9 @@
 
 ## 索引
 
+- [CI-CD完整方案.md](./CI-CD完整方案.md)（当前权威发布流程）
 - [20260120-本地调试方法.md](./20260120-本地调试方法.md)
-- [20260120-npm发布和GitHub-CICD配置指南.md](./20260120-npm发布和GitHub-CICD配置指南.md)
-- [CI-CD完整方案.md](./CI-CD完整方案.md)
+- [20260120-npm发布和GitHub-CICD配置指南.md](./20260120-npm发布和GitHub-CICD配置指南.md)（历史归档）
 
 ## 说明
 
