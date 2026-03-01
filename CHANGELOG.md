@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased (2026-03-01)
+## Unreleased
+
+## 1.1.1 (2026-03-01)
 
 ### Added
 - Added `codex` adapter support, which generates command files to `.codex/commands/`.
@@ -12,3 +14,4 @@
 - Updated README AI tool lists and `--ai` available values to include `codex`.
 - Simplified `README.md` into a concise user-facing guide and removed duplicated sections.
 - Renamed internal maintainer docs directory from `docs/` to `guides/` and added `guides/README.md` index.
+- Cleaned build output before compilation to avoid stale artifacts in published package.
