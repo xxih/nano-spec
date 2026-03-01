@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.3.1 (2026-03-01)
+
 ### Added
 - Added `gemini` adapter support with scoped command output: `./.gemini/commands/` (`project`) or `~/.gemini/commands/` (`user`).
 - Added Claude Code skills sync support to `.claude/skills/` (project/user scope).
