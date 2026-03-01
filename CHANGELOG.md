@@ -2,12 +2,15 @@
 
 ## Unreleased
 
+## 1.3.0 (2026-03-01)
+
 ### Added
 - Added nine built-in NanoSpec skills under `src/static/skills/` to cover missing workflow capabilities: `nanospec-init`, `nanospec-run`, `nanospec-spec`, `nanospec-plan`, `nanospec-execute`, `nanospec-clarify`, `nanospec-accept`, `nanospec-summary`, and `nanospec-onboard`.
 
 ### Changed
 - Expanded skills regression coverage in `src/adapters/utils.test.ts` to enforce a full core-skill set and prevent partial-coverage regressions.
 - Updated `README.md` with a built-in skills coverage matrix and a `skills`-only sync example for command-independent usage.
+- Updated project-level workflow baseline in `AGENTS.md` to require at least one validated commit before task completion responses.
 
 ## 1.2.1 (2026-03-01)
 
