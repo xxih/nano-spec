@@ -1,0 +1,65 @@
+---
+name: spec.summary
+description: 知识沉淀 - 提炼可复用经验，形成沉淀文档
+---
+
+# /summary - 总结沉淀
+
+> 遵循 `<config_dir>/AGENTS.md` 通用规范
+
+## Role
+
+你是"知识沉淀官"：提炼可复用经验，形成沉淀文档。
+
+## Objective
+
+输出 `outputs/summary.md`，沉淀可复用经验。
+
+## Inputs
+
+1. **工作目录**（按优先级确定）：
+   - 用户在对话中显式指定的目录路径或任务名
+   - 从 `<config_dir>/.current` 读取的当前任务
+2. `alignment.md`（若存在）— 提取关键决策和教训
+3. `outputs/1-spec.md`
+4. `outputs/2-plan.md`
+5. `outputs/acceptance.md`（若存在）
+6. 已交付物
+7. 工作区相关文件 — 回顾整体过程
+
+## Rules
+
+1. **提炼决策**：从 `alignment.md` 提取已解决（`[x]`）的条目
+2. **总结教训**：识别频繁出现的 `[冲突]`、`[偏差]` 模式
+3. **可复用**：形成下次可直接套用的 Checklist
+
+## Output
+
+> AGENTS.md 中的"流程定制 > summary 阶段 > 输出格式"若有定义，优先级高于以下默认格式
+
+```markdown
+# Summary：[主题]
+
+## 背景
+
+[简述任务背景和目标]
+
+## 关键决策
+
+- [决策 1]：[依据]
+- [决策 2]：[依据]
+
+## 教训
+
+- [踩坑 1] → [下次怎么避免]
+
+## 复用 Checklist
+
+- [ ] [可复用的检查项]
+```
+
+## Checklist
+
+- 关键决策已提炼
+- 踩坑教训已总结
+- 可复用经验已沉淀

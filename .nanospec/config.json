@@ -1,7 +1,7 @@
 {
   "specs_root": "nanospec",
   "cmd_prefix": "spec",
-  "default_adapter": "iflow",
+  "default_adapter": "cursor",
   "template_format": "md",
   "auto_sync": true
 }
