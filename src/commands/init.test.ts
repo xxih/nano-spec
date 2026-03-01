@@ -109,4 +109,21 @@ describe('init command', () => {
 			existsSync(join(testDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))
 		).toBe(true);
 	});
+
+	it('应该支持初始化 claude-code skills 资产', async () => {
+		await init({ai: 'claude-code', assets: 'skills', scope: 'project'});
+		expect(
+			existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))
+		).toBe(true);
+	});
+
+	it('应该支持 gemini 在 user scope 输出到用户目录', async () => {
+		process.env.NANOSPEC_HOME_DIR = testDir;
+		try {
+			await init({ai: 'gemini', assets: 'commands', scope: 'user'});
+			expect(existsSync(join(testDir, '.gemini', 'commands', 'spec.1-spec.toml'))).toBe(true);
+		} finally {
+			delete process.env.NANOSPEC_HOME_DIR;
+		}
+	});
 });

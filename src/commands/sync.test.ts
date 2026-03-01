@@ -1,4 +1,5 @@
 import {join} from 'path';
+import {existsSync} from 'fs';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {syncCommands} from './sync.js';
 
@@ -85,5 +86,12 @@ describe('sync command', () => {
 		);
 
 		consoleLogSpy.mockRestore();
+	});
+
+	it('应该支持同步 claude-code skills', async () => {
+		await syncCommands({adapter: 'claude-code', assets: 'skills', scope: 'project'});
+		expect(
+			existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))
+		).toBe(true);
 	});
 });
