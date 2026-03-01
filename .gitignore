@@ -147,7 +147,7 @@ my-test-folder/
 dist
 
 # nanospec
-.nanospec/current-task
+.nanospec/.current
 
 .test-nanospec-sync
 .test-*

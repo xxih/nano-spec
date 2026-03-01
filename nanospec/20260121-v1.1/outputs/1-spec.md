@@ -3,14 +3,18 @@
 ## 背景与目标
 
 ### 背景
+
 当前 `nano-spec` 已实现基础的 Spec 驱动开发框架，具备：
+
 - CLI 命令：`init`（初始化）、`new`（创建任务）
 - 多 AI 工具适配器系统（cursor, qwen, iflow, cline）
 - 基础工作流命令模板（1-spec, 2-plan, 3-execute, accept, align, summary）
 - AGENTS.md 通用规范
 
 ### 目标
+
 为 `nano-spec` 提供更完善的配置和扩展能力，使其成为：
+
 1. **可配置**：支持多级配置覆盖，适应不同团队/项目需求
 2. **可扩展**：通过预设包快速注入领域能力
 3. **可持久化**：支持任务记忆与断点续作
@@ -18,13 +22,16 @@
 5. **广泛兼容**：覆盖主流 AI 工具（参考 OpenSpec，新增 Claude Code、GitHub Copilot、Windsurf、Kilo Code）
 
 ### 目标
+
 为 `nano-spec` 提供更完善的配置和扩展能力，使其成为：
+
 1. **可配置**：支持多级配置覆盖，适应不同团队/项目需求
 2. **可扩展**：通过预设包快速注入领域能力
 3. **可持久化**：支持任务记忆与断点续作
 4. **易用**：提供交互式体验降低学习成本
 
 ### 非目标
+
 - 不涉及具体的 AI 模型集成或提示词优化
 - 不改变现有 AGENTS.md 核心规范结构
 - 不提供图形化界面（交互式体验仅限命令行）
@@ -46,7 +53,7 @@ nano-spec 配置系统与增强能力
 │   ├── 预设安装命令：`nanospec preset install <name>`
 │   └── 预设列表命令：`nanospec preset list`
 ├── 任务记忆与断点续作
-│   ├── 当前任务指针（.nanospec/current-task）
+│   ├── 当前任务指针（.nanospec/.current）
 │   ├── 自动更新机制（new/switch 时）
 │   ├── 上下文感知（命令默认读取当前任务）
 │   └── 状态恢复命令：`nanospec status`
@@ -64,24 +71,29 @@ nano-spec 配置系统与增强能力
 ### 详细说明
 
 #### 1. 配置管理
+
 **交付物表现**：
+
 - 用户可在项目根目录创建 `.nanospecrc` (JSON/YAML) 或 `nanospec.config.js` (CommonJS/ESM)
 - 配置项生效优先级：项目级配置 > 用户级配置 (`~/.nanospecrc`) > 默认配置
 - CLI 命令读取配置并应用（如 `nanospec init` 读取 `default_adapter`）
 
 **可配置项**：
+
 ```json
 {
-  "specs_root": "specs",           // 规格根目录名（默认：nanospec）
-  "cmd_prefix": "spec",            // 命令前缀（默认：spec）
-  "default_adapter": "cursor",     // 默认 AI 工具
-  "template_format": "md",         // 模板格式（默认：md）
-  "auto_sync": true                // init 时自动同步（默认：true）
+	"specs_root": "specs", // 规格根目录名（默认：nanospec）
+	"cmd_prefix": "spec", // 命令前缀（默认：spec）
+	"default_adapter": "cursor", // 默认 AI 工具
+	"template_format": "md", // 模板格式（默认：md）
+	"auto_sync": true // init 时自动同步（默认：true）
 }
 ```
 
 #### 2. 预设包系统
+
 **交付物表现**：
+
 - 预设包为目录结构，包含：
   - `preset.json`：元数据（名称、描述、版本、依赖）
   - `commands/`：追加的命令模板
@@ -90,14 +102,17 @@ nano-spec 配置系统与增强能力
 - 安装时将预设内容合并到项目（追加到 AGENTS.md、复制命令/模板）
 
 **内置预设示例**：
+
 - `frontend`：前端特化规范（组件/状态/交互）
 - `backend`：后端开发规范（API/数据模型/服务架构）
 - `refactor`：重构优化清单（评审/风险控制）
 - `docs`：文档写作模板（信息架构/受众分析）
 
 #### 3. 任务记忆与断点续作
+
 **交付物表现**：
-- 当前任务指针存储在 `.nanospec/current-task`（文件内容为任务目录名）
+
+- 当前任务指针存储在 `.nanospec/.current`（文件内容为任务目录名）
 - `nanospec new <name>` 自动将新任务设为当前任务（无需手动 switch）
 - `nanospec switch <name>` 切换当前任务
 - `nanospec switch` 无参数时显示任务列表供交互选择（避免手动输入完整任务名）
@@ -105,7 +120,9 @@ nano-spec 配置系统与增强能力
 - `nanospec status` 显示当前激活任务信息
 
 #### 4. 交互式体验
+
 **交付物表现**：
+
 - `nanospec init` 支持交互式向导，仅询问 AI 工具选择（多选），其他配置项使用默认值
 - 交互式工具选择支持多选，覆盖主流 AI 工具（包括 Claude Code、GitHub Copilot、Windsurf、Kilo Code）
 - 配置项（specs_root、cmd_prefix、default_adapter 等）使用默认值，用户可通过 `nanospec config` 命令按需修改
@@ -114,25 +131,32 @@ nano-spec 配置系统与增强能力
 - 危险操作（覆盖、删除）前显示确认提示
 
 #### 5. 同步命令到工具
+
 **交付物表现**：
+
 - `nanospec sync` 将项目内的命令/模板同步到各 AI 工具目录
 - 支持指定目标工具：`nanospec sync --adapter cursor`
 - 增量同步：仅更新内容变化的文件，避免不必要的写入
 
 #### 6. 命令自动发现
+
 **交付物表现**：
+
 - 适配器自动扫描 `src/static/commands/` 目录，发现所有可用的命令模板
 - 新增命令时，只需在 `src/static/commands/` 添加 `.toml` 文件，无需修改适配器代码
 - 所有适配器（cursor、iflow、qwen、cline、claude-code、copilot、windsurf、kilo-code）统一使用自动扫描机制
 
 **技术实现**：
+
 - 在 `src/adapters/utils.ts` 中新增 `listAvailableCommands()` 函数
 - 函数扫描 `src/static/commands/` 目录，过滤出 `.toml` 文件
 - 返回命令名称数组（不含扩展名），按字母顺序排序
 - 各适配器的 `generateCommands()` 方法调用 `listAvailableCommands()` 获取命令列表
 
 #### 7. CLI 命令增强
+
 **交付物表现**：
+
 - `nanospec init` 默认启用交互式向导，无需 `--interactive` 参数
 - `nanospec init --ai <tool>` 支持非交互式快速初始化
 - `nanospec config` 查看当前配置
@@ -147,6 +171,7 @@ nano-spec 配置系统与增强能力
 ## 成功标志
 
 ### 功能验收
+
 - [ ] **配置管理**：创建 `.nanospecrc` 后，CLI 命令能正确读取并应用配置
 - [ ] **多级覆盖**：用户级配置能被项目级配置覆盖
 - [ ] **预设安装**：`nanospec preset install frontend` 成功将预设内容合并到项目
@@ -157,6 +182,7 @@ nano-spec 配置系统与增强能力
 - [ ] **命令同步**：`nanospec sync` 能将命令同步到目标工具目录
 
 ### 非功能验收
+
 - [ ] **向后兼容**：无配置文件时，CLI 仍能使用默认配置正常工作
 - [ ] **配置验证**：无效配置项应显示警告并使用默认值
 - [ ] **错误处理**：预设不存在时显示友好错误提示
@@ -171,7 +197,7 @@ nano-spec 配置系统与增强能力
 - [ ] **代码规范**：遵循现有 TypeScript 代码风格（使用 `commander` 库）
 - [ ] **目录约定**：
   - 配置文件：项目根目录 `.nanospecrc` / `nanospec.config.js`
-  - 当前任务指针：`.nanospec/current-task`
+  - 当前任务指针：`.nanospec/.current`
   - 预设包：`src/presets/<name>/` → `dist/presets/<name>/`
 - [ ] **依赖项**：
   - 使用现有 `commander` 库处理 CLI 参数
@@ -189,6 +215,7 @@ nano-spec 配置系统与增强能力
   - 避免与现有功能冲突
 
 ### 技术债务与风险
+
 - [ ] **配置解析**：引入 `cosmiconfig` 增加依赖体积，需评估是否必要
 - [ ] **预设冲突**：预设包与项目自定义内容可能冲突，需定义合并策略
 - [ ] **任务指针**：文件损坏或丢失时需有恢复机制

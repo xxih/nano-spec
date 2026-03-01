@@ -10,3 +10,5 @@
 - Updated adapter registry and related tests to include `codex`.
 - Updated config validation to use dynamic adapter list from registry, so `default_adapter: "codex"` is valid.
 - Updated README AI tool lists and `--ai` available values to include `codex`.
+- Simplified `README.md` into a concise user-facing guide and removed duplicated sections.
+- Renamed internal maintainer docs directory from `docs/` to `guides/` and added `guides/README.md` index.

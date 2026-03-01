@@ -1,9 +1,15 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs';
-import { join } from 'path';
-import { loadConfig } from './config.js';
+import {
+	existsSync,
+	mkdirSync,
+	readdirSync,
+	readFileSync,
+	writeFileSync
+} from 'fs';
+import {join} from 'path';
+import {loadConfig} from './config.js';
 
 const NANOSPEC_DIR = '.nanospec';
-const CURRENT_TASK_FILE = 'current-task';
+const CURRENT_TASK_FILE = '.current';
 
 /**
  * 获取当前任务指针
@@ -31,12 +37,15 @@ export function getCurrentTask(cwd: string = process.cwd()): string | null {
  * @param cwd 工作目录
  * @param taskName 任务名称
  */
-export function setCurrentTask(cwd: string = process.cwd(), taskName: string): void {
+export function setCurrentTask(
+	cwd: string = process.cwd(),
+	taskName: string
+): void {
 	const nanospecDir = join(cwd, NANOSPEC_DIR);
 
 	// 确保 .nanospec 目录存在
 	if (!existsSync(nanospecDir)) {
-		mkdirSync(nanospecDir, { recursive: true });
+		mkdirSync(nanospecDir, {recursive: true});
 	}
 
 	const taskPointerPath = join(nanospecDir, CURRENT_TASK_FILE);
@@ -59,7 +68,7 @@ export function clearCurrentTask(cwd: string = process.cwd()): void {
 	if (existsSync(taskPointerPath)) {
 		try {
 			// 删除文件
-			const { unlinkSync } = require('fs');
+			const {unlinkSync} = require('fs');
 			unlinkSync(taskPointerPath);
 		} catch (error) {
 			console.warn(`⚠️  无法删除任务指针: ${taskPointerPath}`);
@@ -72,7 +81,9 @@ export function clearCurrentTask(cwd: string = process.cwd()): void {
  * @param cwd 工作目录
  * @returns 任务名称列表
  */
-export async function listTasks(cwd: string = process.cwd()): Promise<string[]> {
+export async function listTasks(
+	cwd: string = process.cwd()
+): Promise<string[]> {
 	const config = await loadConfig(cwd);
 	const nanospecDir = join(cwd, config.specs_root || 'nanospec');
 
@@ -81,10 +92,10 @@ export async function listTasks(cwd: string = process.cwd()): Promise<string[]> 
 	}
 
 	try {
-		const entries = readdirSync(nanospecDir, { withFileTypes: true });
+		const entries = readdirSync(nanospecDir, {withFileTypes: true});
 		return entries
-			.filter(entry => entry.isDirectory())
-			.map(entry => entry.name)
+			.filter((entry) => entry.isDirectory())
+			.map((entry) => entry.name)
 			.sort();
 	} catch (error) {
 		console.warn(`⚠️  无法读取任务目录: ${nanospecDir}`);
@@ -98,7 +109,10 @@ export async function listTasks(cwd: string = process.cwd()): Promise<string[]> 
  * @param taskName 任务名称
  * @returns 任务状态信息
  */
-export async function getTaskStatus(cwd: string = process.cwd(), taskName: string): Promise<{
+export async function getTaskStatus(
+	cwd: string = process.cwd(),
+	taskName: string
+): Promise<{
 	exists: boolean;
 	hasBrief: boolean;
 	hasSpec: boolean;
@@ -114,7 +128,7 @@ export async function getTaskStatus(cwd: string = process.cwd(), taskName: strin
 			hasBrief: false,
 			hasSpec: false,
 			hasPlan: false,
-			hasTasks: false,
+			hasTasks: false
 		};
 	}
 
@@ -125,6 +139,6 @@ export async function getTaskStatus(cwd: string = process.cwd(), taskName: strin
 		hasBrief: existsSync(join(taskDir, 'brief.md')),
 		hasSpec: existsSync(join(outputsDir, '1-spec.md')),
 		hasPlan: existsSync(join(outputsDir, '2-plan.md')),
-		hasTasks: existsSync(join(outputsDir, '3-tasks.md')),
+		hasTasks: existsSync(join(outputsDir, '3-tasks.md'))
 	};
 }

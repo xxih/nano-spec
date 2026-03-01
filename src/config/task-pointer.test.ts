@@ -2,11 +2,11 @@ import {existsSync, mkdirSync, rmSync, writeFileSync} from 'fs';
 import {join} from 'path';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {
-	getCurrentTask,
-	setCurrentTask,
 	clearCurrentTask,
-	listTasks,
+	getCurrentTask,
 	getTaskStatus,
+	listTasks,
+	setCurrentTask
 } from './task-pointer.js';
 
 describe('task-pointer module', () => {
@@ -41,7 +41,7 @@ describe('task-pointer module', () => {
 
 		it('应该返回当前任务名称', () => {
 			mkdirSync(nanospecConfigDir, {recursive: true});
-			writeFileSync(join(nanospecConfigDir, 'current-task'), 'test-task', 'utf-8');
+			writeFileSync(join(nanospecConfigDir, '.current'), 'test-task', 'utf-8');
 
 			const currentTask = getCurrentTask();
 			expect(currentTask).toBe('test-task');
@@ -49,7 +49,7 @@ describe('task-pointer module', () => {
 
 		it('应该处理空文件', () => {
 			mkdirSync(nanospecConfigDir, {recursive: true});
-			writeFileSync(join(nanospecConfigDir, 'current-task'), '', 'utf-8');
+			writeFileSync(join(nanospecConfigDir, '.current'), '', 'utf-8');
 
 			const currentTask = getCurrentTask();
 			expect(currentTask).toBe('');

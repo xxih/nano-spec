@@ -28,9 +28,7 @@ describe('status command', () => {
 	});
 
 	it('应该在未初始化时显示错误', async () => {
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -44,9 +42,7 @@ describe('status command', () => {
 	it('应该显示配置信息', async () => {
 		mkdirSync(nanospecDir, {recursive: true});
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -60,9 +56,7 @@ describe('status command', () => {
 	it('应该显示当前任务（未设置）', async () => {
 		mkdirSync(nanospecDir, {recursive: true});
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -78,16 +72,14 @@ describe('status command', () => {
 		mkdirSync(nanospecConfigDir, {recursive: true});
 
 		// 设置当前任务
-		writeFileSync(join(nanospecConfigDir, 'current-task'), 'test-task', 'utf-8');
+		writeFileSync(join(nanospecConfigDir, '.current'), 'test-task', 'utf-8');
 
 		// 创建任务目录
 		const taskDir = join(nanospecDir, 'test-task');
 		mkdirSync(taskDir, {recursive: true});
 		mkdirSync(join(taskDir, 'outputs'), {recursive: true});
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -103,7 +95,7 @@ describe('status command', () => {
 		mkdirSync(nanospecConfigDir, {recursive: true});
 
 		// 设置当前任务
-		writeFileSync(join(nanospecConfigDir, 'current-task'), 'test-task', 'utf-8');
+		writeFileSync(join(nanospecConfigDir, '.current'), 'test-task', 'utf-8');
 
 		// 创建任务目录和文件
 		const taskDir = join(nanospecDir, 'test-task');
@@ -111,9 +103,7 @@ describe('status command', () => {
 		mkdirSync(join(taskDir, 'outputs'), {recursive: true});
 		writeFileSync(join(taskDir, 'brief.md'), '# Test Task', 'utf-8');
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -136,9 +126,7 @@ describe('status command', () => {
 		mkdirSync(task2Dir, {recursive: true});
 		writeFileSync(join(task2Dir, 'brief.md'), '# Task 2', 'utf-8');
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
@@ -152,9 +140,7 @@ describe('status command', () => {
 	it('应该在无任务时显示提示', async () => {
 		mkdirSync(nanospecDir, {recursive: true});
 
-		const consoleLogSpy = vi
-			.spyOn(console, 'log')
-			.mockImplementation(() => {});
+		const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
 		await showStatus();
 
