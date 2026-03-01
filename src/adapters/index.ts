@@ -7,12 +7,13 @@ import { claudeCodeAdapter } from './claude-code.js';
 import { copilotAdapter } from './copilot.js';
 import { windsurfAdapter } from './windsurf.js';
 import { kiloCodeAdapter } from './kilo-code.js';
+import { geminiAdapter } from './gemini.js';
 
 export type AssetType = 'commands' | 'skills';
-export type CodexScope = 'project' | 'user';
+export type AdapterScope = 'project' | 'user';
 
 export interface AdapterGenerateOptions {
-  scope?: CodexScope;
+  scope?: AdapterScope;
   skills?: string[];
 }
 
@@ -36,6 +37,10 @@ export interface AIAdapter {
   fileFormat: CommandFormat;
   /** 是否支持变量替换 */
   supportsVariables: boolean;
+  /** 解析命令目标目录（支持 scope 的适配器可实现） */
+  resolveCommandsDir?(cwd: string, options?: AdapterGenerateOptions): string;
+  /** 解析 skills 目标目录（支持 skills 的适配器可实现） */
+  resolveSkillsDir?(cwd: string, options?: AdapterGenerateOptions): string;
   /** 生成命令文件 */
   generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void;
   /** 生成 skills（仅部分适配器支持） */
@@ -59,6 +64,7 @@ const adapters: Record<string, AIAdapter> = {
   copilot: copilotAdapter,
   windsurf: windsurfAdapter,
   'kilo-code': kiloCodeAdapter,
+  gemini: geminiAdapter,
 };
 
 export function getAdapter(name: string): AIAdapter | null {

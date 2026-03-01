@@ -14,7 +14,8 @@ describe('adapters index', () => {
     expect(adapters).toContain('copilot');
     expect(adapters).toContain('windsurf');
     expect(adapters).toContain('kilo-code');
-    expect(adapters.length).toBe(9);
+    expect(adapters).toContain('gemini');
+    expect(adapters.length).toBe(10);
   });
 
   it('应该能获取已注册的适配器', () => {
@@ -55,6 +56,10 @@ describe('adapters index', () => {
     const kiloCodeAdapter = getAdapter('kilo-code');
     expect(kiloCodeAdapter).toBeDefined();
     expect(kiloCodeAdapter?.name).toBe('kilo-code');
+
+    const geminiAdapter = getAdapter('gemini');
+    expect(geminiAdapter).toBeDefined();
+    expect(geminiAdapter?.name).toBe('gemini');
   });
 
   it('应该对未注册的适配器返回 null', () => {
@@ -115,6 +120,11 @@ describe('adapters index', () => {
     expect(iflowAdapter.fileFormat).toBe('toml');
   });
 
+  it('gemini 适配器应该使用 TOML 格式', () => {
+    const geminiAdapter = getAdapter('gemini') as AIAdapter;
+    expect(geminiAdapter.fileFormat).toBe('toml');
+  });
+
   it('cursor、codex、qwen、cline、claude-code、copilot、windsurf、kilo-code 适配器应该使用 Markdown 格式', () => {
     const cursorAdapter = getAdapter('cursor') as AIAdapter;
     const codexAdapter = getAdapter('codex') as AIAdapter;
@@ -133,5 +143,12 @@ describe('adapters index', () => {
     expect(copilotAdapter.fileFormat).toBe('md');
     expect(windsurfAdapter.fileFormat).toBe('md');
     expect(kiloCodeAdapter.fileFormat).toBe('md');
+  });
+
+  it('claude-code 适配器应该支持 skills', () => {
+    const claudeCodeAdapter = getAdapter('claude-code') as AIAdapter;
+    expect(claudeCodeAdapter.supportedAssets).toContain('commands');
+    expect(claudeCodeAdapter.supportedAssets).toContain('skills');
+    expect(typeof claudeCodeAdapter.generateSkills).toBe('function');
   });
 });

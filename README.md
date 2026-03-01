@@ -52,7 +52,7 @@ nanospec new
 
 ## 内置 Skills 覆盖
 
-当你使用 `codex` 且同步 `skills` 资产时，即使不依赖 slash commands，也可以通过技能触发完整流程能力。
+当你使用 `codex` 或 `claude-code` 且同步 `skills` 资产时，即使不依赖 slash commands，也可以通过技能触发完整流程能力。
 
 | 能力 | Skill |
 |---|---|
@@ -104,7 +104,7 @@ nanospec config set default_adapter codex
 新增配置项：
 
 - `default_assets`：默认同步资产类型（`commands` / `skills` / `both`）
-- `codex_scope`：codex 输出作用域（`project` / `user`）
+- `codex_scope`：作用域配置（`project` / `user`），用于支持用户级目录的适配器（如 `codex` / `claude-code` / `gemini`）
 - `enabled_skills`：仅同步指定 skills（JSON 数组；空数组表示全部内置 skills）
 
 ## 支持的 AI 工具
@@ -113,11 +113,16 @@ nanospec config set default_adapter codex
 - `codex`
   - `commands`：`./.codex/prompts/`（`--scope project`）或 `~/.codex/prompts/`（`--scope user`）
   - `skills`：`./.codex/skills/`（`--scope project`）或 `~/.codex/skills/`（`--scope user`）
+- `claude-code`
+  - `commands`：`./.claude/commands/`（`--scope project`）或 `~/.claude/commands/`（`--scope user`）
+  - `skills`：`./.claude/skills/`（`--scope project`）或 `~/.claude/skills/`（`--scope user`）
+- `gemini`
+  - `commands`：`./.gemini/commands/`（`--scope project`）或 `~/.gemini/commands/`（`--scope user`）
 - `qwen`
 - `iflow`
 - `cline`
-- `claude-code`
 - `copilot`
+  - `commands`：`./.github/prompts/*.prompt.md`
 - `windsurf`
 - `kilo-code`
 
@@ -138,6 +143,8 @@ project-root/
 │           ├── 2-plan.md
 │           └── 3-tasks.md
 ├── .<ai-tool>/commands/
+├── .github/
+│   └── prompts/
 └── .codex/
     ├── prompts/
     └── skills/
@@ -153,7 +160,7 @@ project-root/
 nanospec sync
 ```
 
-如果使用 `codex` 且指定了 `--scope user`，请检查 `~/.codex/prompts/` 与 `~/.codex/skills/`。
+如果使用了 `--scope user`，请检查对应用户目录（如 `~/.codex/*`、`~/.claude/*`、`~/.gemini/*`）。
 
 ### 如何继续上次任务？
 

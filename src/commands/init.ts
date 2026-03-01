@@ -1,5 +1,4 @@
 import {cpSync, existsSync, mkdirSync, writeFileSync} from 'fs';
-import {homedir} from 'os';
 import {dirname, join} from 'path';
 import {fileURLToPath} from 'url';
 import inquirer from 'inquirer';
@@ -8,7 +7,7 @@ import {listAvailableCommands, listAvailableSkills} from '../adapters/utils.js';
 import {loadConfig} from '../config/config.js';
 
 type AssetMode = 'commands' | 'skills' | 'both';
-type CodexScope = 'project' | 'user';
+type AssetScope = 'project' | 'user';
 
 interface InitOptions {
 	ai?: string;
@@ -20,7 +19,7 @@ interface InitOptions {
 interface InteractiveAnswers {
 	adapters: string[];
 	assets: AssetMode;
-	scope: CodexScope;
+	scope: AssetScope;
 }
 
 export async function init(options: InitOptions): Promise<void> {
@@ -44,7 +43,7 @@ async function quickInit(options: InitOptions): Promise<void> {
 	// 使用指定的 AI 工具
 	const aiTool = options.ai || config.default_adapter || 'cursor';
 	const assetMode = resolveAssetMode(options.assets, config.default_assets || 'commands');
-	const scope = resolveCodexScope(options.scope, config.codex_scope || 'user');
+	const scope = resolveAssetScope(options.scope, config.codex_scope || 'user');
 
 	const nanospecDir = join(cwd, config.specs_root || 'nanospec');
 
@@ -79,7 +78,7 @@ async function quickInit(options: InitOptions): Promise<void> {
 		console.warn('⚠️  未找到 AGENTS.md，跳过复制');
 	}
 
-	syncAdapterAssets(cwd, __dirname, aiTool, adapter, assetMode, scope, config.enabled_skills);
+	syncAdapterAssets(cwd, __dirname, adapter, assetMode, scope, config.enabled_skills);
 
 	console.log('\n🎉 nanospec 初始化完成！');
 	console.log('\n下一步：');
@@ -131,11 +130,11 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 		{
 			type: 'list',
 			name: 'scope',
-			message: 'codex 输出作用域：',
-			default: resolveCodexScope(undefined, config.codex_scope || 'user'),
+			message: '支持 user 目录工具的输出作用域：',
+			default: resolveAssetScope(undefined, config.codex_scope || 'user'),
 			choices: [
-				{name: 'user（~/.codex/*）', value: 'user'},
-				{name: 'project（./.codex/*）', value: 'project'},
+				{name: 'user（~/.codex|~/.claude|~/.gemini）', value: 'user'},
+				{name: 'project（./.codex|./.claude|./.gemini）', value: 'project'},
 			],
 		},
 	]);
@@ -184,7 +183,7 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 	for (const adapterName of answers.adapters) {
 		const adapter = getAdapter(adapterName);
 		if (adapter) {
-			syncAdapterAssets(cwd, __dirname, adapterName, adapter, answers.assets, answers.scope, defaultConfig.enabled_skills);
+			syncAdapterAssets(cwd, __dirname, adapter, answers.assets, answers.scope, defaultConfig.enabled_skills);
 		}
 	}
 
@@ -195,7 +194,7 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 	console.log(`  - 默认 AI 工具: ${defaultConfig.default_adapter}`);
 	console.log(`  - 支持的 AI 工具: ${answers.adapters.join(', ')}`);
 	console.log(`  - 默认资产: ${defaultConfig.default_assets}`);
-	console.log(`  - codex 作用域: ${defaultConfig.codex_scope}`);
+	console.log(`  - 资产作用域: ${defaultConfig.codex_scope}`);
 	console.log('\n如需修改配置，可使用：');
 	console.log('  - nanospec config set <key> <value>');
 	console.log('  - nanospec config --list');
@@ -208,18 +207,14 @@ async function interactiveInit(options: InitOptions): Promise<void> {
 function syncAdapterAssets(
 	cwd: string,
 	templatesDir: string,
-	adapterName: string,
 	adapter: AIAdapter,
 	assetMode: AssetMode,
-	scope: CodexScope,
+	scope: AssetScope,
 	enabledSkills?: string[]
 ): void {
 	if (supportsCommands(assetMode)) {
 		adapter.generateCommands(cwd, templatesDir, {scope});
-		const targetDir =
-			adapterName === 'codex'
-				? join(resolveCodexRoot(cwd, scope), 'prompts')
-				: join(cwd, adapter.commandsDir);
+		const targetDir = adapter.resolveCommandsDir?.(cwd, {scope}) || join(cwd, adapter.commandsDir);
 		console.log(`✓ 创建 ${targetDir} (${listAvailableCommands().length} 个命令)`);
 	}
 
@@ -232,10 +227,7 @@ function syncAdapterAssets(
 					: availableSkills;
 
 			adapter.generateSkills(cwd, templatesDir, {scope, skills: enabledSkills});
-			const targetDir =
-				adapterName === 'codex'
-					? join(resolveCodexRoot(cwd, scope), 'skills')
-					: join(cwd, '.skills');
+			const targetDir = adapter.resolveSkillsDir?.(cwd, {scope}) || join(cwd, '.skills');
 			console.log(`✓ 创建 ${targetDir} (${selectedSkills.length} 个 skills)`);
 		} else {
 			console.log(`⚠️  ${adapter.name} 暂不支持 skills，已跳过`);
@@ -250,7 +242,7 @@ function resolveAssetMode(input: string | undefined, fallback: AssetMode): Asset
 	return fallback;
 }
 
-function resolveCodexScope(input: string | undefined, fallback: CodexScope): CodexScope {
+function resolveAssetScope(input: string | undefined, fallback: AssetScope): AssetScope {
 	if (input === 'project' || input === 'user') {
 		return input;
 	}
@@ -263,15 +255,6 @@ function supportsCommands(mode: AssetMode): boolean {
 
 function supportsSkills(mode: AssetMode): boolean {
 	return mode === 'skills' || mode === 'both';
-}
-
-function resolveCodexRoot(cwd: string, scope: CodexScope): string {
-	if (scope === 'user') {
-		const homeDir = process.env.NANOSPEC_HOME_DIR || homedir();
-		return join(homeDir, '.codex');
-	}
-
-	return join(cwd, '.codex');
 }
 
 function copyFile(src: string, dest: string): void {

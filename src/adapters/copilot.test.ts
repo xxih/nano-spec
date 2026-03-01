@@ -28,31 +28,31 @@ describe('copilot adapter', () => {
 
 	it('应该有正确的适配器属性', () => {
 		expect(copilotAdapter.name).toBe('copilot');
-		expect(copilotAdapter.commandsDir).toBe('.github/copilot/commands/');
+		expect(copilotAdapter.commandsDir).toBe('.github/prompts/');
 		expect(copilotAdapter.fileFormat).toBe('md');
 		expect(copilotAdapter.supportsVariables).toBe(true);
 		expect(typeof copilotAdapter.generateCommands).toBe('function');
 		expect(typeof copilotAdapter.transformCommand).toBe('function');
 	});
 
-	it('应该创建 .github/copilot/commands/ 目录', () => {
+	it('应该创建 .github/prompts/ 目录', () => {
 		copilotAdapter.generateCommands(testDir, templatesDir);
 
-		const commandsDir = join(testDir, '.github', 'copilot', 'commands');
+		const commandsDir = join(testDir, '.github', 'prompts');
 		expect(existsSync(commandsDir)).toBe(true);
 	});
 
-	it('应该生成 6 个 Markdown 命令文件', () => {
+	it('应该生成 .prompt.md 命令文件', () => {
 		copilotAdapter.generateCommands(testDir, templatesDir);
 
-		const commandsDir = join(testDir, '.github', 'copilot', 'commands');
+		const commandsDir = join(testDir, '.github', 'prompts');
 		const expectedFiles = [
-			'spec.1-spec.md',
-			'spec.2-plan.md',
-			'spec.3-execute.md',
-			'spec.accept.md',
-			'spec.align.md',
-			'spec.summary.md'
+			'spec.1-spec.prompt.md',
+			'spec.2-plan.prompt.md',
+			'spec.3-execute.prompt.md',
+			'spec.accept.prompt.md',
+			'spec.align.prompt.md',
+			'spec.summary.prompt.md'
 		];
 
 		for (const file of expectedFiles) {
@@ -63,8 +63,8 @@ describe('copilot adapter', () => {
 	it('生成的命令文件应该有内容', () => {
 		copilotAdapter.generateCommands(testDir, templatesDir);
 
-		const commandsDir = join(testDir, '.github', 'copilot', 'commands');
-		const filePath = join(commandsDir, 'spec.1-spec.md');
+		const commandsDir = join(testDir, '.github', 'prompts');
+		const filePath = join(commandsDir, 'spec.1-spec.prompt.md');
 
 		if (existsSync(filePath)) {
 			const content = readFileSync(filePath, 'utf-8');
@@ -83,7 +83,6 @@ prompt = """Test prompt"""`;
 
 		const result = copilotAdapter.transformCommand!(toml, 'test');
 		expect(result).toContain('---');
-		expect(result).toContain('name: test');
 		expect(result).toContain('description: Test command');
 		expect(result).toContain('Test prompt');
 	});
@@ -92,7 +91,7 @@ prompt = """Test prompt"""`;
 		copilotAdapter.generateCommands(testDir, templatesDir);
 		copilotAdapter.generateCommands(testDir, templatesDir);
 
-		const commandsDir = join(testDir, '.github', 'copilot', 'commands');
+		const commandsDir = join(testDir, '.github', 'prompts');
 		expect(existsSync(commandsDir)).toBe(true);
 	});
 });

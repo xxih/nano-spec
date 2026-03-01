@@ -1,85 +1,78 @@
-import {existsSync, mkdirSync, writeFileSync} from 'fs';
-import {homedir} from 'os';
-import { join } from 'path';
+import {mkdirSync, writeFileSync} from 'fs';
+import {join} from 'path';
 import type {AIAdapter, AdapterGenerateOptions} from './index.js';
 import {
-  getCommandTemplate,
-  getFileExtension,
-  parseTomlCommand,
-  listAvailableCommands,
-  listAvailableSkills,
-  copySkillToDir,
+	getCommandTemplate,
+	getFileExtension,
+	parseTomlCommand,
+	listAvailableCommands,
+	listAvailableSkills,
+	copySkillToDir,
 } from './utils.js';
+import {resolveCodexRoot} from './roots.js';
 
 export const codexAdapter: AIAdapter = {
-  name: 'codex',
-  supportedAssets: ['commands', 'skills'],
-  commandsDir: '.codex/prompts/',
-  fileFormat: 'md',
-  supportsVariables: true,
+	name: 'codex',
+	supportedAssets: ['commands', 'skills'],
+	commandsDir: '.codex/prompts/',
+	fileFormat: 'md',
+	supportsVariables: true,
 
-  generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
-    const codexRoot = resolveCodexRoot(cwd, options?.scope);
-    const commandsDir = join(codexRoot, 'prompts');
-    mkdirSync(commandsDir, { recursive: true });
+	resolveCommandsDir(cwd: string, options?: AdapterGenerateOptions): string {
+		return join(resolveCodexRoot(cwd, options?.scope), 'prompts');
+	},
 
-    // 自动扫描所有可用的命令
-    const commands = listAvailableCommands();
+	resolveSkillsDir(cwd: string, options?: AdapterGenerateOptions): string {
+		return join(resolveCodexRoot(cwd, options?.scope), 'skills');
+	},
 
-    for (const cmd of commands) {
-      // 获取模板内容（TOML 格式）
-      const template = getCommandTemplate(templatesDir, 'codex', cmd);
-      if (!template) {
-        console.warn(`⚠️  模板不存在: ${cmd}`);
-        continue;
-      }
+	generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
+		const commandsDir = this.resolveCommandsDir?.(cwd, options) || join(cwd, '.codex', 'prompts');
+		mkdirSync(commandsDir, {recursive: true});
 
-      // 转换格式（从 TOML 转换为 Codex Markdown 格式）
-      const content = this.transformCommand?.(template, cmd) || template;
+		const commands = listAvailableCommands();
 
-      // 写入文件
-      const ext = getFileExtension(this.fileFormat);
-      const dest = join(commandsDir, `${cmd}${ext}`);
-      writeFileSync(dest, content, 'utf-8');
-    }
-  },
+		for (const cmd of commands) {
+			const template = getCommandTemplate(templatesDir, 'codex', cmd);
+			if (!template) {
+				console.warn(`⚠️  模板不存在: ${cmd}`);
+				continue;
+			}
 
-  generateSkills(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
-    const codexRoot = resolveCodexRoot(cwd, options?.scope);
-    const skillsDir = join(codexRoot, 'skills');
-    mkdirSync(skillsDir, {recursive: true});
+			const content = this.transformCommand?.(template, cmd) || template;
 
-    const availableSkills = listAvailableSkills();
-    const selectedSkills =
-      options?.skills && options.skills.length > 0
-        ? availableSkills.filter((skill) => options.skills?.includes(skill))
-        : availableSkills;
+			const ext = getFileExtension(this.fileFormat);
+			const dest = join(commandsDir, `${cmd}${ext}`);
+			writeFileSync(dest, content, 'utf-8');
+		}
+	},
 
-    for (const skillName of selectedSkills) {
-      copySkillToDir(skillName, skillsDir);
-    }
-  },
+	generateSkills(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
+		const skillsDir = this.resolveSkillsDir?.(cwd, options) || join(cwd, '.codex', 'skills');
+		mkdirSync(skillsDir, {recursive: true});
 
-  transformCommand(content: string, commandName: string): string {
-    const parsed = parseTomlCommand(content, commandName);
+		const availableSkills = listAvailableSkills();
+		const selectedSkills =
+			options?.skills && options.skills.length > 0
+				? availableSkills.filter((skill) => options.skills?.includes(skill))
+				: availableSkills;
 
-    const lines: string[] = [];
-    lines.push('---');
-    lines.push(`name: ${parsed.name}`);
-    lines.push(`description: ${parsed.description}`);
-    lines.push('---');
-    lines.push('');
-    lines.push(parsed.prompt);
+		for (const skillName of selectedSkills) {
+			copySkillToDir(skillName, skillsDir);
+		}
+	},
 
-    return lines.join('\n');
-  }
+	transformCommand(content: string, commandName: string): string {
+		const parsed = parseTomlCommand(content, commandName);
+
+		const lines: string[] = [];
+		lines.push('---');
+		lines.push(`name: ${parsed.name}`);
+		lines.push(`description: ${parsed.description}`);
+		lines.push('---');
+		lines.push('');
+		lines.push(parsed.prompt);
+
+		return lines.join('\n');
+	},
 };
-
-function resolveCodexRoot(cwd: string, scope?: 'project' | 'user'): string {
-  if (scope === 'user') {
-    const homeDir = process.env.NANOSPEC_HOME_DIR || homedir();
-    return join(homeDir, '.codex');
-  }
-
-  return join(cwd, '.codex');
-}

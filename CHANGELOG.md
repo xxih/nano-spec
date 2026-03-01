@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Added
+- Added `gemini` adapter support with scoped command output: `./.gemini/commands/` (`project`) or `~/.gemini/commands/` (`user`).
+- Added Claude Code skills sync support to `.claude/skills/` (project/user scope).
+- Added regression tests for `gemini` adapter and Claude Code skills sync path behavior.
+
+### Changed
+- Updated GitHub Copilot output path to `.github/prompts/` and command file naming to `*.prompt.md` to align with prompt-file conventions.
+- Expanded `--scope` handling beyond Codex to cover other scoped adapters (currently `claude-code` and `gemini`) while keeping the existing `codex_scope` config key for backward compatibility.
+- Updated README adapter path matrix and skills coverage notes for Codex/Claude Code/Gemini/Copilot.
+
 ### Fixed
 - Fixed CLI version output source: `nanospec --version` now reads from `package.json` instead of a hardcoded value (`1.0.0`), so installed output matches the actual package version.
 

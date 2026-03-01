@@ -28,10 +28,12 @@ describe('claude-code adapter', () => {
 
 	it('应该有正确的适配器属性', () => {
 		expect(claudeCodeAdapter.name).toBe('claude-code');
+		expect(claudeCodeAdapter.supportedAssets).toEqual(['commands', 'skills']);
 		expect(claudeCodeAdapter.commandsDir).toBe('.claude/commands/');
 		expect(claudeCodeAdapter.fileFormat).toBe('md');
 		expect(claudeCodeAdapter.supportsVariables).toBe(true);
 		expect(typeof claudeCodeAdapter.generateCommands).toBe('function');
+		expect(typeof claudeCodeAdapter.generateSkills).toBe('function');
 		expect(typeof claudeCodeAdapter.transformCommand).toBe('function');
 	});
 
@@ -94,5 +96,35 @@ prompt = """Test prompt"""`;
 
 		const commandsDir = join(testDir, '.claude', 'commands');
 		expect(existsSync(commandsDir)).toBe(true);
+	});
+
+	it('应该生成 skills 到 .claude/skills/', () => {
+		claudeCodeAdapter.generateSkills!(testDir, templatesDir, {scope: 'project'});
+		const skillPath = join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md');
+		expect(existsSync(skillPath)).toBe(true);
+		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec-workflow');
+	});
+
+	it('应该支持选择性同步 skills', () => {
+		claudeCodeAdapter.generateSkills!(testDir, templatesDir, {
+			scope: 'project',
+			skills: ['nanospec-align'],
+		});
+
+		expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+		expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))).toBe(false);
+	});
+
+	it('应该在 user scope 写入 ~/.claude/commands 和 ~/.claude/skills', () => {
+		process.env.NANOSPEC_HOME_DIR = testDir;
+		try {
+			claudeCodeAdapter.generateCommands(testDir, templatesDir, {scope: 'user'});
+			claudeCodeAdapter.generateSkills!(testDir, templatesDir, {scope: 'user', skills: ['nanospec-align']});
+
+			expect(existsSync(join(testDir, '.claude', 'commands'))).toBe(true);
+			expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+		} finally {
+			delete process.env.NANOSPEC_HOME_DIR;
+		}
 	});
 });
