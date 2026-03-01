@@ -1,7 +1,17 @@
 import {describe, expect, it} from 'vitest';
+import {createRequire} from 'node:module';
 import {createProgram} from './index.js';
 
+const require = createRequire(import.meta.url);
+const {version: packageVersion} = require('../package.json') as {version: string};
+
 describe('cli command registration', () => {
+	it('should expose package version for --version', () => {
+		const program = createProgram();
+
+		expect(program.version()).toBe(packageVersion);
+	});
+
 	it('should register aliases for top-level commands', () => {
 		const program = createProgram();
 		const expectedAliases: Array<[string, string]> = [

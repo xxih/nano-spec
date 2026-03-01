@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Fixed
+- Fixed CLI version output source: `nanospec --version` now reads from `package.json` instead of a hardcoded value (`1.0.0`), so installed output matches the actual package version.
+
 ## 1.3.0 (2026-03-01)
 
 ### Added

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import {Command} from 'commander';
+import {createRequire} from 'node:module';
 import {init} from './commands/init.js';
 import {newTask} from './commands/new.js';
 import {switchTask} from './commands/switch.js';
@@ -9,13 +10,16 @@ import {listPresets, installPreset, uninstallPreset} from './commands/preset.js'
 import {syncCommands} from './commands/sync.js';
 import {config} from './commands/config.js';
 
+const require = createRequire(import.meta.url);
+const {version: packageVersion} = require('../package.json') as {version: string};
+
 export function createProgram(): Command {
 	const program = new Command();
 
 	program
 		.name('nanospec')
 		.description('nanospec - Spec 驱动开发工作流')
-		.version('1.0.0');
+		.version(packageVersion);
 
 	program
 		.command('init')

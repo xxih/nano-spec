@@ -39,6 +39,7 @@ nanospec new
 | `nanospec preset list/install/uninstall` | `nanospec p ls/add/rm` | 预设包管理 |
 | `nanospec config` | `nanospec c` | 查看当前配置 |
 | `nanospec config get/set/unset/list` | `nanospec c g/s/u/ls` | 读写配置（支持 `--global`） |
+| `nanospec -V, --version` | - | 显示当前安装的 CLI 版本 |
 
 ## 工作流概览
 
