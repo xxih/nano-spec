@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 1.1.3 (2026-03-01)
+
+### Changed
+- Hardened `/init` command template (`spec.init`) to require clarification when task name/intent cannot be extracted, and to block generic placeholder task names.
+- Simplified `/init` command template (`spec.init`) by removing initialization-environment detection and keeping it focused on task creation flow.
+- Improved CLI ergonomics: `nanospec new` now prompts interactively when no name is provided (supports Enter to use default name), and common commands now support short aliases (e.g. `nanospec s` for `switch`).
+- Updated README with `/init` usage guidance for initialized projects (provide task name + one-line goal).
+- Updated README command table with command aliases and interactive `new` behavior.
+- Added a reusable commit-cadence prompt to the project-level `AGENTS.md`, so agents keep small, stage-based commits during execution.
+
+### Added
+- Added template regression test to ensure `spec.init` keeps the clarification gate before running `nanospec new`.
+- Added CLI registration tests to lock top-level command aliases.
+- Added `new` command regression coverage for no-arg interactive naming flow.
+
 ## 1.1.2 (2026-03-01)
 
 ### Changed

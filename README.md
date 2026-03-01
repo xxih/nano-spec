@@ -12,8 +12,8 @@ npm install -g nano-spec
 # 2) 初始化（默认交互式选择 AI 工具）
 nanospec init
 
-# 3) 创建任务
-nanospec new "优化登录流程"
+# 3) 创建任务（可直接回车使用默认名“待命名”）
+nanospec new
 ```
 
 在 AI 工具中按顺序执行：
@@ -22,18 +22,23 @@ nanospec new "优化登录流程"
 - `/spec.2-plan`：生成实施方案与任务拆解
 - `/spec.3-execute`：执行任务并更新状态
 
+`/init` 使用建议（已初始化项目）：
+
+- 直接给出任务目标：`/init 创建用户认证功能`
+- 避免只输入 `/init` 或“创建任务”这类泛化描述，否则应先补充任务名与一句话目标
+
 ## 核心命令
 
-| 命令 | 说明 |
-|---|---|
-| `nanospec init` | 初始化项目结构与命令模板 |
-| `nanospec new [name]` | 创建任务目录并设为当前任务 |
-| `nanospec switch [name]` | 切换当前任务 |
-| `nanospec status` | 查看当前任务状态 |
-| `nanospec sync [--adapter <name>]` | 同步命令到 AI 工具目录 |
-| `nanospec preset list/install/uninstall` | 预设包管理 |
-| `nanospec config` | 查看当前配置 |
-| `nanospec config get/set/unset/list` | 读写配置（支持 `--global`） |
+| 命令 | 简写 | 说明 |
+|---|---|---|
+| `nanospec init` | `nanospec i` | 初始化项目结构与命令模板 |
+| `nanospec new [name]` | `nanospec n [name]` | 创建任务目录并设为当前任务；不带 `name` 时进入交互输入（默认“待命名”） |
+| `nanospec switch [name]` | `nanospec s [name]` | 切换当前任务 |
+| `nanospec status` | `nanospec st` | 查看当前任务状态 |
+| `nanospec sync [--adapter <name>]` | `nanospec sy [--adapter <name>]` | 同步命令到 AI 工具目录 |
+| `nanospec preset list/install/uninstall` | `nanospec p ls/add/rm` | 预设包管理 |
+| `nanospec config` | `nanospec c` | 查看当前配置 |
+| `nanospec config get/set/unset/list` | `nanospec c g/s/u/ls` | 读写配置（支持 `--global`） |
 
 ## 工作流概览
 

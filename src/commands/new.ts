@@ -1,5 +1,6 @@
 import {existsSync, mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
+import inquirer from 'inquirer';
 import {loadConfig} from '../config/config.js';
 import {setCurrentTask} from '../config/task-pointer.js';
 
@@ -14,7 +15,20 @@ export async function newTask(name?: string): Promise<void> {
 	}
 
 	const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-	const taskName = name || '待命名';
+	let taskName = name?.trim();
+
+	if (!taskName) {
+		const result = await inquirer.prompt<{taskName: string}>([
+			{
+				type: 'input',
+				name: 'taskName',
+				message: '任务名称：',
+				default: '待命名',
+			},
+		]);
+		taskName = result.taskName?.trim() || '待命名';
+	}
+
 	const dirName = `${date}-${taskName}`;
 	const taskDir = join(nanospecDir, dirName);
 

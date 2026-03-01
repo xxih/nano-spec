@@ -1,5 +1,6 @@
 import {existsSync, mkdirSync, readFileSync, rmSync} from 'fs';
 import {join} from 'path';
+import inquirer from 'inquirer';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {newTask} from './new.js';
 
@@ -43,6 +44,7 @@ describe('new command', () => {
 	it('应该创建带日期戳的任务目录', async () => {
 		// 先初始化项目
 		mkdirSync(nanospecDir, {recursive: true});
+		const promptSpy = vi.spyOn(inquirer, 'prompt');
 
 		await newTask('用户认证功能');
 
@@ -50,6 +52,7 @@ describe('new command', () => {
 		const taskDir = join(nanospecDir, `${date}-用户认证功能`);
 
 		expect(existsSync(taskDir)).toBe(true);
+		expect(promptSpy).not.toHaveBeenCalled();
 	});
 
 	it('应该创建任务目录结构（brief.md、assets/、outputs/）', async () => {
@@ -80,6 +83,9 @@ describe('new command', () => {
 
 	it('应该使用"待命名"作为默认名称', async () => {
 		mkdirSync(nanospecDir, {recursive: true});
+		const promptSpy = vi
+			.spyOn(inquirer, 'prompt')
+			.mockResolvedValue({taskName: ''});
 
 		await newTask();
 
@@ -87,6 +93,22 @@ describe('new command', () => {
 		const taskDir = join(nanospecDir, `${date}-待命名`);
 
 		expect(existsSync(taskDir)).toBe(true);
+		expect(promptSpy).toHaveBeenCalledOnce();
+	});
+
+	it('应该在无参时进入交互模式并使用用户输入名称', async () => {
+		mkdirSync(nanospecDir, {recursive: true});
+		const promptSpy = vi
+			.spyOn(inquirer, 'prompt')
+			.mockResolvedValue({taskName: '登录体验优化'});
+
+		await newTask();
+
+		const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+		const taskDir = join(nanospecDir, `${date}-登录体验优化`);
+
+		expect(existsSync(taskDir)).toBe(true);
+		expect(promptSpy).toHaveBeenCalledOnce();
 	});
 
 	it('应该在目录已存在时显示警告', async () => {
