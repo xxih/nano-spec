@@ -49,6 +49,29 @@ nanospec new
 5. 对齐（可选）：`/spec.align`
 6. 验收/总结（可选）：`/spec.accept`、`/spec.summary`
 
+## 内置 Skills 覆盖
+
+当你使用 `codex` 且同步 `skills` 资产时，即使不依赖 slash commands，也可以通过技能触发完整流程能力。
+
+| 能力 | Skill |
+|---|---|
+| 任务创建/初始化 | `nanospec-init` |
+| 一键调度（断点续跑） | `nanospec-run` |
+| 规格撰写 | `nanospec-spec`、`nanospec-workflow` |
+| 方案设计 | `nanospec-plan`、`nanospec-workflow` |
+| 执行交付 | `nanospec-execute`、`nanospec-workflow` |
+| 对齐纠偏 | `nanospec-align` |
+| 需求澄清 | `nanospec-clarify` |
+| 验收 | `nanospec-accept` |
+| 总结沉淀 | `nanospec-summary` |
+| 新手引导 | `nanospec-onboard` |
+
+仅同步 skills 示例：
+
+```bash
+nanospec sync --adapter codex --assets skills
+```
+
 ## 预设包
 
 内置预设：

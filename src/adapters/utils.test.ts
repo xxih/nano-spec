@@ -75,8 +75,24 @@ describe('skills utils', () => {
 
 	it('should list built-in skills', () => {
 		const skills = listAvailableSkills();
-		expect(skills).toContain('nanospec-workflow');
-		expect(skills).toContain('nanospec-align');
+		const requiredSkills = [
+			'nanospec-accept',
+			'nanospec-align',
+			'nanospec-clarify',
+			'nanospec-execute',
+			'nanospec-init',
+			'nanospec-onboard',
+			'nanospec-plan',
+			'nanospec-run',
+			'nanospec-spec',
+			'nanospec-summary',
+			'nanospec-workflow',
+		];
+
+		requiredSkills.forEach((skill) => {
+			expect(skills).toContain(skill);
+		});
+		expect(skills.length).toBeGreaterThanOrEqual(requiredSkills.length);
 	});
 
 	it('should resolve skill source directory', () => {
