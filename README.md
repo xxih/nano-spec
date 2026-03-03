@@ -104,14 +104,14 @@ nanospec config set default_adapter codex
 新增配置项：
 
 - `default_assets`：默认同步资产类型（`commands` / `skills` / `both`）
-- `codex_scope`：作用域配置（`project` / `user`），用于支持用户级目录的适配器（如 `codex` / `claude-code` / `gemini`）
+- `codex_scope`：作用域配置（`project` / `user`），用于支持 scoped 目录的资产（如 `codex` skills、`claude-code`、`gemini`）
 - `enabled_skills`：仅同步指定 skills（JSON 数组；空数组表示全部内置 skills）
 
 ## 支持的 AI 工具
 
 - `cursor`
 - `codex`
-  - `commands`：`./.codex/prompts/`（`--scope project`）或 `~/.codex/prompts/`（`--scope user`）
+  - `commands`：`~/.codex/prompts/`（固定用户级；即使传 `--scope project` 也会回退到 user）
   - `skills`：`./.codex/skills/`（`--scope project`）或 `~/.codex/skills/`（`--scope user`）
 - `claude-code`
   - `commands`：`./.claude/commands/`（`--scope project`）或 `~/.claude/commands/`（`--scope user`）
@@ -146,8 +146,10 @@ project-root/
 ├── .github/
 │   └── prompts/
 └── .codex/
-    ├── prompts/
     └── skills/
+
+~/.codex/
+└── prompts/
 ```
 
 ## 常见问题
@@ -161,6 +163,7 @@ nanospec sync
 ```
 
 如果使用了 `--scope user`，请检查对应用户目录（如 `~/.codex/*`、`~/.claude/*`、`~/.gemini/*`）。
+注意：`codex` 的 commands 固定写入 `~/.codex/prompts/`。
 
 ### 如何继续上次任务？
 

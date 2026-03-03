@@ -17,6 +17,7 @@ describe('init command', () => {
 
 		// 模拟 process.cwd() 返回测试目录
 		vi.spyOn(process, 'cwd').mockReturnValue(testDir);
+		process.env.NANOSPEC_HOME_DIR = testDir;
 	});
 
 	afterEach(() => {
@@ -24,6 +25,7 @@ describe('init command', () => {
 		if (existsSync(testDir)) {
 			rmSync(testDir, {recursive: true, force: true});
 		}
+		delete process.env.NANOSPEC_HOME_DIR;
 		vi.restoreAllMocks();
 	});
 

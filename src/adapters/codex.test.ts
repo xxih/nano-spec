@@ -4,22 +4,31 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {codexAdapter} from './codex.js';
 
 describe('codex adapter', () => {
-	const testDir = join(process.cwd(), '.test-codex-adapter');
+	const workspaceDir = join(process.cwd(), '.test-codex-adapter-workspace');
+	const homeDir = join(process.cwd(), '.test-codex-adapter-home');
 	const templatesDir = join(process.cwd(), 'src', 'templates');
 
 	beforeEach(() => {
-		if (existsSync(testDir)) {
-			rmSync(testDir, {recursive: true, force: true});
+		if (existsSync(workspaceDir)) {
+			rmSync(workspaceDir, {recursive: true, force: true});
 		}
-		mkdirSync(testDir, {recursive: true});
+		if (existsSync(homeDir)) {
+			rmSync(homeDir, {recursive: true, force: true});
+		}
 
-		vi.spyOn(process, 'cwd').mockReturnValue(testDir);
-		process.env.NANOSPEC_HOME_DIR = testDir;
+		mkdirSync(workspaceDir, {recursive: true});
+		mkdirSync(homeDir, {recursive: true});
+
+		vi.spyOn(process, 'cwd').mockReturnValue(workspaceDir);
+		process.env.NANOSPEC_HOME_DIR = homeDir;
 	});
 
 	afterEach(() => {
-		if (existsSync(testDir)) {
-			rmSync(testDir, {recursive: true, force: true});
+		if (existsSync(workspaceDir)) {
+			rmSync(workspaceDir, {recursive: true, force: true});
+		}
+		if (existsSync(homeDir)) {
+			rmSync(homeDir, {recursive: true, force: true});
 		}
 		delete process.env.NANOSPEC_HOME_DIR;
 		vi.restoreAllMocks();
@@ -36,20 +45,21 @@ describe('codex adapter', () => {
 		expect(typeof codexAdapter.transformCommand).toBe('function');
 	});
 
-	it('应该在 project scope 创建 .codex/prompts/ 目录', () => {
-		codexAdapter.generateCommands(testDir, templatesDir, {scope: 'project'});
-		expect(existsSync(join(testDir, '.codex', 'prompts'))).toBe(true);
+	it('project scope 下 commands 应该自动写入用户目录', () => {
+		codexAdapter.generateCommands(workspaceDir, templatesDir, {scope: 'project'});
+		expect(existsSync(join(homeDir, '.codex', 'prompts'))).toBe(true);
+		expect(existsSync(join(workspaceDir, '.codex', 'prompts'))).toBe(false);
 	});
 
 	it('应该在 user scope 创建 ~/.codex/prompts/ 目录', () => {
-		codexAdapter.generateCommands(testDir, templatesDir, {scope: 'user'});
-		expect(existsSync(join(testDir, '.codex', 'prompts'))).toBe(true);
+		codexAdapter.generateCommands(workspaceDir, templatesDir, {scope: 'user'});
+		expect(existsSync(join(homeDir, '.codex', 'prompts'))).toBe(true);
 	});
 
 	it('应该生成核心 Markdown 命令文件', () => {
-		codexAdapter.generateCommands(testDir, templatesDir, {scope: 'project'});
+		codexAdapter.generateCommands(workspaceDir, templatesDir, {scope: 'project'});
 
-		const commandsDir = join(testDir, '.codex', 'prompts');
+		const commandsDir = join(homeDir, '.codex', 'prompts');
 		const expectedFiles = [
 			'spec.1-spec.md',
 			'spec.2-plan.md',
@@ -81,19 +91,19 @@ prompt = """Test prompt"""`;
 	});
 
 	it('应该生成 skills 到 .codex/skills/', () => {
-		codexAdapter.generateSkills!(testDir, templatesDir, {scope: 'project'});
-		const skillPath = join(testDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md');
+		codexAdapter.generateSkills!(workspaceDir, templatesDir, {scope: 'project'});
+		const skillPath = join(workspaceDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md');
 		expect(existsSync(skillPath)).toBe(true);
 		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec-workflow');
 	});
 
 	it('应该按 skills 过滤条件生成指定技能', () => {
-		codexAdapter.generateSkills!(testDir, templatesDir, {
+		codexAdapter.generateSkills!(workspaceDir, templatesDir, {
 			scope: 'project',
 			skills: ['nanospec-align'],
 		});
 
-		expect(existsSync(join(testDir, '.codex', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
-		expect(existsSync(join(testDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))).toBe(false);
+		expect(existsSync(join(workspaceDir, '.codex', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+		expect(existsSync(join(workspaceDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))).toBe(false);
 	});
 });

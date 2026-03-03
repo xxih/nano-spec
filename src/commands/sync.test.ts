@@ -1,5 +1,5 @@
 import {join} from 'path';
-import {existsSync} from 'fs';
+import {existsSync, mkdirSync, rmSync} from 'fs';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {syncCommands} from './sync.js';
 
@@ -7,11 +7,20 @@ describe('sync command', () => {
 	const testDir = join(process.cwd(), '.test-nanospec-sync');
 
 	beforeEach(() => {
+		if (existsSync(testDir)) {
+			rmSync(testDir, {recursive: true, force: true});
+		}
+		mkdirSync(testDir, {recursive: true});
+
 		// 模拟 process.cwd() 返回测试目录
 		vi.spyOn(process, 'cwd').mockReturnValue(testDir);
 	});
 
 	afterEach(() => {
+		if (existsSync(testDir)) {
+			rmSync(testDir, {recursive: true, force: true});
+		}
+		delete process.env.NANOSPEC_HOME_DIR;
 		vi.restoreAllMocks();
 	});
 
@@ -86,6 +95,16 @@ describe('sync command', () => {
 		);
 
 		consoleLogSpy.mockRestore();
+	});
+
+	it('codex commands 在 project scope 下应写入用户目录', async () => {
+		const homeDir = join(testDir, '.test-home');
+		process.env.NANOSPEC_HOME_DIR = homeDir;
+
+		await syncCommands({adapter: 'codex', assets: 'commands', scope: 'project'});
+
+		expect(existsSync(join(homeDir, '.codex', 'prompts', 'spec.1-spec.md'))).toBe(true);
+		expect(existsSync(join(testDir, '.codex', 'prompts'))).toBe(false);
 	});
 
 	it('应该支持同步 claude-code skills', async () => {

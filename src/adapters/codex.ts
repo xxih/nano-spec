@@ -1,6 +1,6 @@
 import {mkdirSync, writeFileSync} from 'fs';
 import {join} from 'path';
-import type {AIAdapter, AdapterGenerateOptions} from './index.js';
+import type {AIAdapter, AdapterGenerateOptions, AdapterScope} from './index.js';
 import {
 	getCommandTemplate,
 	getFileExtension,
@@ -11,6 +11,16 @@ import {
 } from './utils.js';
 import {resolveCodexRoot} from './roots.js';
 
+function resolveCodexCommandsScope(_scope?: AdapterScope): AdapterScope {
+	return 'user';
+}
+
+function warnCodexProjectScope(scope?: AdapterScope): void {
+	if (scope === 'project') {
+		console.log('⚠️  codex commands 仅支持 user 作用域，已自动写入 ~/.codex/prompts/');
+	}
+}
+
 export const codexAdapter: AIAdapter = {
 	name: 'codex',
 	supportedAssets: ['commands', 'skills'],
@@ -19,7 +29,7 @@ export const codexAdapter: AIAdapter = {
 	supportsVariables: true,
 
 	resolveCommandsDir(cwd: string, options?: AdapterGenerateOptions): string {
-		return join(resolveCodexRoot(cwd, options?.scope), 'prompts');
+		return join(resolveCodexRoot(cwd, resolveCodexCommandsScope(options?.scope)), 'prompts');
 	},
 
 	resolveSkillsDir(cwd: string, options?: AdapterGenerateOptions): string {
@@ -27,7 +37,10 @@ export const codexAdapter: AIAdapter = {
 	},
 
 	generateCommands(cwd: string, templatesDir: string, options?: AdapterGenerateOptions): void {
-		const commandsDir = this.resolveCommandsDir?.(cwd, options) || join(cwd, '.codex', 'prompts');
+		warnCodexProjectScope(options?.scope);
+		const normalizedScope = resolveCodexCommandsScope(options?.scope);
+		const commandsDir =
+			this.resolveCommandsDir?.(cwd, {scope: normalizedScope}) || join(cwd, '.codex', 'prompts');
 		mkdirSync(commandsDir, {recursive: true});
 
 		const commands = listAvailableCommands();

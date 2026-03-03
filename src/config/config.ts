@@ -23,7 +23,7 @@ export interface NanospecConfig {
 	auto_sync?: boolean;
 	/** 默认同步资产类型（默认：commands） */
 	default_assets?: 'commands' | 'skills' | 'both';
-	/** 资产输出作用域（保留键名 codex_scope，默认：project） */
+	/** 资产输出作用域（保留键名 codex_scope，默认：user） */
 	codex_scope?: 'project' | 'user';
 	/** 启用的 skills（空数组表示全部内置 skills） */
 	enabled_skills?: string[];
@@ -39,7 +39,7 @@ export const DEFAULT_CONFIG: NanospecConfig = {
 	template_format: 'md',
 	auto_sync: true,
 	default_assets: 'commands',
-	codex_scope: 'project',
+	codex_scope: 'user',
 	enabled_skills: [],
 };
 

@@ -25,7 +25,7 @@ const DEFAULT_CONFIG: NanospecConfig = {
 	template_format: 'md',
 	auto_sync: true,
 	default_assets: 'commands',
-	codex_scope: 'project',
+	codex_scope: 'user',
 	enabled_skills: [],
 };
 

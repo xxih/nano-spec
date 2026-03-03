@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Changed
+- Changed `codex` command sync target to user-level only: commands now always write to `~/.codex/prompts/`, and `--scope project` is ignored for Codex prompts.
+- Updated docs and defaults to match the new behavior (`codex_scope` default is now `user`).
+
+### Added
+- Added regression coverage to ensure Codex commands still route to user scope when `--scope project` is provided.
+
 ## 1.3.1 (2026-03-01)
 
 ### Added
