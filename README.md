@@ -60,7 +60,7 @@ nanospec new
 
 直接用自然语言让 agent 安装即可（示例）：
 
-`请帮我安装 nano-spec 的 nanospec skill`
+`请帮我安装 nano-spec 的 nanospec skill，来源是 https://github.com/xxih/nano-spec/tree/main/src/static/skills/nanospec`
 
 ```bash
 nanospec sync --adapter codex --assets skills --scope user
