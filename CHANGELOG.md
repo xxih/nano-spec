@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.3.3 (2026-03-05)
+
 ### Changed
 - Merged multiple NanoSpec skills into a single built-in `nanospec` skill with progressive disclosure via `references/`.
 - Simplified README skill instructions to installation-focused guidance (`nanospec sync` and `$skill-installer install`).
