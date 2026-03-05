@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.3.4 (2026-03-05)
+
 ### Fixed
 - Fixed built-in `nanospec` skill frontmatter in `src/static/skills/nanospec/SKILL.md` by quoting `description`, so YAML parsers can load it reliably.
 
