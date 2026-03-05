@@ -24,3 +24,10 @@
 - [x] 3.6 按反馈调整 README：自然语言安装示例必须包含可点击的 GitHub 来源链接。
 
 验收条件：变更可审查、可回滚。
+
+## 4. static skill 文件修复
+
+- [x] 4.1 修复 `src/static/skills/nanospec/SKILL.md` 的 frontmatter：为 `description` 增加引号，避免 YAML 解析失败。
+- [x] 4.2 增加回归测试，校验 `nanospec` skill frontmatter 中 `description` 为 YAML-safe 引号字符串。
+
+验收条件：`src/static/skills/nanospec/SKILL.md` 可被 Codex/通用 YAML 解析器稳定加载。

@@ -1,6 +1,6 @@
 ---
 name: nanospec
-description: Run the full NanoSpec workflow in one skill: task init, clarify, spec, align, plan, execute, acceptance, summary, onboarding, and resumable run mode. Use when the user asks for any NanoSpec task delivery action and load only the relevant reference files for the current phase.
+description: "Run the full NanoSpec workflow in one skill: task init, clarify, spec, align, plan, execute, acceptance, summary, onboarding, and resumable run mode. Use when the user asks for any NanoSpec task delivery action and load only the relevant reference files for the current phase."
 ---
 
 # NanoSpec

@@ -97,4 +97,14 @@ describe('skills utils', () => {
 		expect(existsSync(copiedSkill)).toBe(true);
 		expect(readFileSync(copiedSkill, 'utf-8')).toContain('name: nanospec');
 	});
+
+	it('should keep nanospec SKILL frontmatter YAML-safe', () => {
+		const skillDir = getSkillSourceDir('nanospec');
+		if (!skillDir) {
+			throw new Error('nanospec skill directory not found');
+		}
+
+		const skillContent = readFileSync(join(skillDir, 'SKILL.md'), 'utf-8');
+		expect(skillContent).toMatch(/^description:\s*".+"$/m);
+	});
 });
