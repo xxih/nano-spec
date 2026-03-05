@@ -50,71 +50,30 @@ nanospec new
 5. 对齐（可选）：`/spec.align`
 6. 验收/总结（可选）：`/spec.accept`、`/spec.summary`
 
-## 内置 Skills 覆盖
+## 内置 Skill
 
-当你使用 `codex` 或 `claude-code` 且同步 `skills` 资产时，即使不依赖 slash commands，也可以通过技能触发完整流程能力。
+内置统一 skill：`nanospec`（已合并 init/run/spec/align/plan/execute/accept/summary/onboard，内部按渐进披露加载 references）。
 
-| 能力 | Skill |
-|---|---|
-| 任务创建/初始化 | `nanospec-init` |
-| 一键调度（断点续跑） | `nanospec-run` |
-| 规格撰写 | `nanospec-spec`、`nanospec-workflow` |
-| 方案设计 | `nanospec-plan`、`nanospec-workflow` |
-| 执行交付 | `nanospec-execute`、`nanospec-workflow` |
-| 对齐纠偏 | `nanospec-align` |
-| 需求澄清 | `nanospec-clarify` |
-| 验收 | `nanospec-accept` |
-| 总结沉淀 | `nanospec-summary` |
-| 新手引导 | `nanospec-onboard` |
+## 安装 Skill（简版）
 
-仅同步 skills 示例：
+在 Codex（推荐，用户级）：
 
 ```bash
-nanospec sync --adapter codex --assets skills
+nanospec sync --adapter codex --assets skills --scope user
 ```
 
-## Skills 安装（跨工具）
-
-为了让更多 AI agent 工具尽量可用，建议按 Agent Skills 开放标准组织技能，并用 GitHub 分发。
-
-最小结构（必需）：
-
-```text
-<skill-name>/
-└── SKILL.md
-```
-
-`SKILL.md` 顶部 frontmatter 建议保持极简（兼容性更高）：
-
-```yaml
----
-name: nanospec-workflow
-description: Drive NanoSpec tasks from brief to delivery...
----
-```
-
-推荐分发仓库结构：
-
-```text
-skills/
-└── <skill-name>/
-    ├── SKILL.md
-    ├── scripts/      # 可选
-    ├── references/   # 可选
-    └── assets/       # 可选
-```
-
-Codex 用户可直接安装 GitHub 子目录（示例）：
+或直接从 GitHub 安装：
 
 ```bash
-$skill-installer install https://github.com/xxih/nano-spec/tree/main/.codex/skills/nanospec-workflow
+$skill-installer install https://github.com/xxih/nano-spec/tree/main/.codex/skills/nanospec
 ```
 
-安装后请重启 Codex 以加载新 skills。
+安装后重启 Codex 生效。
 
-对其它支持 Agent Skills 标准的工具：通常是 `git clone` 后，把 `skills/` 加入该工具的 skills 搜索路径。
+在其它 AI agent 工具：
 
-对尚未原生支持 skills 的工具：可用 MCP/CLI 做“转接层”（托管、检索、下发 `SKILL.md` 内容）来复用同一份技能资产。
+1. 复制仓库中的 `.codex/skills/nanospec/` 到该工具的 skills 目录。
+2. 若工具暂不支持原生 skills，可通过 MCP/CLI 方式转接使用同一份 `SKILL.md`。
 
 ## 预设包
 

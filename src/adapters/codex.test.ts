@@ -92,18 +92,18 @@ prompt = """Test prompt"""`;
 
 	it('应该生成 skills 到 .codex/skills/', () => {
 		codexAdapter.generateSkills!(workspaceDir, templatesDir, {scope: 'project'});
-		const skillPath = join(workspaceDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md');
+		const skillPath = join(workspaceDir, '.codex', 'skills', 'nanospec', 'SKILL.md');
 		expect(existsSync(skillPath)).toBe(true);
-		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec-workflow');
+		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec');
 	});
 
 	it('应该按 skills 过滤条件生成指定技能', () => {
 		codexAdapter.generateSkills!(workspaceDir, templatesDir, {
 			scope: 'project',
-			skills: ['nanospec-align'],
+			skills: ['nanospec'],
 		});
 
-		expect(existsSync(join(workspaceDir, '.codex', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+		expect(existsSync(join(workspaceDir, '.codex', 'skills', 'nanospec', 'SKILL.md'))).toBe(true);
 		expect(existsSync(join(workspaceDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))).toBe(false);
 	});
 });

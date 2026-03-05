@@ -108,14 +108,14 @@ describe('init command', () => {
 	it('应该支持初始化 codex skills 资产', async () => {
 		await init({ai: 'codex', assets: 'skills', scope: 'project'});
 		expect(
-			existsSync(join(testDir, '.codex', 'skills', 'nanospec-workflow', 'SKILL.md'))
+			existsSync(join(testDir, '.codex', 'skills', 'nanospec', 'SKILL.md'))
 		).toBe(true);
 	});
 
 	it('应该支持初始化 claude-code skills 资产', async () => {
 		await init({ai: 'claude-code', assets: 'skills', scope: 'project'});
 		expect(
-			existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))
+			existsSync(join(testDir, '.claude', 'skills', 'nanospec', 'SKILL.md'))
 		).toBe(true);
 	});
 

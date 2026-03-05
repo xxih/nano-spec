@@ -100,18 +100,18 @@ prompt = """Test prompt"""`;
 
 	it('应该生成 skills 到 .claude/skills/', () => {
 		claudeCodeAdapter.generateSkills!(testDir, templatesDir, {scope: 'project'});
-		const skillPath = join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md');
+		const skillPath = join(testDir, '.claude', 'skills', 'nanospec', 'SKILL.md');
 		expect(existsSync(skillPath)).toBe(true);
-		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec-workflow');
+		expect(readFileSync(skillPath, 'utf-8')).toContain('name: nanospec');
 	});
 
 	it('应该支持选择性同步 skills', () => {
 		claudeCodeAdapter.generateSkills!(testDir, templatesDir, {
 			scope: 'project',
-			skills: ['nanospec-align'],
+			skills: ['nanospec'],
 		});
 
-		expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+		expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec', 'SKILL.md'))).toBe(true);
 		expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))).toBe(false);
 	});
 
@@ -119,10 +119,10 @@ prompt = """Test prompt"""`;
 		process.env.NANOSPEC_HOME_DIR = testDir;
 		try {
 			claudeCodeAdapter.generateCommands(testDir, templatesDir, {scope: 'user'});
-			claudeCodeAdapter.generateSkills!(testDir, templatesDir, {scope: 'user', skills: ['nanospec-align']});
+			claudeCodeAdapter.generateSkills!(testDir, templatesDir, {scope: 'user', skills: ['nanospec']});
 
 			expect(existsSync(join(testDir, '.claude', 'commands'))).toBe(true);
-			expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec-align', 'SKILL.md'))).toBe(true);
+			expect(existsSync(join(testDir, '.claude', 'skills', 'nanospec', 'SKILL.md'))).toBe(true);
 		} finally {
 			delete process.env.NANOSPEC_HOME_DIR;
 		}

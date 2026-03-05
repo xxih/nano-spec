@@ -75,38 +75,26 @@ describe('skills utils', () => {
 
 	it('should list built-in skills', () => {
 		const skills = listAvailableSkills();
-		const requiredSkills = [
-			'nanospec-accept',
-			'nanospec-align',
-			'nanospec-clarify',
-			'nanospec-execute',
-			'nanospec-init',
-			'nanospec-onboard',
-			'nanospec-plan',
-			'nanospec-run',
-			'nanospec-spec',
-			'nanospec-summary',
-			'nanospec-workflow',
-		];
+		const requiredSkills = ['nanospec'];
 
 		requiredSkills.forEach((skill) => {
 			expect(skills).toContain(skill);
 		});
-		expect(skills.length).toBeGreaterThanOrEqual(requiredSkills.length);
+		expect(skills).toEqual(requiredSkills);
 	});
 
 	it('should resolve skill source directory', () => {
-		const skillDir = getSkillSourceDir('nanospec-workflow');
+		const skillDir = getSkillSourceDir('nanospec');
 		expect(skillDir).toBeTruthy();
-		expect(skillDir).toContain('nanospec-workflow');
+		expect(skillDir).toContain('nanospec');
 	});
 
 	it('should copy skill folder to destination root', () => {
-		const copied = copySkillToDir('nanospec-align', testDir);
+		const copied = copySkillToDir('nanospec', testDir);
 		expect(copied).toBe(true);
 
-		const copiedSkill = join(testDir, 'nanospec-align', 'SKILL.md');
+		const copiedSkill = join(testDir, 'nanospec', 'SKILL.md');
 		expect(existsSync(copiedSkill)).toBe(true);
-		expect(readFileSync(copiedSkill, 'utf-8')).toContain('name: nanospec-align');
+		expect(readFileSync(copiedSkill, 'utf-8')).toContain('name: nanospec');
 	});
 });

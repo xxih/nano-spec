@@ -3,7 +3,8 @@
 ## Unreleased
 
 ### Changed
-- Updated README with a new cross-tool skills installation guide, including Agent Skills minimum structure, GitHub distribution layout, Codex `$skill-installer` usage, and MCP/CLI fallback guidance.
+- Merged multiple NanoSpec skills into a single built-in `nanospec` skill with progressive disclosure via `references/`.
+- Simplified README skill instructions to installation-focused guidance (`nanospec sync` and `$skill-installer install`).
 
 ## 1.3.2 (2026-03-03)
 

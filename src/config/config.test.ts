@@ -101,7 +101,7 @@ describe('config module', () => {
 			auto_sync: false,
 			default_assets: 'both' as const,
 			codex_scope: 'project' as const,
-			enabled_skills: ['nanospec-align'],
+			enabled_skills: ['nanospec'],
 		};
 		writeFileSync(configPath, JSON.stringify(testConfig), 'utf-8');
 

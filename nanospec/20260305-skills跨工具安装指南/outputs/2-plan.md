@@ -1,16 +1,16 @@
-# 方案：README 增补跨工具 Skills 安装说明
+# 方案：单 Skill 重构 + README 安装简化
 
 ## 实施方案
 
-1. 在 README 的 skills 相关章节后新增“Skills 安装（跨工具）”。
-2. 采用“标准 -> 分发 -> 安装 -> 兜底”的固定顺序组织内容：
-   - 标准：最小目录与 frontmatter 要求。
-   - 分发：推荐 GitHub 目录布局。
-   - Codex 安装：`$skill-installer install <url>`。
-   - 其他工具：clone 后加入 skills 搜索路径，或用 MCP/CLI 转接。
-3. 在 CHANGELOG 的 Unreleased 记录文档增强项。
+1. 新建统一 skill 目录 `nanospec/`，在 `SKILL.md` 中保留：
+   - 核心 workflow；
+   - 渐进披露索引（指向 `references/*.md`）。
+2. 将原先分散能力迁移到 references 文件（init/run/spec/align/plan/execute/accept/summary/onboard）。
+3. 删除旧的多 skill 目录，更新相关单测到单 skill 口径。
+4. README 只保留安装路径与命令，不再介绍 skill 创作流程。
+5. CHANGELOG 记录“单 skill 合并 + 安装说明简化”。
 
 ## 风险与约束
 
-- 不承诺“所有工具原生支持”，仅给出兼容性最强的实践路径。
-- 保持 frontmatter 极简，避免不同实现的可选字段差异导致兼容问题。
+- 保持 `SKILL.md` frontmatter 极简：仅 `name` 与 `description`。
+- references 内容需要一层索引可达，避免深层跳转。

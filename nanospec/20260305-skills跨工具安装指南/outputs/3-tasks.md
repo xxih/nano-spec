@@ -6,18 +6,19 @@
 
 验收条件：任务目标、规格、方案可追踪。
 
-## 2. README 增补
+## 2. Skill 合并重构
 
-- [x] 2.1 新增“Skills 安装（跨工具）”章节。
-- [x] 2.2 增加 GitHub 分发目录示例与 Codex 安装命令。
-- [x] 2.3 增加非原生 skills 工具兜底方案说明。
+- [x] 2.1 新建统一 `nanospec` skill，并采用 `SKILL.md + references/` 渐进披露结构。
+- [x] 2.2 删除旧的多 skill 目录，统一为单 skill。
+- [x] 2.3 更新相关测试断言（skill 名称/复制/同步路径）。
 
-验收条件：文档可直接复制命令执行。
+验收条件：仓库技能结构已合并为单 skill，测试通过。
 
-## 3. 发布记录与验证
+## 3. README 与发布记录
 
-- [x] 3.1 更新 `CHANGELOG.md`（Unreleased）。
-- [x] 3.2 运行最小必要验证命令。
-- [x] 3.3 完成一次有效 commit。
+- [x] 3.1 README 改为“安装导向”说明，不再展开 skill 创作教程。
+- [x] 3.2 更新 `CHANGELOG.md`（Unreleased）。
+- [x] 3.3 运行最小必要验证命令。
+- [x] 3.4 完成一次有效 commit。
 
 验收条件：变更可审查、可回滚。

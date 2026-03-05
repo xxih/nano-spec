@@ -110,7 +110,7 @@ describe('sync command', () => {
 	it('应该支持同步 claude-code skills', async () => {
 		await syncCommands({adapter: 'claude-code', assets: 'skills', scope: 'project'});
 		expect(
-			existsSync(join(testDir, '.claude', 'skills', 'nanospec-workflow', 'SKILL.md'))
+			existsSync(join(testDir, '.claude', 'skills', 'nanospec', 'SKILL.md'))
 		).toBe(true);
 	});
 });
