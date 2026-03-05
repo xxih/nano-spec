@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- Updated README with a new cross-tool skills installation guide, including Agent Skills minimum structure, GitHub distribution layout, Codex `$skill-installer` usage, and MCP/CLI fallback guidance.
+
 ## 1.3.2 (2026-03-03)
 
 ### Changed

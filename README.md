@@ -73,6 +73,49 @@ nanospec new
 nanospec sync --adapter codex --assets skills
 ```
 
+## Skills 安装（跨工具）
+
+为了让更多 AI agent 工具尽量可用，建议按 Agent Skills 开放标准组织技能，并用 GitHub 分发。
+
+最小结构（必需）：
+
+```text
+<skill-name>/
+└── SKILL.md
+```
+
+`SKILL.md` 顶部 frontmatter 建议保持极简（兼容性更高）：
+
+```yaml
+---
+name: nanospec-workflow
+description: Drive NanoSpec tasks from brief to delivery...
+---
+```
+
+推荐分发仓库结构：
+
+```text
+skills/
+└── <skill-name>/
+    ├── SKILL.md
+    ├── scripts/      # 可选
+    ├── references/   # 可选
+    └── assets/       # 可选
+```
+
+Codex 用户可直接安装 GitHub 子目录（示例）：
+
+```bash
+$skill-installer install https://github.com/xxih/nano-spec/tree/main/.codex/skills/nanospec-workflow
+```
+
+安装后请重启 Codex 以加载新 skills。
+
+对其它支持 Agent Skills 标准的工具：通常是 `git clone` 后，把 `skills/` 加入该工具的 skills 搜索路径。
+
+对尚未原生支持 skills 的工具：可用 MCP/CLI 做“转接层”（托管、检索、下发 `SKILL.md` 内容）来复用同一份技能资产。
+
 ## 预设包
 
 内置预设：
