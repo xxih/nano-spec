@@ -13,9 +13,11 @@
    - `SKILL.md` 仅保留核心流程与索引；
    - 分阶段细节放在 `references/*.md`，按需加载。
 3. README 仅保留安装说明（简版）：
+   - 先给出自然语言触发示例（让 agent 帮用户安装）。
    - `nanospec sync --adapter codex --assets skills --scope user`
-   - `$skill-installer install <github-subdir-url>`
+   - `$skill-installer install https://github.com/xxih/nano-spec/tree/main/src/static/skills/nanospec`
 4. 保持 `src/static/skills` 与项目 `.codex/skills` 结构一致，避免分发路径不一致。
+5. 移除 README 中“暂不支持原生 skills 时的 MCP/CLI 转接”描述。
 
 ## 验收标准
 

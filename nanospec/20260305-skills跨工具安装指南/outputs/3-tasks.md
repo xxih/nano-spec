@@ -20,5 +20,6 @@
 - [x] 3.2 更新 `CHANGELOG.md`（Unreleased）。
 - [x] 3.3 运行最小必要验证命令。
 - [x] 3.4 完成一次有效 commit。
+- [x] 3.5 按反馈调整 README：安装路径指向 `src/static/skills/nanospec`、增加自然语言安装示例、删除 MCP/CLI 转接说明。
 
 验收条件：变更可审查、可回滚。

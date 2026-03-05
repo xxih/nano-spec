@@ -5,6 +5,7 @@
 ### Changed
 - Merged multiple NanoSpec skills into a single built-in `nanospec` skill with progressive disclosure via `references/`.
 - Simplified README skill instructions to installation-focused guidance (`nanospec sync` and `$skill-installer install`).
+- Updated README installation source path to `src/static/skills/nanospec` and removed MCP/CLI fallback guidance.
 
 ## 1.3.2 (2026-03-03)
 

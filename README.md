@@ -58,6 +58,10 @@ nanospec new
 
 在 Codex（推荐，用户级）：
 
+直接用自然语言让 agent 安装即可（示例）：
+
+`请帮我安装 nano-spec 的 nanospec skill`
+
 ```bash
 nanospec sync --adapter codex --assets skills --scope user
 ```
@@ -65,15 +69,14 @@ nanospec sync --adapter codex --assets skills --scope user
 或直接从 GitHub 安装：
 
 ```bash
-$skill-installer install https://github.com/xxih/nano-spec/tree/main/.codex/skills/nanospec
+$skill-installer install https://github.com/xxih/nano-spec/tree/main/src/static/skills/nanospec
 ```
 
 安装后重启 Codex 生效。
 
 在其它 AI agent 工具：
 
-1. 复制仓库中的 `.codex/skills/nanospec/` 到该工具的 skills 目录。
-2. 若工具暂不支持原生 skills，可通过 MCP/CLI 方式转接使用同一份 `SKILL.md`。
+1. 复制仓库中的 `src/static/skills/nanospec/` 到该工具的 skills 目录。
 
 ## 预设包
 
