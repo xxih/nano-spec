@@ -84,6 +84,6 @@
 - [x] 9.4 更新 `README.md` 与 `CHANGELOG.md`，记录脚本能力。
 - [x] 9.5 增加自动化测试：覆盖脚本副本同步和实际骨架创建行为。
 - [x] 9.6 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts src/static/skills/nanospec/create-task-skeleton.test.ts`。
-- [ ] 9.7 完成本轮有效 commit。
+- [x] 9.7 完成本轮有效 commit：`97fe993 feat(nanospec): add task skeleton script`。
 
 验收条件：skill 目录内可直接使用脚本创建符合规范的任务骨架，且文档、测试、发布副本与项目副本口径一致。
