@@ -55,6 +55,10 @@
    - 支持输入已带日期前缀的任务目录名；
    - 创建 `brief.md`、`alignment.md`、`assets/`、`outputs/1-spec.md`、`outputs/2-plan.md`、`outputs/3-tasks.md`；
    - 支持通过 `--set-current` 更新 `.nanospec/.current`。
+16. 任务骨架脚本应优先采用更兼容的实现，避免过度依赖 shell 方言；优先选用只依赖标准库的 `python3` 脚本。
+17. `references/*.md` 需要尽可能与原 `src/static/commands/spec.*.toml` 保持一致：
+   - 保留输入、执行流程、规则、输出约束、关键判断逻辑；
+   - 允许做 skill 化改写，但不能把原有能力压缩成只有 3 到 5 行的过度简化版本。
 
 ## 验收标准
 
@@ -69,3 +73,4 @@
 - `nanospec` skill 文档明确区分“目录规范层”和“按需路由的完整 workflow”，且支持与其他 skill 共用同一任务容器。
 - `SKILL.md` 明确说明 align 机制与 `/xxx` 路由方式，且相关文案有测试锁定。
 - skill 自带可执行脚本来创建任务骨架，且发布副本与项目副本保持一致并有自动化测试覆盖。
+- skill 的脚本实现兼容性提升，且 references 与原 commands 的能力边界重新对齐。

@@ -15,8 +15,8 @@ const getLocalDatePrefix = () => {
 describe('create-task-skeleton script', () => {
 	it('should create a dated task skeleton and update .current when requested', () => {
 		const workdir = mkdtempSync(join(tmpdir(), 'nanospec-skill-'));
-		const scriptPath = join(process.cwd(), 'src/static/skills/nanospec/scripts/create-task-skeleton.sh');
-		const result = spawnSync('sh', [scriptPath, '支付 回调', '--set-current'], {
+		const scriptPath = join(process.cwd(), 'src/static/skills/nanospec/scripts/create_task_skeleton.py');
+		const result = spawnSync('python3', [scriptPath, '支付 回调', '--set-current'], {
 			cwd: workdir,
 			encoding: 'utf-8',
 		});
@@ -37,8 +37,8 @@ describe('create-task-skeleton script', () => {
 
 	it('should preserve an explicit dated directory name', () => {
 		const workdir = mkdtempSync(join(tmpdir(), 'nanospec-skill-'));
-		const scriptPath = join(process.cwd(), 'src/static/skills/nanospec/scripts/create-task-skeleton.sh');
-		const result = spawnSync('sh', [scriptPath, '20260315-支付回调重试'], {
+		const scriptPath = join(process.cwd(), 'src/static/skills/nanospec/scripts/create_task_skeleton.py');
+		const result = spawnSync('python3', [scriptPath, '20260315-支付回调重试'], {
 			cwd: workdir,
 			encoding: 'utf-8',
 		});

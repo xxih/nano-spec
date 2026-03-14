@@ -2,17 +2,32 @@
 
 ## 目标
 
-生成 `outputs/2-plan.md` 和可执行的 `outputs/3-tasks.md`。
+基于 `outputs/1-spec.md` 生成 `outputs/2-plan.md` 和可执行的 `outputs/3-tasks.md`。
 
-## 步骤
+## 输入
 
-1. 读取 `outputs/1-spec.md` 与最新的 `alignment.md`。
-2. 设计执行顺序，并补充风险与应对方式。
+1. `outputs/1-spec.md`。
+2. `alignment.md`（若存在）。
+3. 当前工作区现状。
+
+## 执行流程
+
+1. 判断任务类型：
+   - 涉及代码、配置、脚本或工程结构时，严禁跳过 plan；
+   - 纯内容类任务且 spec 已足够详细时，允许透传模式，但 `2-plan.md` 仍需保持原命令约束。
+2. 设计在当前环境中的落地方式、顺序、依赖关系与风险收口。
 3. 将实施策略写入 `outputs/2-plan.md`。
-4. 在 `outputs/3-tasks.md` 中生成带编号的任务清单。
-5. 确保每条需求至少映射到一个任务。
+4. 在 `outputs/3-tasks.md` 中生成带编号、带复选框的任务清单。
+5. 确保每条需求至少映射到一个任务组，并为任务组附验收条件。
+
+## 输出约束
+
+- `2-plan.md` 禁止使用复选框。
+- `3-tasks.md` 必须使用 checkbox 语法。
+- 待确认事项统一追加到 `alignment.md`。
 
 ## 规则
 
-- `2-plan.md` 不使用复选框。
-- 只有 `3-tasks.md` 使用 checkbox 语法。
+- 必须保持与 `1-spec.md` 一致，不能引入未对齐的新范围。
+- `2-plan.md` 讲“如何在当前环境实现”，`3-tasks.md` 讲“具体要做什么”。
+- 任务拆解要清晰体现依赖和并行机会。

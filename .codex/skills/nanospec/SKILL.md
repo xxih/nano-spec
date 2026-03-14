@@ -98,11 +98,11 @@ align 记录应使用统一标签：`[偏差] [变更] [缺失] [歧义] [冲突
 
 ## 辅助脚本
 
-skill 目录内自带 `scripts/create-task-skeleton.sh`，用于快速创建符合约定的任务骨架：
+skill 目录内自带 `scripts/create_task_skeleton.py`，用于快速创建符合约定的任务骨架。优先使用 Python 标准库脚本，是为了比 shell 更容易跨不同 agent 环境复用：
 
 ```bash
-sh scripts/create-task-skeleton.sh "支付回调重试"
-sh scripts/create-task-skeleton.sh "20260315-支付回调重试" --set-current
+python3 scripts/create_task_skeleton.py "支付回调重试"
+python3 scripts/create_task_skeleton.py "20260315-支付回调重试" --set-current
 ```
 
 脚本会创建：

@@ -35,6 +35,8 @@
 16. 在 `SKILL.md` 与 README 中增加“路由方式”说明，明确 `/xxx` 可直接路由到对应阶段，同时兼容 `/spec.xxx` 形式。
 17. 在 skill 目录新增 `scripts/create-task-skeleton.sh`，并让 `references/init.md`、`references/run.md` 优先指向这个脚本。
 18. 新增脚本行为测试，验证它能在临时目录创建标准任务骨架，并按需设置 `.nanospec/.current`。
+19. 将骨架脚本替换为 `python3` 标准库实现，减少 shell 兼容性问题，并更新引用文案与行为测试。
+20. 逐个对照 `src/static/commands/spec.*.toml`，重写 `references/*.md` 的结构，使其重新包含输入、流程、规则、输出约束和关键判断。
 
 ## 风险与约束
 
@@ -46,3 +48,4 @@
 - skill 新定位不能削弱已有完整 workflow 能力，只能把它降为按需路由层。
 - `/xxx` 路由说明要保持“兼容前缀命令”，不能把现有 `/spec.align` 这类用法写成失效。
 - 脚本要保持轻量和可移植，不能引入对项目 CLI 或仓库源码的额外依赖。
+- references 可以变成 skill 友好的中文说明，但不能丢掉原命令模板中的关键决策逻辑。

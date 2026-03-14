@@ -26,3 +26,6 @@
 
 - [x] **[变更]** `nanospec` skill 需要内置一个创建任务骨架的脚本，避免每次 init/run 都重复手工建目录。 `@2026-03-15`
   - **Resolved:** 已新增 `scripts/create-task-skeleton.sh` 到发布副本与项目副本，并更新 `SKILL.md`、`references/init.md`、`references/run.md`、README、CHANGELOG 与测试。 `@2026-03-15`
+
+- [x] **[变更]** 用户要求把任务骨架脚本改为更兼容的实现，并让 `references/*.md` 尽可能贴近 NanoSpec 原有 commands，而不是过度简化。 `@2026-03-15`
+  - **Resolved:** 已将骨架脚本切换为 `scripts/create_task_skeleton.py`，并重写 `references/*.md` 的目标、输入、执行流程、输出约束与规则，使其更接近 `src/static/commands/spec.*.toml` 的原始能力边界。 `@2026-03-15`

@@ -61,7 +61,7 @@ nanospec new
 - 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute，或继续其他已装载的 plan / research / execute skill。
 - `align` 是核心能力，不依赖完整 workflow 才能使用。
 - 使用这个 skill 时，也可以直接通过 `/xxx` 路由到对应阶段，例如 `/align`、`/plan`、`/execute`、`/run`；如果团队仍使用 `/spec.align`、`/spec.2-plan` 这类前缀命令，也保持兼容。
-- skill 自带 `scripts/create-task-skeleton.sh`，可快速创建 `nanospec/<YYYYMMDD-task-name>/` 骨架，并可选同步 `.nanospec/.current`。
+- skill 自带 `scripts/create_task_skeleton.py`，可快速创建 `nanospec/<YYYYMMDD-task-name>/` 骨架，并可选同步 `.nanospec/.current`。
 - 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,alignment.md,assets/,outputs/}`。
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 
