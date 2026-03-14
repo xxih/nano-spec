@@ -53,3 +53,14 @@
 - [x] 6.6 完成本轮有效 commit：`41b8367 docs(skills): require align-first task updates`。
 
 验收条件：skill 主文档、参考稿、README 与测试对 align 和任务命名的口径一致。
+
+## 7. skill 定位重构为目录规范优先
+
+- [x] 7.1 回写当前任务对齐记录：将 `nanospec` skill 新定位记入 `alignment.md`，并补记本轮“先修改仓库、后补记录”的流程偏差。
+- [x] 7.2 更新 `SKILL.md`：把第一定位改为“AI 工作中间文档目录规范 + align 核心能力”，并补充跨 skill 协作边界。
+- [x] 7.3 更新 `references/align.md` 与 `README.md`，明确 `align` 可服务于其他 `plan / research / execute` skill，完整 workflow 为按需路由。
+- [x] 7.4 更新回归测试，锁定“目录规范优先、完整 workflow 按需路由”的文案。
+- [x] 7.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`。
+- [x] 7.6 完成本轮有效 commit：`8723dcd docs(nanospec): reposition skill around directory convention`。
+
+验收条件：本轮 skill 定位调整在 NanoSpec 任务记录、仓库文档与测试中都可追踪，且流程偏差已被显式记录。

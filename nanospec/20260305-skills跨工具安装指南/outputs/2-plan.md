@@ -22,6 +22,15 @@
    - init/run/onboard 不重新引入 CLI 硬依赖文案。
 9. 在 `SKILL.md`、`references/align.md`、`references/run.md` 与 README 中强化 align 优先级，明确偏差出现时必须先对齐、再继续后续阶段。
 10. 在 `SKILL.md`、`references/init.md`、`references/run.md`、`references/onboard.md` 与 README 中统一新建任务命名规则：`YYYYMMDD-任务主题`。
+11. 重写 `SKILL.md` 的目标、核心流程与全局规则：
+   - 先定义目录规范与跨 skill 协作边界；
+   - 再声明完整 workflow 是按需路由能力，而不是默认前提。
+12. 更新 `references/align.md`，把 align 明确为“继续其他阶段或其他 skill 前”的统一纠偏入口。
+13. 更新 README 的 skill 说明，强调：
+   - 用户可以只采用目录规范；
+   - 其他 skill 装载 `nanospec` 后应复用同一任务目录；
+   - `align` 是核心能力。
+14. 扩充回归测试，锁定新的定位文案，避免回退到“单一完整 workflow skill”的表述。
 
 ## 风险与约束
 
@@ -30,3 +39,4 @@
 - README 可以补充必要背景，但不能回退成“如何创作 skill”的教程。
 - `.codex/skills/nanospec` 与 `src/static/skills/nanospec` 必须同步更新，避免发布态与项目态口径漂移。
 - 任务命名规则必须只约束“新建任务”，不能破坏对用户显式指定既有目录的复用能力。
+- skill 新定位不能削弱已有完整 workflow 能力，只能把它降为按需路由层。

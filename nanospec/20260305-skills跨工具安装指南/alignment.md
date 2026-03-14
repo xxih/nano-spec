@@ -14,3 +14,9 @@
 
 - [x] **[缺失]** NanoSpec 任务名缺少统一格式约束，未要求时间前缀。 `@2026-03-15`
   - **Resolved:** 已统一要求新建任务目录使用 `YYYYMMDD-任务主题` 格式，并同步更新 `SKILL.md`、`references/init.md`、`references/run.md`、`references/onboard.md` 与 README。 `@2026-03-15`
+
+- [x] **[变更]** `nanospec` skill 的定位从“默认承载完整 workflow”调整为“默认提供中间文档目录规范与跨 skill 的 align 纠偏能力，完整 spec-driven workflow 改为按需路由”。 `@2026-03-15`
+  - **Resolved:** 已更新 `SKILL.md`、`references/align.md`、README 与测试断言，明确 `nanospec` 可以独立作为目录规范层，与其他 `plan / research / execute` skill 协同；完整 workflow 仍保留，但不再作为默认前提。 `@2026-03-15`
+
+- [x] **[偏差]** 本轮定位调整先完成了仓库文档与测试修改，之后才补写 NanoSpec 任务记录，违反了“变更先 align 回写”的流程约束。 `@2026-03-15`
+  - **Resolved:** 已回写当前任务的 `alignment.md`、`outputs/1-spec.md`、`outputs/2-plan.md` 与 `outputs/3-tasks.md`，补齐本轮变更、验证与提交信息。 `@2026-03-15`

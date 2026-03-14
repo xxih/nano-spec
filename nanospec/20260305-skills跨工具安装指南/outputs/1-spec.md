@@ -14,6 +14,9 @@
 5. `align` 需要被强调为偏差处理的优先入口，而不是可选补记；
 6. 新建 NanoSpec 任务目录名必须带时间前缀。
 
+本轮继续补充一项定位调整：
+7. `nanospec` skill 的第一定位应是 AI 工作中间文档目录规范与 `align` 纠偏机制，可无缝配合其他 skill；完整 spec-driven workflow 改为按需路由能力。
+
 ## 需求
 
 1. 将项目内多个 NanoSpec skill 合并为一个 `nanospec` skill。
@@ -38,6 +41,11 @@
    - 不会重新引入 `nanospec new`、`nanospec init`、`nanospec --version` 等 CLI 硬依赖描述。
 10. `SKILL.md`、`references/align.md`、`references/run.md` 与 README 需要明确：出现需求变化、实现偏差或临时决策时，必须先执行 align，再继续 spec / plan / execute。
 11. 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`；相关规则要同步到 `SKILL.md`、`references/init.md`、`references/run.md`、`references/onboard.md` 与 README。
+12. `SKILL.md` 与 README 需要明确：
+   - `nanospec` 默认提供目录规范，而不是强制从 init 开始跑完整流程；
+   - 当其他 skill 采用“先 plan 后 xxx”时，只要装载了 `nanospec`，就应按该目录规范读写中间文档；
+   - `align` 是跨 skill 的核心纠偏入口，不依赖完整 workflow 才能使用；
+   - 完整 spec-driven workflow 保留，但改为按需路由。
 
 ## 验收标准
 
@@ -49,3 +57,4 @@
 - 存在自动化回归测试覆盖双副本同步、中文标题与无 CLI 硬依赖约束。
 - skill 文档与 README 明确要求：出现偏差或变更时，先 align 再继续其他阶段。
 - 新建任务目录名统一为 `YYYYMMDD-任务主题` 格式。
+- `nanospec` skill 文档明确区分“目录规范层”和“按需路由的完整 workflow”，且支持与其他 skill 共用同一任务容器。
