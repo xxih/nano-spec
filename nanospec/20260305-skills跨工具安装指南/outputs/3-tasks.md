@@ -39,6 +39,6 @@
 - [x] 5.3 更新 `README.md` 与 `CHANGELOG.md`，同步中文化、CLI-free 与目录结构口径。
 - [x] 5.4 增加回归测试，校验发布态与项目副本同步、中文标题约束，以及无 CLI 硬依赖描述。
 - [x] 5.5 运行本轮最小必要验证命令：`npm test`（受既有 `src/ralph/prd.test.ts` 时间戳断言失败影响）、`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
-- [ ] 5.6 完成本轮有效 commit。
+- [x] 5.6 完成本轮有效 commit：`528b114 docs(skills): localize nanospec workflow guidance`。
 
 验收条件：skill 文案、README、CHANGELOG 和测试口径保持一致，且任务状态可追踪。
