@@ -50,6 +50,6 @@
 - [x] 6.3 更新 `README.md` 与 `CHANGELOG.md`，同步 align 优先级和任务命名格式。
 - [x] 6.4 扩充回归测试，覆盖 align 优先级文案和 `YYYYMMDD-任务主题` 约束。
 - [x] 6.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
-- [ ] 6.6 完成本轮有效 commit。
+- [x] 6.6 完成本轮有效 commit：`41b8367 docs(skills): require align-first task updates`。
 
 验收条件：skill 主文档、参考稿、README 与测试对 align 和任务命名的口径一致。
