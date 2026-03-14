@@ -19,7 +19,6 @@
 - [x] 3.1 README 改为“安装导向”说明，不再展开 skill 创作教程。
 - [x] 3.2 更新 `CHANGELOG.md`（Unreleased）。
 - [x] 3.3 运行最小必要验证命令。
-- [x] 3.4 完成一次有效 commit。
 - [x] 3.5 按反馈调整 README：安装路径指向 `src/static/skills/nanospec`、增加自然语言安装示例、删除 MCP/CLI 转接说明。
 - [x] 3.6 按反馈调整 README：自然语言安装示例必须包含可点击的 GitHub 来源链接。
 
@@ -39,7 +38,6 @@
 - [x] 5.3 更新 `README.md` 与 `CHANGELOG.md`，同步中文化、CLI-free 与目录结构口径。
 - [x] 5.4 增加回归测试，校验发布态与项目副本同步、中文标题约束，以及无 CLI 硬依赖描述。
 - [x] 5.5 运行本轮最小必要验证命令：`npm test`（受既有 `src/ralph/prd.test.ts` 时间戳断言失败影响）、`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
-- [x] 5.6 完成本轮有效 commit：`528b114 docs(skills): localize nanospec workflow guidance`。
 
 验收条件：skill 文案、README、CHANGELOG 和测试口径保持一致，且任务状态可追踪。
 
@@ -50,7 +48,6 @@
 - [x] 6.3 更新 `README.md` 与 `CHANGELOG.md`，同步 align 优先级和任务命名格式。
 - [x] 6.4 扩充回归测试，覆盖 align 优先级文案和 `YYYYMMDD-任务主题` 约束。
 - [x] 6.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
-- [x] 6.6 完成本轮有效 commit：`41b8367 docs(skills): require align-first task updates`。
 
 验收条件：skill 主文档、参考稿、README 与测试对 align 和任务命名的口径一致。
 
@@ -61,7 +58,6 @@
 - [x] 7.3 更新 `references/align.md` 与 `README.md`，明确 `align` 可服务于其他 `plan / research / execute` skill，完整 workflow 为按需路由。
 - [x] 7.4 更新回归测试，锁定“目录规范优先、完整 workflow 按需路由”的文案。
 - [x] 7.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`。
-- [x] 7.6 完成本轮有效 commit：`8723dcd docs(nanospec): reposition skill around directory convention`。
 
 验收条件：本轮 skill 定位调整在 NanoSpec 任务记录、仓库文档与测试中都可追踪，且流程偏差已被显式记录。
 
@@ -72,7 +68,6 @@
 - [x] 8.3 更新 `SKILL.md` 与 `README.md`：明确使用本 skill 时可通过 `/xxx` 路由到对应阶段，同时兼容 `/spec.align`、`/spec.2-plan` 等前缀命令。
 - [x] 8.4 更新 `CHANGELOG.md` 与回归测试，锁定 “align 机制 + `/xxx` 路由” 文案。
 - [x] 8.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`。
-- [x] 8.6 完成本轮有效 commit：`6e9941b docs(nanospec): explain align mechanism routing`。
 
 验收条件：`SKILL.md` 已具备独立的 align 机制说明与 slash 路由说明，发布副本、项目副本、README、CHANGELOG、测试和任务记录保持一致。
 
@@ -84,7 +79,6 @@
 - [x] 9.4 更新 `README.md` 与 `CHANGELOG.md`，记录脚本能力。
 - [x] 9.5 增加自动化测试：覆盖脚本副本同步和实际骨架创建行为。
 - [x] 9.6 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts src/static/skills/nanospec/create-task-skeleton.test.ts`。
-- [x] 9.7 完成本轮有效 commit：`97fe993 feat(nanospec): add task skeleton script`。
 
 验收条件：skill 目录内可直接使用脚本创建符合规范的任务骨架，且文档、测试、发布副本与项目副本口径一致。
 
@@ -94,6 +88,13 @@
 - [x] 10.2 将任务骨架脚本切换为 `python3 scripts/create_task_skeleton.py`，并同步更新 `SKILL.md`、README、CHANGELOG 与测试。
 - [x] 10.3 重写 `references/*.md`，补回输入、执行流程、输出约束、关键判断与规则，使其更接近原 `spec.*.toml` 命令模板。
 - [x] 10.4 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts src/static/skills/nanospec/create-task-skeleton.test.ts`。
-- [x] 10.5 完成本轮有效 commit：`b9a559f refactor(nanospec): align references with command templates`。
 
 验收条件：脚本实现更兼容，references 不再过度简化，并与原有 command 模板保持能力一致性。
+
+## 11. 停止在 task 中记录 commit
+
+- [x] 11.1 删除当前任务中所有与 commit hash、提交信息、补任务日志相关的 task 项。
+- [x] 11.2 更新 `SKILL.md`、`references/execute.md` 与 `references/summary.md`，明确 `outputs/3-tasks.md` 只跟踪交付动作与状态，不记录 git 元信息。
+- [x] 11.3 更新 `CHANGELOG.md`、`alignment.md`、`outputs/1-spec.md` 与 `outputs/2-plan.md`，同步新的任务跟踪规则。
+
+验收条件：以后不再需要为了把 commit hash 写回 task 而额外补一次 task 日志提交。

@@ -29,3 +29,6 @@
 
 - [x] **[变更]** 用户要求把任务骨架脚本改为更兼容的实现，并让 `references/*.md` 尽可能贴近 NanoSpec 原有 commands，而不是过度简化。 `@2026-03-15`
   - **Resolved:** 已将骨架脚本切换为 `scripts/create_task_skeleton.py`，并重写 `references/*.md` 的目标、输入、执行流程、输出约束与规则，使其更接近 `src/static/commands/spec.*.toml` 的原始能力边界。 `@2026-03-15`
+
+- [x] **[变更]** 用户要求停止把 commit hash 写入 `outputs/3-tasks.md`，并删除现有任务中的相关条目，避免以后为了回写 git 元信息再额外提交一次。 `@2026-03-15`
+  - **Resolved:** 已删除当前任务中所有 commit/hash/补任务日志相关 task 项，并在 `SKILL.md`、`references/execute.md`、`references/summary.md` 与 CHANGELOG 中明确：`3-tasks.md` 只记录交付动作与状态，不记录 git 元信息。 `@2026-03-15`

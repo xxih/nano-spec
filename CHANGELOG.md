@@ -11,6 +11,7 @@
 - 重定义 `nanospec` skill 定位：默认提供 AI 工作中间文档目录规范与跨 skill 的 `align` 纠偏能力，完整 spec-driven workflow 改为按需路由。
 - 在 `nanospec` skill 的 `SKILL.md` 中补充 align 机制说明，并明确支持通过 `/xxx` 将请求路由到对应阶段。
 - 为 `nanospec` skill 增加更易跨环境复用的 `scripts/create_task_skeleton.py`，用于创建任务骨架并可选更新 `.nanospec/.current`。
+- 调整 `nanospec` 任务跟踪规则：`outputs/3-tasks.md` 不再记录 commit hash 或补日志类 git 元信息，只保留交付动作与状态。
 
 ### Added
 - 为发布态 `nanospec` skill 与项目内 `.codex` 副本新增回归测试，约束两者保持同步、保持中文说明，并避免重新引入 CLI 硬依赖。

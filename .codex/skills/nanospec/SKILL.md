@@ -139,5 +139,6 @@ python3 scripts/create_task_skeleton.py "20260315-支付回调重试" --set-curr
 - 需求变化统一记录到 `alignment.md`，并使用标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。
 - 只有真正阻塞推进的确认项，才使用 `` `⏳ 待确认` ``。
 - 不要把后续行动只留在对话里，必须回写到 `outputs/3-tasks.md`。
+- `outputs/3-tasks.md` 只跟踪交付动作与状态，不记录 commit hash、提交信息或“补任务日志”这类 git 元信息。
 - 除非用户明确要求调用 CLI，否则不要把 `nanospec init`、`nanospec new`、`nanospec status`、`nanospec switch` 当成前置步骤。
 - 保持现有文件语言和风格，除非用户明确要求调整。
