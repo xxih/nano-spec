@@ -9,6 +9,7 @@
 - 强化 `align` 在 `nanospec` skill 中的优先级：出现偏差或临时变更时，必须先完成对齐回写，再继续其他阶段。
 - 为新建 NanoSpec 任务目录新增命名约束：必须使用 `YYYYMMDD-任务主题` 时间前缀格式。
 - 重定义 `nanospec` skill 定位：默认提供 AI 工作中间文档目录规范与跨 skill 的 `align` 纠偏能力，完整 spec-driven workflow 改为按需路由。
+- 在 `nanospec` skill 的 `SKILL.md` 中补充 align 机制说明，并明确支持通过 `/xxx` 将请求路由到对应阶段。
 
 ### Added
 - 为发布态 `nanospec` skill 与项目内 `.codex` 副本新增回归测试，约束两者保持同步、保持中文说明，并避免重新引入 CLI 硬依赖。

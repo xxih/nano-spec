@@ -64,3 +64,14 @@
 - [x] 7.6 完成本轮有效 commit：`8723dcd docs(nanospec): reposition skill around directory convention`。
 
 验收条件：本轮 skill 定位调整在 NanoSpec 任务记录、仓库文档与测试中都可追踪，且流程偏差已被显式记录。
+
+## 8. align 机制说明与 slash 路由
+
+- [x] 8.1 在当前任务 `alignment.md` 记录本轮新增要求：`SKILL.md` 需补充 align 机制说明，并明确 `/xxx` 路由方式。
+- [x] 8.2 更新 `SKILL.md`：新增“Align 机制”章节，参考 `_AGENTS.md` 解释触发时机、标签格式、变更传播与任务回写要求。
+- [x] 8.3 更新 `SKILL.md` 与 `README.md`：明确使用本 skill 时可通过 `/xxx` 路由到对应阶段，同时兼容 `/spec.align`、`/spec.2-plan` 等前缀命令。
+- [x] 8.4 更新 `CHANGELOG.md` 与回归测试，锁定 “align 机制 + `/xxx` 路由” 文案。
+- [x] 8.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`。
+- [ ] 8.6 完成本轮有效 commit。
+
+验收条件：`SKILL.md` 已具备独立的 align 机制说明与 slash 路由说明，发布副本、项目副本、README、CHANGELOG、测试和任务记录保持一致。

@@ -20,3 +20,6 @@
 
 - [x] **[偏差]** 本轮定位调整先完成了仓库文档与测试修改，之后才补写 NanoSpec 任务记录，违反了“变更先 align 回写”的流程约束。 `@2026-03-15`
   - **Resolved:** 已回写当前任务的 `alignment.md`、`outputs/1-spec.md`、`outputs/2-plan.md` 与 `outputs/3-tasks.md`，补齐本轮变更、验证与提交信息。 `@2026-03-15`
+
+- [x] **[变更]** `nanospec` skill 需要在 `SKILL.md` 中单列说明 align 机制，并明确 skill 使用时可通过 `/xxx` 将请求路由到对应阶段。 `@2026-03-15`
+  - **Resolved:** 已参考 `_AGENTS.md` 的通用规则，在 `SKILL.md` 中新增“Align 机制”和“路由方式”章节，并同步 README、CHANGELOG 与测试断言。 `@2026-03-15`

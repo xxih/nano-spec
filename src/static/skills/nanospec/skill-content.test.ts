@@ -46,6 +46,8 @@ describe('nanospec skill content', () => {
 		});
 
 		expect(readPublishedFile('SKILL.md')).toContain('## 任务目录结构');
+		expect(readPublishedFile('SKILL.md')).toContain('## Align 机制');
+		expect(readPublishedFile('SKILL.md')).toContain('## 路由方式');
 	});
 
 	it('should document a CLI-free workflow for init, run, and onboarding', () => {
@@ -57,6 +59,8 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('仓库里没有 `nanospec` CLI 时');
 		expect(skillContent).toContain('`.nanospec/.current` 只是任务指针');
 		expect(skillContent).toContain('用户完全可以只采用这套目录规范');
+		expect(skillContent).toContain('可以直接用 `/xxx` 把请求路由到对应阶段');
+		expect(skillContent).toContain('`/run`：让 NanoSpec 按缺失阶段续跑完整 workflow');
 
 		expect(initContent).toContain('不依赖 `nanospec` CLI');
 		expect(initContent).toContain('直接创建 `nanospec/<YYYYMMDD-task-name>/`');
@@ -82,6 +86,9 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('align 不是可选补记');
 		expect(skillContent).toContain('完整的 spec-driven workflow 是可选路由');
 		expect(skillContent).toContain('当其他 skill 采用“先 plan 后 xxx”模式时');
+		expect(skillContent).toContain('align 不是一个孤立阶段');
+		expect(skillContent).toContain('触发 align 的时机不限于 `/align`');
+		expect(skillContent).toContain('`/align`：执行对齐纠偏，并传播变更');
 
 		expect(initContent).toContain('YYYYMMDD-任务主题');
 		expect(initContent).toContain('任务名必须以当前日期前缀 `YYYYMMDD-` 开头');

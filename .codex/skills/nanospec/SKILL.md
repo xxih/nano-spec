@@ -59,6 +59,43 @@ project-root/
 - align 是核心能力，不依赖完整 workflow 才能使用。
 - 完整的 spec-driven workflow 是可选路由，不是使用本 skill 的前提条件。
 
+## Align 机制
+
+align 不是一个孤立阶段，而是贯穿整个任务生命周期的变更传播机制。参考 `_AGENTS.md` 的通用规则，它的核心循环是：
+
+1. 发现问题。
+2. 记录到 `alignment.md`。
+3. 同步受影响产物。
+4. 回写新的执行动作到 `outputs/3-tasks.md`。
+
+触发 align 的时机不限于 `/align`：
+
+- 在 spec 阶段发现需求冲突、歧义、缺失时，要立即 align。
+- 在 plan 阶段发现口径不一致、方案风险时，要立即 align。
+- 在 execute 阶段发现实现偏差、阻塞问题时，要立即 align。
+- 在 accept 或 summary 阶段发现遗漏决策点时，也要立即 align。
+
+align 记录应使用统一标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。需要用户确认时，再追加 `` `⏳ 待确认` ``。
+
+只要口径发生变化，就必须同步更新受影响的 `outputs/1-spec.md`、`outputs/2-plan.md`、`outputs/3-tasks.md`，以及存在时的 `acceptance.md`。不能只改 `alignment.md`，也不能只留在对话里。
+
+## 路由方式
+
+使用这个 skill 时，可以直接用 `/xxx` 把请求路由到对应阶段，而不必先声明“进入某个内部模式”。
+
+- `/init`：初始化任务目录或建立当前任务上下文。
+- `/clarify`：补需求澄清。
+- `/spec` 或 `/1-spec`：产出规格说明。
+- `/plan` 或 `/2-plan`：产出方案与任务拆解。
+- `/execute` 或 `/3-execute`：按任务清单推进实现。
+- `/align`：执行对齐纠偏，并传播变更。
+- `/accept`：生成或更新验收产物。
+- `/summary`：沉淀总结。
+- `/onboard`：进入带教学解释的引导模式。
+- `/run`：让 NanoSpec 按缺失阶段续跑完整 workflow。
+
+如果外部工具或团队约定使用的是带前缀命令，例如 `/spec.align`、`/spec.2-plan`，也可以继续使用；本 skill 的要求是“按当前意图路由到对应 reference 和目录规范”，而不是强绑定某一种命名形式。
+
 ## 渐进加载
 
 只加载当前意图需要的参考文件：
@@ -78,6 +115,7 @@ project-root/
 
 - align 不是可选补记；出现偏差或变更时，继续 spec / plan / execute 之前必须先完成 align 回写。
 - 当其他 plan / research / execute skill 已经装载本 skill 时，也要沿用同样的目录规范与 align 约束。
+- 使用 `/xxx` 路由阶段时，也必须遵守同一套目录规范、align 机制与回写要求。
 - 需求变化统一记录到 `alignment.md`，并使用标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。
 - 只有真正阻塞推进的确认项，才使用 `` `⏳ 待确认` ``。
 - 不要把后续行动只留在对话里，必须回写到 `outputs/3-tasks.md`。

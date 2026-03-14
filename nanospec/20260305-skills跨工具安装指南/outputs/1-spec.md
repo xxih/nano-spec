@@ -46,6 +46,10 @@
    - 当其他 skill 采用“先 plan 后 xxx”时，只要装载了 `nanospec`，就应按该目录规范读写中间文档；
    - `align` 是跨 skill 的核心纠偏入口，不依赖完整 workflow 才能使用；
    - 完整 spec-driven workflow 保留，但改为按需路由。
+13. `SKILL.md` 需要参考 `_AGENTS.md` 补充一章 “Align 机制”，明确：
+   - align 是贯穿所有阶段的问题发现与变更传播机制，不限于 `/align` 命令；
+   - 口径变化时必须同步更新受影响 outputs，并把动作回写到 `outputs/3-tasks.md`。
+14. `SKILL.md` 与 README 需要明确：使用本 skill 时，可以直接通过 `/xxx` 将请求路由到对应阶段；若外部工具仍使用 `/spec.align`、`/spec.2-plan` 等前缀命令，也保持兼容。
 
 ## 验收标准
 
@@ -58,3 +62,4 @@
 - skill 文档与 README 明确要求：出现偏差或变更时，先 align 再继续其他阶段。
 - 新建任务目录名统一为 `YYYYMMDD-任务主题` 格式。
 - `nanospec` skill 文档明确区分“目录规范层”和“按需路由的完整 workflow”，且支持与其他 skill 共用同一任务容器。
+- `SKILL.md` 明确说明 align 机制与 `/xxx` 路由方式，且相关文案有测试锁定。

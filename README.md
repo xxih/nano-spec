@@ -60,6 +60,7 @@ nanospec new
 - 当其他 skill 采用“先 plan 后 xxx”模式时，只要装载了 `nanospec` skill，就应按这套目录规范读写中间文档。
 - 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute，或继续其他已装载的 plan / research / execute skill。
 - `align` 是核心能力，不依赖完整 workflow 才能使用。
+- 使用这个 skill 时，也可以直接通过 `/xxx` 路由到对应阶段，例如 `/align`、`/plan`、`/execute`、`/run`；如果团队仍使用 `/spec.align`、`/spec.2-plan` 这类前缀命令，也保持兼容。
 - 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,alignment.md,assets/,outputs/}`。
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 
