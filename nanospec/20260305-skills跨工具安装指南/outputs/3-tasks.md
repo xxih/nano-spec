@@ -94,6 +94,6 @@
 - [x] 10.2 将任务骨架脚本切换为 `python3 scripts/create_task_skeleton.py`，并同步更新 `SKILL.md`、README、CHANGELOG 与测试。
 - [x] 10.3 重写 `references/*.md`，补回输入、执行流程、输出约束、关键判断与规则，使其更接近原 `spec.*.toml` 命令模板。
 - [x] 10.4 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts src/static/skills/nanospec/create-task-skeleton.test.ts`。
-- [ ] 10.5 完成本轮有效 commit。
+- [x] 10.5 完成本轮有效 commit：`b9a559f refactor(nanospec): align references with command templates`。
 
 验收条件：脚本实现更兼容，references 不再过度简化，并与原有 command 模板保持能力一致性。
