@@ -56,6 +56,10 @@ describe('prd.ts', () => {
 		vi.clearAllMocks();
 	});
 
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	describe('readPrd', () => {
 		it('should read and parse prd.json file', async () => {
 			vi.mocked(fs.readFile).mockResolvedValue(JSON.stringify(mockPrd));
@@ -88,12 +92,14 @@ describe('prd.ts', () => {
 
 		it('should update last_updated timestamp', async () => {
 			vi.mocked(fs.writeFile).mockResolvedValue(undefined);
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date('2026-03-15T10:00:00.000Z'));
 
 			const originalLastUpdated = mockPrd.last_updated;
 			await writePrd('/test/prd.json', mockPrd);
 
 			expect(mockPrd.last_updated).not.toBe(originalLastUpdated);
-			expect(new Date(mockPrd.last_updated).toISOString()).toBe(mockPrd.last_updated);
+			expect(mockPrd.last_updated).toBe('2026-03-15T10:00:00.000Z');
 		});
 	});
 
