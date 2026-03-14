@@ -1,18 +1,18 @@
-# Onboard
+# 上手
 
-## Objective
+## 目标
 
-Guide a newcomer through one full NanoSpec cycle.
+带新成员在真实仓库里走完一次最小可用的 NanoSpec 闭环。
 
-## Steps
+## 步骤
 
-1. Verify prerequisites (`nanospec --version`, initialization status).
-2. Choose a small starter task.
-3. Create task and draft `brief.md`.
-4. Walk through spec -> plan -> execute with phase explanations.
-5. End with recap and continuation tips.
+1. 确认仓库是否已有 `.nanospec/` 与 `nanospec/` 目录；如果没有，就手动创建最小结构，不要求先安装 CLI。
+2. 选择一个能在单次会话内完成的小任务。
+3. 创建任务目录并起草 `brief.md`。
+4. 依次演示 spec -> plan -> execute，并解释每个阶段的产物与判断标准。
+5. 用验收或总结收尾，再说明如何继续下一轮迭代。
 
-## Rules
+## 规则
 
-- Teach in real repository context.
-- Keep scope small enough to finish in one session.
+- 讲解必须基于当前仓库的真实文件和上下文。
+- 控制范围，确保新手能在一轮里看到完整闭环。

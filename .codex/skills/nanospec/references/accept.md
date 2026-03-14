@@ -1,18 +1,18 @@
-# Accept
+# 验收
 
-## Objective
+## 目标
 
-Create or update `outputs/acceptance.md` with executable acceptance coverage.
+创建或更新 `outputs/acceptance.md`，为核心需求补齐可执行的验收覆盖。
 
-## Steps
+## 步骤
 
-1. Read spec/plan/tasks/alignment artifacts.
-2. Derive scenarios for happy path, boundaries, and regressions.
-3. Map each scenario to concrete evidence.
-4. Mark pass/fail and unresolved gaps.
-5. Save to `outputs/acceptance.md`.
+1. 读取 spec、plan、tasks、alignment 等产物。
+2. 为正常路径、边界场景和回归风险整理验收场景。
+3. 将每个场景映射到具体证据、验证动作或检查结果。
+4. 标记通过、失败和待补齐项。
+5. 保存到 `outputs/acceptance.md`。
 
-## Rules
+## 规则
 
-- Ensure each core requirement has acceptance coverage.
-- For failed scenarios, add concrete follow-up actions.
+- 每个核心需求都必须有对应的验收覆盖。
+- 对失败或证据不足的场景，补充明确的后续动作。

@@ -1,18 +1,18 @@
-# Summary
+# 总结
 
-## Objective
+## 目标
 
-Create `outputs/summary.md` for handoff and traceability.
+创建用于交接和追踪的 `outputs/summary.md`。
 
-## Steps
+## 步骤
 
-1. Read brief/alignment/spec/plan/tasks and acceptance if present.
-2. Summarize delivered scope and key decisions.
-3. Include validation evidence.
-4. Record residual risks and deferred items.
-5. Save concise summary for handoff.
+1. 读取 brief、alignment、spec、plan、tasks，以及已存在的 acceptance。
+2. 总结已交付范围和关键决策。
+3. 补充验证证据。
+4. 记录剩余风险和延期事项。
+5. 保存简洁的交接总结。
 
-## Rules
+## 规则
 
-- Do not claim work not reflected in tasks/results.
-- Keep unresolved items explicit and actionable.
+- 不要声明任务结果里没有体现的工作。
+- 未解决事项必须写得明确且可执行。

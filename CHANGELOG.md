@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Changed
+- 将内置 `nanospec` skill 及其 `references/` 参考稿全部改为中文说明。
+- 更新 `nanospec` skill 的 init/run/onboard 流程，明确可以在未安装 `nanospec` CLI 的仓库中直接按目录结构运行。
+- 在 `nanospec` skill 与 README 中补充任务目录结构说明，并为项目内 `.codex` skill 副本增加同步约束。
+
+### Added
+- 为发布态 `nanospec` skill 与项目内 `.codex` 副本新增回归测试，约束两者保持同步、保持中文说明，并避免重新引入 CLI 硬依赖。
+
 ## 1.3.4 (2026-03-05)
 
 ### Fixed

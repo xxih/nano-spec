@@ -1,18 +1,18 @@
-# Clarify
+# 澄清
 
-## Objective
+## 目标
 
-Turn ambiguous requirements into explicit constraints.
+把含糊需求澄清成明确约束。
 
-## Steps
+## 步骤
 
-1. Read `brief.md` or `prd.md` and identify ambiguity/conflicts/gaps.
-2. Group questions by scope, behavior, edge cases, acceptance.
-3. Ask concise high-impact clarification questions.
-4. Record unresolved items in `alignment.md` with `⏳ 待确认`.
-5. Propagate confirmed decisions into outputs.
+1. 读取 `brief.md` 或 `prd.md`，识别歧义、冲突和缺口。
+2. 按范围、行为、边界情况、验收标准整理问题。
+3. 优先提出高影响、低数量的澄清问题。
+4. 将未解决项以 `⏳ 待确认` 形式记录到 `alignment.md`。
+5. 把已确认结论同步回相关输出文件。
 
-## Rules
+## 规则
 
-- Ask the minimum blocking questions first.
-- Persist confirmed decisions to files, not only chat.
+- 先问最少但真正阻塞推进的问题。
+- 已确认结论必须落盘，不能只留在对话里。

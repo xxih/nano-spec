@@ -1,40 +1,65 @@
 ---
 name: nanospec
-description: "Run the full NanoSpec workflow in one skill: task init, clarify, spec, align, plan, execute, acceptance, summary, onboarding, and resumable run mode. Use when the user asks for any NanoSpec task delivery action and load only the relevant reference files for the current phase."
+description: "用一个统一 skill 执行 NanoSpec 全流程：init、clarify、spec、align、plan、execute、accept、summary、onboard，以及可恢复的 run 模式。用户提出任一 NanoSpec 交付请求时使用，并只按当前阶段加载所需的 references。"
 ---
 
 # NanoSpec
 
-## Objective
+## 目标
 
-Deliver NanoSpec tasks end to end with one unified skill and progressive disclosure.
+用一个统一 skill 端到端推进 NanoSpec 任务，并通过渐进披露只读取当前阶段所需参考文件。
 
-## Core Workflow
+## 任务目录结构
 
-1. Resolve task directory from explicit user input, then fallback to `.nanospec/.current`.
-2. Read context in order: `alignment.md`, `brief.md` or `prd.md`, `assets/*`, workspace state.
-3. Execute only the required phase for the current request.
-4. Propagate requirement changes to all impacted outputs.
-5. Update `outputs/3-tasks.md` immediately after finishing each actionable item.
+```text
+project-root/
+├── .nanospec/
+│   └── .current                  # 当前任务名，可选
+└── nanospec/
+    └── <task-name>/
+        ├── brief.md              # 简述需求，和 prd.md 二选一或并存
+        ├── prd.md                # 更正式的需求文档，可选
+        ├── alignment.md          # 对齐记录，可按需创建
+        ├── assets/
+        │   └── ...               # 资料、截图、草图、补充文档
+        └── outputs/
+            ├── 1-spec.md
+            ├── 2-plan.md
+            ├── 3-tasks.md
+            ├── acceptance.md     # 可选，验收阶段生成
+            └── summary.md        # 可选，总结阶段生成
+```
 
-## Progressive References
+- 仓库里没有 `nanospec` CLI 时，也按上面的结构直接创建和维护文件。
+- `.nanospec/.current` 只是任务指针，不是 skill 生效的前置条件。
 
-Load only the file needed for the current intent:
+## 核心流程
 
-- Task creation/init: `references/init.md`
-- Fast end-to-end routing: `references/run.md`
-- Requirement clarification: `references/clarify.md`
-- Spec generation: `references/spec.md`
-- Alignment updates: `references/align.md`
-- Planning and task breakdown: `references/plan.md`
-- Task execution: `references/execute.md`
-- Acceptance validation: `references/accept.md`
-- Delivery summary: `references/summary.md`
-- Onboarding walkthrough: `references/onboard.md`
+1. 优先从用户显式输入解析任务目录，其次读取 `.nanospec/.current`；仍无法定位时，直接在 `nanospec/<task-name>/` 下手动创建目录。
+2. 按顺序读取 `alignment.md`、`brief.md`/`prd.md`、`assets/*` 与工作区现状。
+3. 只执行本次请求所需阶段；如果用户要求 `/run`，就按缺失阶段自动续跑。
+4. 需求变化出现时，同步回写所有受影响产物。
+5. 每完成一个可执行事项，立即更新 `outputs/3-tasks.md`。
 
-## Global Rules
+## 渐进加载
 
-- Keep requirement changes in `alignment.md` using tags: `[偏差] [变更] [缺失] [歧义] [冲突]`.
-- Use `` `⏳ 待确认` `` only for truly blocking confirmations.
-- Do not leave follow-up actions only in chat; persist them into `outputs/3-tasks.md`.
-- Preserve existing file language and style unless explicitly requested otherwise.
+只加载当前意图需要的参考文件：
+
+- 创建或初始化任务：`references/init.md`
+- 快速续跑全流程：`references/run.md`
+- 需求澄清：`references/clarify.md`
+- 规格产出：`references/spec.md`
+- 对齐更新：`references/align.md`
+- 规划与任务拆解：`references/plan.md`
+- 任务执行：`references/execute.md`
+- 验收校验：`references/accept.md`
+- 交付总结：`references/summary.md`
+- 新人上手：`references/onboard.md`
+
+## 全局规则
+
+- 需求变化统一记录到 `alignment.md`，并使用标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。
+- 只有真正阻塞推进的确认项，才使用 `` `⏳ 待确认` ``。
+- 不要把后续行动只留在对话里，必须回写到 `outputs/3-tasks.md`。
+- 除非用户明确要求调用 CLI，否则不要把 `nanospec init`、`nanospec new`、`nanospec status`、`nanospec switch` 当成前置步骤。
+- 保持现有文件语言和风格，除非用户明确要求调整。

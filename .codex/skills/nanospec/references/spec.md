@@ -1,18 +1,18 @@
-# Spec
+# 规格
 
-## Objective
+## 目标
 
-Produce `outputs/1-spec.md` with clear and testable requirements.
+产出清晰、可验证的 `outputs/1-spec.md`。
 
-## Steps
+## 步骤
 
-1. Read task inputs by priority: `alignment.md`, `brief.md`/`prd.md`, `assets/*`, workspace state.
-2. Define scope and goals in current project context.
-3. Group requirements with observable outcomes and acceptance signals.
-4. Record unresolved conflicts in `alignment.md`.
-5. Save final content to `outputs/1-spec.md`.
+1. 按优先级读取任务输入：`alignment.md`、`brief.md`/`prd.md`、`assets/*`、工作区现状。
+2. 在当前项目上下文中明确范围与目标。
+3. 按可观察结果和验收信号整理需求。
+4. 将未解决冲突记录到 `alignment.md`。
+5. 把最终内容保存到 `outputs/1-spec.md`。
 
-## Rules
+## 规则
 
-- Focus on what to deliver, not implementation details.
-- Ensure every requirement has verifiable acceptance evidence.
+- 聚焦“交付什么”，不要提前展开实现细节。
+- 每条需求都必须有可验证的验收证据。

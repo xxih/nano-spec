@@ -1,18 +1,18 @@
-# Execute
+# 执行
 
-## Objective
+## 目标
 
-Deliver tasks in `outputs/3-tasks.md` with traceable progress.
+按可追踪进度交付 `outputs/3-tasks.md` 中的任务。
 
-## Steps
+## 步骤
 
-1. Read tasks plus spec/plan/alignment context.
-2. Pick next unchecked item with dependency awareness.
-3. Implement and validate changes.
-4. Mark completed item as `- [x]` immediately.
-5. Repeat until done or blocked.
+1. 读取任务清单，以及 spec、plan、alignment 上下文。
+2. 按依赖顺序选择下一个未完成项。
+3. 实施改动并完成必要验证。
+4. 任务完成后立即标记为 `- [x]`。
+5. 重复执行，直到全部完成或出现阻塞。
 
-## Rules
+## 规则
 
-- Update checkbox status right after completion.
-- If blocked, record issue in `alignment.md` first.
+- 复选框状态必须和实际进度同步更新。
+- 遇到阻塞时，先把问题写入 `alignment.md`，再决定是否暂停。

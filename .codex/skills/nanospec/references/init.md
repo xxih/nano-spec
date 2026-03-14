@@ -1,18 +1,18 @@
-# Init
+# 初始化
 
-## Objective
+## 目标
 
-Create or initialize a NanoSpec task from user intent.
+根据用户意图创建新任务，或补齐已有任务的 NanoSpec 基础结构。
 
-## Steps
+## 步骤
 
-1. Decide whether the request is task creation or existing task initialization.
-2. Extract a concise task title from user intent.
-3. Run `nanospec new <task-name>` when creating a new task is needed.
-4. Write or update `brief.md` with confirmed objective and scope.
-5. Confirm the task path and next command (`/spec.1-spec` or `/spec.run`).
+1. 判断当前请求是新建任务，还是补齐已有任务。
+2. 从用户意图提炼简洁且具体的任务名；如果无法确定，先提出一个最小阻塞问题。
+3. 不依赖 `nanospec` CLI：直接创建 `nanospec/<task-name>/`、`outputs/`，并按需创建或更新 `.nanospec/.current`。
+4. 写入或更新 `brief.md`，记录已确认的目标、范围和约束。
+5. 明确任务路径以及下一步建议：进入 spec 阶段，或继续执行 `/run`。
 
-## Rules
+## 规则
 
-- Avoid placeholder names when intent is ambiguous.
-- Reuse the current task when the user already targets a valid task.
+- 任务名必须直接对应功能、问题或主题，避免占位命名。
+- 用户已经指定有效任务目录时，优先复用，不重复创建。

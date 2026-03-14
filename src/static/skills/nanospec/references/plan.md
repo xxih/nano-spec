@@ -1,18 +1,18 @@
-# Plan
+# 规划
 
-## Objective
+## 目标
 
-Generate `outputs/2-plan.md` and executable `outputs/3-tasks.md`.
+生成 `outputs/2-plan.md` 和可执行的 `outputs/3-tasks.md`。
 
-## Steps
+## 步骤
 
-1. Read `outputs/1-spec.md` and latest `alignment.md`.
-2. Build execution sequence with risks and mitigations.
-3. Write strategy into `outputs/2-plan.md`.
-4. Create numbered checklists in `outputs/3-tasks.md`.
-5. Ensure each requirement maps to at least one task.
+1. 读取 `outputs/1-spec.md` 与最新的 `alignment.md`。
+2. 设计执行顺序，并补充风险与应对方式。
+3. 将实施策略写入 `outputs/2-plan.md`。
+4. 在 `outputs/3-tasks.md` 中生成带编号的任务清单。
+5. 确保每条需求至少映射到一个任务。
 
-## Rules
+## 规则
 
-- Keep `2-plan.md` checklist-free.
-- Use checkbox syntax only in `3-tasks.md`.
+- `2-plan.md` 不使用复选框。
+- 只有 `3-tasks.md` 使用 checkbox 语法。

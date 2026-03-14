@@ -54,6 +54,10 @@ nanospec new
 
 内置统一 skill：`nanospec`（已合并 init/run/spec/align/plan/execute/accept/summary/onboard，内部按渐进披露加载 references）。
 
+- skill 文案已全部中文化。
+- skill 可脱离 `nanospec` CLI 运行；只要仓库里具备约定目录结构，就可以直接按文件推进。
+- 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<task-name>/{brief.md,alignment.md,assets/,outputs/}`。
+
 ## 安装 Skill（简版）
 
 在 Codex（推荐，用户级）：

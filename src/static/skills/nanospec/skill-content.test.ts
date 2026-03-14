@@ -1,0 +1,71 @@
+import {readdirSync, readFileSync} from 'fs';
+import {dirname, join} from 'path';
+import {fileURLToPath} from 'url';
+import {describe, expect, it} from 'vitest';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const repoRoot = join(__dirname, '..', '..', '..', '..');
+const projectSkillDir = join(repoRoot, '.codex', 'skills', 'nanospec');
+const referenceFiles = readdirSync(join(__dirname, 'references')).sort();
+
+const readPublishedFile = (relativePath: string) =>
+	readFileSync(join(__dirname, relativePath), 'utf-8');
+
+const readProjectFile = (relativePath: string) =>
+	readFileSync(join(projectSkillDir, relativePath), 'utf-8');
+
+describe('nanospec skill content', () => {
+	it('should keep published skill and project skill copies aligned', () => {
+		const files = ['SKILL.md', ...referenceFiles.map((file) => join('references', file))];
+
+		files.forEach((relativePath) => {
+			expect(readProjectFile(relativePath)).toBe(readPublishedFile(relativePath));
+		});
+	});
+
+	it('should use Chinese headings across the skill docs', () => {
+		const files = ['SKILL.md', ...referenceFiles.map((file) => join('references', file))];
+		const forbiddenHeadings = [
+			/^## Objective$/m,
+			/^## Steps$/m,
+			/^## Rules$/m,
+			/^## Core Workflow$/m,
+			/^## Progressive References$/m,
+			/^## Global Rules$/m,
+			/^# Run$/m,
+			/^# Init$/m,
+			/^# Onboard$/m,
+		];
+
+		files.forEach((relativePath) => {
+			const content = readPublishedFile(relativePath);
+			forbiddenHeadings.forEach((pattern) => {
+				expect(content).not.toMatch(pattern);
+			});
+		});
+
+		expect(readPublishedFile('SKILL.md')).toContain('## 任务目录结构');
+	});
+
+	it('should document a CLI-free workflow for init, run, and onboarding', () => {
+		const skillContent = readPublishedFile('SKILL.md');
+		const initContent = readPublishedFile(join('references', 'init.md'));
+		const runContent = readPublishedFile(join('references', 'run.md'));
+		const onboardContent = readPublishedFile(join('references', 'onboard.md'));
+
+		expect(skillContent).toContain('仓库里没有 `nanospec` CLI 时');
+		expect(skillContent).toContain('`.nanospec/.current` 只是任务指针');
+
+		expect(initContent).toContain('不依赖 `nanospec` CLI');
+		expect(initContent).toContain('直接创建 `nanospec/<task-name>/`');
+		expect(initContent).not.toContain('nanospec new <task-name>');
+
+		expect(runContent).toContain('不依赖 `nanospec` CLI');
+		expect(runContent).toContain('手动创建 `nanospec/<task-name>/`');
+		expect(runContent).toContain('不把 `nanospec new`、`nanospec init` 当成前置条件');
+
+		expect(onboardContent).toContain('不要求先安装 CLI');
+		expect(onboardContent).not.toContain('nanospec --version');
+	});
+});

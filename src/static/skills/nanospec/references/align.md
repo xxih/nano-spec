@@ -1,18 +1,18 @@
-# Align
+# 对齐
 
-## Objective
+## 目标
 
-Record deviations and synchronize all affected artifacts.
+记录偏差，并同步所有受影响的产物。
 
-## Steps
+## 步骤
 
-1. Append new alignment entries to `alignment.md`.
-2. Label each issue with `[偏差] [变更] [缺失] [歧义] [冲突]`.
-3. Update impacted outputs immediately.
-4. Add corresponding actionable items to `outputs/3-tasks.md`.
-5. Mark resolved items with explicit notes and date.
+1. 将新的对齐记录追加到 `alignment.md`。
+2. 为每条问题标注 `[偏差] [变更] [缺失] [歧义] [冲突]`。
+3. 立即更新所有受影响的输出文件。
+4. 将对应的可执行动作补进 `outputs/3-tasks.md`。
+5. 已解决项要补充明确说明和日期。
 
-## Rules
+## 规则
 
-- Keep `alignment.md` and outputs conflict-free.
-- Keep unresolved confirmations marked as `⏳ 待确认`.
+- 保持 `alignment.md` 与各输出文件内容一致，不留冲突状态。
+- 未解决的确认项统一标记为 `⏳ 待确认`。

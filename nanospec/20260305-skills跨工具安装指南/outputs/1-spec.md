@@ -1,10 +1,14 @@
-# 规格说明：统一 Skill + 简化安装指引
+# 规格说明：统一 Skill + 安装指引对齐
 
 ## 背景
 
 用户反馈两点：
 1. README 不需要讲“怎么做 skill”，只需要告诉用户“怎么安装 skill”；
 2. 现有技能拆分过细，需要合并为一个 skill，并通过渐进披露索引不同阶段能力。
+
+本轮实现又出现两项新增口径：
+3. 内置 `nanospec` skill 的发布态与项目态副本都需要统一为中文说明；
+4. skill 工作流不能再把 `nanospec` CLI 当成前置依赖，而要支持按目录结构直接运行。
 
 ## 需求
 
@@ -18,9 +22,22 @@
    - `$skill-installer install https://github.com/xxih/nano-spec/tree/main/src/static/skills/nanospec`
 4. 保持 `src/static/skills` 与项目 `.codex/skills` 结构一致，避免分发路径不一致。
 5. 移除 README 中“暂不支持原生 skills 时的 MCP/CLI 转接”描述。
+6. `src/static/skills/nanospec` 与 `.codex/skills/nanospec` 中的 `SKILL.md`、`references/*.md` 统一改为中文说明，并补充任务目录结构。
+7. `SKILL.md` 与 `references/init.md`、`references/run.md`、`references/onboard.md` 需要明确：
+   - 不依赖 `nanospec` CLI；
+   - 可以直接创建或维护 `nanospec/<task-name>/` 目录；
+   - `.nanospec/.current` 只是任务指针，不是技能生效前提。
+8. README 与 CHANGELOG 需要同步说明中文化、任务目录结构和 CLI-free 运行口径。
+9. 增加回归测试，保证：
+   - 发布态 skill 与项目内 `.codex` 副本保持一致；
+   - skill 文档不会回退到英文标题；
+   - 不会重新引入 `nanospec new`、`nanospec init`、`nanospec --version` 等 CLI 硬依赖描述。
 
 ## 验收标准
 
 - `src/static/skills/` 下仅保留 `nanospec` 一个内置 skill。
 - `.codex/skills/` 与之对齐为单 skill 结构。
 - README 安装指引聚焦可执行命令，无“如何创作 skill”的教程内容。
+- `src/static/skills/nanospec` 与 `.codex/skills/nanospec` 的 `SKILL.md`、`references/*.md` 内容保持一致，且采用中文说明。
+- `nanospec` skill 能在没有 CLI 的仓库里按约定目录结构运行，不把 CLI 命令当作前置步骤。
+- 存在自动化回归测试覆盖双副本同步、中文标题与无 CLI 硬依赖约束。

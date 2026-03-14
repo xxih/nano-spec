@@ -31,3 +31,14 @@
 - [x] 4.2 增加回归测试，校验 `nanospec` skill frontmatter 中 `description` 为 YAML-safe 引号字符串。
 
 验收条件：`src/static/skills/nanospec/SKILL.md` 可被 Codex/通用 YAML 解析器稳定加载。
+
+## 5. skill 中文化与 CLI 去耦
+
+- [x] 5.1 将 `src/static/skills/nanospec` 与 `.codex/skills/nanospec` 的 `SKILL.md`、`references/*.md` 统一改为中文说明，并补充最小任务目录结构。
+- [x] 5.2 调整 init/run/onboard 口径，明确 skill 可脱离 `nanospec` CLI 运行，`.nanospec/.current` 仅作为可选任务指针。
+- [x] 5.3 更新 `README.md` 与 `CHANGELOG.md`，同步中文化、CLI-free 与目录结构口径。
+- [x] 5.4 增加回归测试，校验发布态与项目副本同步、中文标题约束，以及无 CLI 硬依赖描述。
+- [x] 5.5 运行本轮最小必要验证命令：`npm test`（受既有 `src/ralph/prd.test.ts` 时间戳断言失败影响）、`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
+- [ ] 5.6 完成本轮有效 commit。
+
+验收条件：skill 文案、README、CHANGELOG 和测试口径保持一致，且任务状态可追踪。
