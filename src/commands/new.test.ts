@@ -79,8 +79,9 @@ describe('new command', () => {
 
 		const content = readFileSync(assetsReadmePath, 'utf-8');
 		expect(content).toContain('`research/`');
-		expect(content).toContain('`bug-context/`');
+		expect(content).toContain('`bugs/`');
 		expect(content).toContain('`api/`');
+		expect(content).toContain('简单任务');
 	});
 
 	it('应该创建包含任务名称的 brief.md', async () => {

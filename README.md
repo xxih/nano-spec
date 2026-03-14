@@ -57,13 +57,14 @@ nanospec new
 - skill 文案已全部中文化。
 - skill 可脱离 `nanospec` CLI 运行；只要仓库里具备约定目录结构，就可以直接按文件推进。
 - 用户完全可以只采用这套目录规范，不使用 NanoSpec 的其他阶段能力。
-- 任务骨架会附带 `assets/README.md`，提示可按需建立 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等子目录。
+- 简单任务可以把截图、日志、接口样例、参考链接直接放在 `assets/` 下；只有复杂任务才建议拆成 `research/`、`bugs/`、`api/`、`data/`、`ui/`、`references/` 等子目录。
+- `alignment.md` 不预创建，只有真正需要对齐时才补写。
 - 当其他 skill 采用“先 plan 后 xxx”模式时，只要装载了 `nanospec` skill，就应按这套目录规范读写中间文档。
 - 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute，或继续其他已装载的 plan / research / execute skill。
 - `align` 是核心能力，不依赖完整 workflow 才能使用。
 - 使用这个 skill 时，也可以直接通过 `/xxx` 路由到对应阶段，例如 `/align`、`/plan`、`/execute`、`/run`；如果团队仍使用 `/spec.align`、`/spec.2-plan` 这类前缀命令，也保持兼容。
 - skill 自带 `scripts/create_task_skeleton.py`，可快速创建 `nanospec/<YYYYMMDD-task-name>/` 骨架，并可选同步 `.nanospec/.current`。
-- 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,alignment.md,assets/,outputs/}`。
+- 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,assets/,outputs/}`，`alignment.md` 按需出现。
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 
 ## 安装 Skill（简版）
@@ -154,9 +155,9 @@ project-root/
 ├── nanospec/
 │   └── <task-name>/
 │       ├── brief.md
-│       ├── alignment.md
 │       ├── assets/
 │       │   └── README.md
+│       ├── alignment.md         # 可选，发生偏差/变更时再创建
 │       └── outputs/
 │           ├── 1-spec.md
 │           ├── 2-plan.md
@@ -171,7 +172,7 @@ project-root/
 └── prompts/
 ```
 
-`assets/` 用来放任务上下文，建议按需拆成 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等子目录，不要求一次性建全。
+`assets/` 用来放任务上下文。简单任务直接平铺即可；只有复杂任务才建议拆成 `research/`、`bugs/`、`api/`、`data/`、`ui/`、`references/` 等子目录，不要求一次性建全。
 
 ## 常见问题
 

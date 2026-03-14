@@ -37,7 +37,8 @@ describe('command templates', () => {
 		expect(initTemplate).toContain('如果无法明确提取任务名');
 		expect(initTemplate).toContain('不执行 `nanospec new`');
 		expect(initTemplate).toContain('`research/`');
-		expect(initTemplate).toContain('`bug-context/`');
+		expect(initTemplate).toContain('`bugs/`');
 		expect(initTemplate).toContain('`api/`');
+		expect(initTemplate).toContain('简单任务直接平铺');
 	});
 });

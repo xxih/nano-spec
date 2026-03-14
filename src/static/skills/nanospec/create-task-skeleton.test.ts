@@ -34,7 +34,9 @@ describe('create-task-skeleton script', () => {
 		expect(existsSync(join(taskDir, 'outputs', '3-tasks.md'))).toBe(true);
 		expect(readFileSync(join(workdir, '.nanospec', '.current'), 'utf-8').trim()).toBe(dirName);
 		expect(readFileSync(join(taskDir, 'brief.md'), 'utf-8')).toContain('# 支付 回调');
-		expect(readFileSync(join(taskDir, 'assets', 'README.md'), 'utf-8')).toContain('`bug-context/`');
+		expect(existsSync(join(taskDir, 'alignment.md'))).toBe(false);
+		expect(readFileSync(join(taskDir, 'assets', 'README.md'), 'utf-8')).toContain('`bugs/`');
+		expect(readFileSync(join(taskDir, 'assets', 'README.md'), 'utf-8')).toContain('简单任务');
 	});
 
 	it('should preserve an explicit dated directory name', () => {
@@ -46,7 +48,7 @@ describe('create-task-skeleton script', () => {
 		});
 
 		expect(result.status).toBe(0);
-		expect(existsSync(join(workdir, 'nanospec', '20260315-支付回调重试', 'alignment.md'))).toBe(true);
+		expect(existsSync(join(workdir, 'nanospec', '20260315-支付回调重试', 'alignment.md'))).toBe(false);
 		expect(existsSync(join(workdir, '.nanospec', '.current'))).toBe(false);
 	});
 });

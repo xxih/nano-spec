@@ -9,11 +9,14 @@ import re
 
 ASSETS_README = """# Assets 目录说明
 
-这里放支撑当前任务推进的补充材料，按需建子目录即可，不要求一次性建全。
+这里放支撑当前任务推进的补充材料。
+
+简单任务：直接把截图、接口样例、日志、链接等平铺放在 `assets/` 下即可。
+复杂任务：只有当材料明显变多、类型混杂时，再按需拆子目录，不要求一次性建全。
 
 推荐子目录：
 - `research/`：调研记录、竞品资料、方案比较、外部链接摘录
-- `bug-context/`：复现步骤、报错日志、截图、录屏、环境信息
+- `bugs/`：复现步骤、报错日志、截图、录屏、环境信息
 - `api/`：接口文档、OpenAPI 片段、请求/响应样例、字段映射
 - `data/`：测试数据、SQL、CSV、mock 数据
 - `ui/`：线框图、视觉稿、交互截图
@@ -65,7 +68,6 @@ def main() -> int:
         task_dir / "brief.md",
         f"# {raw_name}\n\n目标：\n\n要求：\n1.\n",
     )
-    ensure_file(task_dir / "alignment.md", "# Alignment Log\n\n")
     ensure_file(task_dir / "assets" / "README.md", ASSETS_README)
     ensure_file(task_dir / "outputs" / "1-spec.md", f"# 规格说明：{raw_name}\n\n")
     ensure_file(task_dir / "outputs" / "2-plan.md", f"# 方案：{raw_name}\n\n")

@@ -68,15 +68,18 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('可以直接用 `/xxx` 把请求路由到对应阶段');
 		expect(skillContent).toContain('`/run`：让 NanoSpec 按缺失阶段续跑完整 workflow');
 		expect(skillContent).toContain('scripts/create_task_skeleton.py');
+		expect(skillContent).toContain('简单任务可以把截图、日志、接口样例、参考链接直接平铺在 `assets/` 下');
+		expect(skillContent).toContain('`alignment.md` 不需要预创建');
 		expect(skillContent).toContain('`research/`');
-		expect(skillContent).toContain('`bug-context/`');
+		expect(skillContent).toContain('`bugs/`');
 		expect(skillContent).toContain('`api/`');
 
 		expect(initContent).toContain('不依赖 `nanospec` CLI');
 		expect(initContent).toContain('python3 scripts/create_task_skeleton.py');
-		expect(initContent).toContain('`assets/` 下建议附带 `README.md`');
+		expect(initContent).toContain('简单任务：截图、日志、接口样例、外部链接等直接平铺放在 `assets/` 下即可');
+		expect(initContent).toContain('`alignment.md` 不预创建');
 		expect(initContent).toContain('`research/`');
-		expect(initContent).toContain('`bug-context/`');
+		expect(initContent).toContain('`bugs/`');
 		expect(initContent).toContain('`api/`');
 		expect(initContent).not.toContain('nanospec new <task-name>');
 
