@@ -8,6 +8,7 @@ const __dirname = dirname(__filename);
 const repoRoot = join(__dirname, '..', '..', '..', '..');
 const projectSkillDir = join(repoRoot, '.codex', 'skills', 'nanospec');
 const referenceFiles = readdirSync(join(__dirname, 'references')).sort();
+const scriptFiles = readdirSync(join(__dirname, 'scripts')).sort();
 
 const readPublishedFile = (relativePath: string) =>
 	readFileSync(join(__dirname, relativePath), 'utf-8');
@@ -17,7 +18,11 @@ const readProjectFile = (relativePath: string) =>
 
 describe('nanospec skill content', () => {
 	it('should keep published skill and project skill copies aligned', () => {
-		const files = ['SKILL.md', ...referenceFiles.map((file) => join('references', file))];
+		const files = [
+			'SKILL.md',
+			...referenceFiles.map((file) => join('references', file)),
+			...scriptFiles.map((file) => join('scripts', file)),
+		];
 
 		files.forEach((relativePath) => {
 			expect(readProjectFile(relativePath)).toBe(readPublishedFile(relativePath));
@@ -48,6 +53,7 @@ describe('nanospec skill content', () => {
 		expect(readPublishedFile('SKILL.md')).toContain('## 任务目录结构');
 		expect(readPublishedFile('SKILL.md')).toContain('## Align 机制');
 		expect(readPublishedFile('SKILL.md')).toContain('## 路由方式');
+		expect(readPublishedFile('SKILL.md')).toContain('## 辅助脚本');
 	});
 
 	it('should document a CLI-free workflow for init, run, and onboarding', () => {
@@ -61,13 +67,15 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('用户完全可以只采用这套目录规范');
 		expect(skillContent).toContain('可以直接用 `/xxx` 把请求路由到对应阶段');
 		expect(skillContent).toContain('`/run`：让 NanoSpec 按缺失阶段续跑完整 workflow');
+		expect(skillContent).toContain('scripts/create-task-skeleton.sh');
 
 		expect(initContent).toContain('不依赖 `nanospec` CLI');
-		expect(initContent).toContain('直接创建 `nanospec/<YYYYMMDD-task-name>/`');
+		expect(initContent).toContain('优先使用 skill 自带脚本');
+		expect(initContent).toContain('scripts/create-task-skeleton.sh');
 		expect(initContent).not.toContain('nanospec new <task-name>');
 
 		expect(runContent).toContain('不依赖 `nanospec` CLI');
-		expect(runContent).toContain('手动创建 `nanospec/<YYYYMMDD-task-name>/`');
+		expect(runContent).toContain('优先使用 `sh scripts/create-task-skeleton.sh');
 		expect(runContent).toContain('不把 `nanospec new`、`nanospec init` 当成前置条件');
 
 		expect(onboardContent).toContain('不要求先安装 CLI');

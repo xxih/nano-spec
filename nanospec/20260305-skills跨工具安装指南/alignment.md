@@ -23,3 +23,6 @@
 
 - [x] **[变更]** `nanospec` skill 需要在 `SKILL.md` 中单列说明 align 机制，并明确 skill 使用时可通过 `/xxx` 将请求路由到对应阶段。 `@2026-03-15`
   - **Resolved:** 已参考 `_AGENTS.md` 的通用规则，在 `SKILL.md` 中新增“Align 机制”和“路由方式”章节，并同步 README、CHANGELOG 与测试断言。 `@2026-03-15`
+
+- [x] **[变更]** `nanospec` skill 需要内置一个创建任务骨架的脚本，避免每次 init/run 都重复手工建目录。 `@2026-03-15`
+  - **Resolved:** 已新增 `scripts/create-task-skeleton.sh` 到发布副本与项目副本，并更新 `SKILL.md`、`references/init.md`、`references/run.md`、README、CHANGELOG 与测试。 `@2026-03-15`

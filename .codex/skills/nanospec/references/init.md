@@ -8,7 +8,7 @@
 
 1. 判断当前请求是新建任务，还是补齐已有任务。
 2. 从用户意图提炼简洁且具体的任务名；新建任务目录必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`；如果无法确定，先提出一个最小阻塞问题。
-3. 不依赖 `nanospec` CLI：直接创建 `nanospec/<YYYYMMDD-task-name>/`、`outputs/`，并按需创建或更新 `.nanospec/.current`。
+3. 仍然不依赖 `nanospec` CLI：优先使用 skill 自带脚本 `sh scripts/create-task-skeleton.sh "<task-topic-or-dirname>" [--set-current]` 创建任务骨架；若脚本不可用，再手动创建 `nanospec/<YYYYMMDD-task-name>/`、`outputs/`，并按需创建或更新 `.nanospec/.current`。
 4. 写入或更新 `brief.md`，记录已确认的目标、范围和约束。
 5. 明确任务路径以及下一步建议：进入 spec 阶段，或继续执行 `/run`。
 
@@ -16,3 +16,4 @@
 
 - 任务名必须以当前日期前缀 `YYYYMMDD-` 开头，并直接对应功能、问题或主题，避免占位命名。
 - 用户已经指定有效任务目录时，优先复用，不重复创建。
+- 使用脚本时，若用户只提供主题名，允许脚本自动补全当天日期前缀。

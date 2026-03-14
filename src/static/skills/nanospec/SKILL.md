@@ -96,6 +96,26 @@ align 记录应使用统一标签：`[偏差] [变更] [缺失] [歧义] [冲突
 
 如果外部工具或团队约定使用的是带前缀命令，例如 `/spec.align`、`/spec.2-plan`，也可以继续使用；本 skill 的要求是“按当前意图路由到对应 reference 和目录规范”，而不是强绑定某一种命名形式。
 
+## 辅助脚本
+
+skill 目录内自带 `scripts/create-task-skeleton.sh`，用于快速创建符合约定的任务骨架：
+
+```bash
+sh scripts/create-task-skeleton.sh "支付回调重试"
+sh scripts/create-task-skeleton.sh "20260315-支付回调重试" --set-current
+```
+
+脚本会创建：
+
+- `nanospec/<YYYYMMDD-task-name>/brief.md`
+- `nanospec/<YYYYMMDD-task-name>/alignment.md`
+- `nanospec/<YYYYMMDD-task-name>/assets/`
+- `nanospec/<YYYYMMDD-task-name>/outputs/1-spec.md`
+- `nanospec/<YYYYMMDD-task-name>/outputs/2-plan.md`
+- `nanospec/<YYYYMMDD-task-name>/outputs/3-tasks.md`
+
+如果传入的是不带日期前缀的主题名，脚本会自动补上当天的 `YYYYMMDD-` 前缀；传入 `--set-current` 时，会同步写入 `.nanospec/.current`。
+
 ## 渐进加载
 
 只加载当前意图需要的参考文件：

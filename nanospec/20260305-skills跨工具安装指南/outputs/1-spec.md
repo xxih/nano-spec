@@ -50,6 +50,11 @@
    - align 是贯穿所有阶段的问题发现与变更传播机制，不限于 `/align` 命令；
    - 口径变化时必须同步更新受影响 outputs，并把动作回写到 `outputs/3-tasks.md`。
 14. `SKILL.md` 与 README 需要明确：使用本 skill 时，可以直接通过 `/xxx` 将请求路由到对应阶段；若外部工具仍使用 `/spec.align`、`/spec.2-plan` 等前缀命令，也保持兼容。
+15. skill 目录需要补充 `scripts/create-task-skeleton.sh`，用于创建任务骨架：
+   - 支持输入主题名并自动补上当天 `YYYYMMDD-` 前缀；
+   - 支持输入已带日期前缀的任务目录名；
+   - 创建 `brief.md`、`alignment.md`、`assets/`、`outputs/1-spec.md`、`outputs/2-plan.md`、`outputs/3-tasks.md`；
+   - 支持通过 `--set-current` 更新 `.nanospec/.current`。
 
 ## 验收标准
 
@@ -63,3 +68,4 @@
 - 新建任务目录名统一为 `YYYYMMDD-任务主题` 格式。
 - `nanospec` skill 文档明确区分“目录规范层”和“按需路由的完整 workflow”，且支持与其他 skill 共用同一任务容器。
 - `SKILL.md` 明确说明 align 机制与 `/xxx` 路由方式，且相关文案有测试锁定。
+- skill 自带可执行脚本来创建任务骨架，且发布副本与项目副本保持一致并有自动化测试覆盖。

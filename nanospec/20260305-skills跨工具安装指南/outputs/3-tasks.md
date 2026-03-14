@@ -75,3 +75,15 @@
 - [x] 8.6 完成本轮有效 commit：`6e9941b docs(nanospec): explain align mechanism routing`。
 
 验收条件：`SKILL.md` 已具备独立的 align 机制说明与 slash 路由说明，发布副本、项目副本、README、CHANGELOG、测试和任务记录保持一致。
+
+## 9. 任务骨架脚本
+
+- [x] 9.1 在当前任务 `alignment.md` 记录新增需求：为 skill 补充创建任务骨架的脚本。
+- [x] 9.2 在发布副本和项目副本新增 `scripts/create-task-skeleton.sh`，用于创建标准任务骨架，并支持 `--set-current`。
+- [x] 9.3 更新 `SKILL.md`、`references/init.md` 与 `references/run.md`，明确优先使用脚本创建骨架。
+- [x] 9.4 更新 `README.md` 与 `CHANGELOG.md`，记录脚本能力。
+- [x] 9.5 增加自动化测试：覆盖脚本副本同步和实际骨架创建行为。
+- [x] 9.6 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts src/static/skills/nanospec/create-task-skeleton.test.ts`。
+- [ ] 9.7 完成本轮有效 commit。
+
+验收条件：skill 目录内可直接使用脚本创建符合规范的任务骨架，且文档、测试、发布副本与项目副本口径一致。
