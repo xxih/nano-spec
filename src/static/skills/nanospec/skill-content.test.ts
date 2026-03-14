@@ -56,6 +56,7 @@ describe('nanospec skill content', () => {
 
 		expect(skillContent).toContain('仓库里没有 `nanospec` CLI 时');
 		expect(skillContent).toContain('`.nanospec/.current` 只是任务指针');
+		expect(skillContent).toContain('用户完全可以只采用这套目录规范');
 
 		expect(initContent).toContain('不依赖 `nanospec` CLI');
 		expect(initContent).toContain('直接创建 `nanospec/<YYYYMMDD-task-name>/`');
@@ -79,6 +80,8 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式');
 		expect(skillContent).toContain('先执行 align');
 		expect(skillContent).toContain('align 不是可选补记');
+		expect(skillContent).toContain('完整的 spec-driven workflow 是可选路由');
+		expect(skillContent).toContain('当其他 skill 采用“先 plan 后 xxx”模式时');
 
 		expect(initContent).toContain('YYYYMMDD-任务主题');
 		expect(initContent).toContain('任务名必须以当前日期前缀 `YYYYMMDD-` 开头');
@@ -88,6 +91,7 @@ describe('nanospec skill content', () => {
 
 		expect(alignContent).toContain('先暂停当前阶段，立即进入 align');
 		expect(alignContent).toContain('align 不是可选补记');
+		expect(alignContent).toContain('跨 skill 的纠偏入口');
 
 		expect(onboardContent).toContain('按 `YYYYMMDD-任务主题` 格式创建任务目录');
 	});

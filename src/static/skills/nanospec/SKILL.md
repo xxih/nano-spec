@@ -1,13 +1,19 @@
 ---
 name: nanospec
-description: "用一个统一 skill 执行 NanoSpec 全流程：init、clarify、spec、align、plan、execute、accept、summary、onboard，以及可恢复的 run 模式。用户提出任一 NanoSpec 交付请求时使用，并只按当前阶段加载所需的 references。"
+description: "NanoSpec 的核心是 AI 工作中间文档的目录规范与 align 纠偏机制；可独立配合其他 plan/research/execute 类 skill 使用，也可在需要时路由为完整的 spec-driven workflow。"
 ---
 
 # NanoSpec
 
 ## 目标
 
-用一个统一 skill 端到端推进 NanoSpec 任务，并通过渐进披露只读取当前阶段所需参考文件。
+先提供一套稳定的 AI 工作中间文档目录规范，让 plan、research、execute 等其他 skill 也能在同一任务容器里协作；当用户需要时，再由这个 skill 路由并补齐完整的 NanoSpec spec-driven workflow。
+
+这个 skill 的默认定位不是“必须从 init 开始跑完整流程”，而是：
+
+1. 约束中间文档落盘位置、命名和读取顺序。
+2. 在出现偏差、变更、缺失、歧义时，用 align 作为统一纠偏入口。
+3. 在用户明确要求或上下文显示需要时，再承接 init / clarify / spec / plan / execute / accept / summary / onboard / run。
 
 ## 任务目录结构
 
@@ -33,15 +39,25 @@ project-root/
 - 仓库里没有 `nanospec` CLI 时，也按上面的结构直接创建和维护文件。
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 - `.nanospec/.current` 只是任务指针，不是 skill 生效的前置条件。
+- 用户完全可以只采用这套目录规范，而不使用 NanoSpec 的其他阶段能力。
 
 ## 核心流程
 
 1. 优先从用户显式输入解析任务目录，其次读取 `.nanospec/.current`；仍无法定位时，按 `YYYYMMDD-任务主题` 格式在 `nanospec/` 下手动创建目录。
 2. 按顺序读取 `alignment.md`、`brief.md`/`prd.md`、`assets/*` 与工作区现状。
-3. 只执行本次请求所需阶段；如果用户要求 `/run`，就按缺失阶段自动续跑。
-4. 只要出现需求变化、实现偏差或临时决策，先执行 align：更新 `alignment.md`，同步所有受影响产物，再继续其他阶段。
+3. 只执行本次请求真正需要的阶段；如果当前任务来自其他 skill 的 plan、research、execute 指令，也继续沿用这套目录规范。
+4. 只要出现需求变化、实现偏差或临时决策，先执行 align：更新 `alignment.md`，同步所有受影响产物，再继续其他阶段或其他 skill。
 5. align 产生的后续动作必须回写到 `outputs/3-tasks.md`，不能只停留在对话或 `alignment.md`。
 6. 每完成一个可执行事项，立即更新 `outputs/3-tasks.md`。
+7. 如果用户要求 `/run`，或明确希望由 NanoSpec 接管完整流程，再按缺失阶段自动续跑完整 workflow。
+
+## 协作边界
+
+- 这个 skill 可以只提供“目录规范 + align”，把 spec、plan、research、execute 交给别的 skill 完成。
+- 当其他 skill 采用“先 plan 后 xxx”模式时，只要装载了本 skill，就应按本目录规范读写中间文档。
+- `outputs/2-plan.md` 和 `outputs/3-tasks.md` 不是 NanoSpec 私有产物；它们也是跨 skill 协作时的共享工作面。
+- align 是核心能力，不依赖完整 workflow 才能使用。
+- 完整的 spec-driven workflow 是可选路由，不是使用本 skill 的前提条件。
 
 ## 渐进加载
 
@@ -61,6 +77,7 @@ project-root/
 ## 全局规则
 
 - align 不是可选补记；出现偏差或变更时，继续 spec / plan / execute 之前必须先完成 align 回写。
+- 当其他 plan / research / execute skill 已经装载本 skill 时，也要沿用同样的目录规范与 align 约束。
 - 需求变化统一记录到 `alignment.md`，并使用标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。
 - 只有真正阻塞推进的确认项，才使用 `` `⏳ 待确认` ``。
 - 不要把后续行动只留在对话里，必须回写到 `outputs/3-tasks.md`。

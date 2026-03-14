@@ -52,11 +52,14 @@ nanospec new
 
 ## 内置 Skill
 
-内置统一 skill：`nanospec`（已合并 init/run/spec/align/plan/execute/accept/summary/onboard，内部按渐进披露加载 references）。
+内置统一 skill：`nanospec`。它的第一定位是 AI 工作中间文档的目录规范和 `align` 纠偏机制；在需要时，才进一步路由为完整的 spec-driven workflow（已合并 init/run/spec/align/plan/execute/accept/summary/onboard，内部按渐进披露加载 references）。
 
 - skill 文案已全部中文化。
 - skill 可脱离 `nanospec` CLI 运行；只要仓库里具备约定目录结构，就可以直接按文件推进。
-- 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute。
+- 用户完全可以只采用这套目录规范，不使用 NanoSpec 的其他阶段能力。
+- 当其他 skill 采用“先 plan 后 xxx”模式时，只要装载了 `nanospec` skill，就应按这套目录规范读写中间文档。
+- 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute，或继续其他已装载的 plan / research / execute skill。
+- `align` 是核心能力，不依赖完整 workflow 才能使用。
 - 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,alignment.md,assets/,outputs/}`。
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 
