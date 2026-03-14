@@ -16,7 +16,7 @@ project-root/
 ├── .nanospec/
 │   └── .current                  # 当前任务名，可选
 └── nanospec/
-    └── <task-name>/
+    └── <YYYYMMDD-task-name>/
         ├── brief.md              # 简述需求，和 prd.md 二选一或并存
         ├── prd.md                # 更正式的需求文档，可选
         ├── alignment.md          # 对齐记录，可按需创建
@@ -31,15 +31,17 @@ project-root/
 ```
 
 - 仓库里没有 `nanospec` CLI 时，也按上面的结构直接创建和维护文件。
+- 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 - `.nanospec/.current` 只是任务指针，不是 skill 生效的前置条件。
 
 ## 核心流程
 
-1. 优先从用户显式输入解析任务目录，其次读取 `.nanospec/.current`；仍无法定位时，直接在 `nanospec/<task-name>/` 下手动创建目录。
+1. 优先从用户显式输入解析任务目录，其次读取 `.nanospec/.current`；仍无法定位时，按 `YYYYMMDD-任务主题` 格式在 `nanospec/` 下手动创建目录。
 2. 按顺序读取 `alignment.md`、`brief.md`/`prd.md`、`assets/*` 与工作区现状。
 3. 只执行本次请求所需阶段；如果用户要求 `/run`，就按缺失阶段自动续跑。
-4. 需求变化出现时，同步回写所有受影响产物。
-5. 每完成一个可执行事项，立即更新 `outputs/3-tasks.md`。
+4. 只要出现需求变化、实现偏差或临时决策，先执行 align：更新 `alignment.md`，同步所有受影响产物，再继续其他阶段。
+5. align 产生的后续动作必须回写到 `outputs/3-tasks.md`，不能只停留在对话或 `alignment.md`。
+6. 每完成一个可执行事项，立即更新 `outputs/3-tasks.md`。
 
 ## 渐进加载
 
@@ -58,6 +60,7 @@ project-root/
 
 ## 全局规则
 
+- align 不是可选补记；出现偏差或变更时，继续 spec / plan / execute 之前必须先完成 align 回写。
 - 需求变化统一记录到 `alignment.md`，并使用标签：`[偏差] [变更] [缺失] [歧义] [冲突]`。
 - 只有真正阻塞推进的确认项，才使用 `` `⏳ 待确认` ``。
 - 不要把后续行动只留在对话里，必须回写到 `outputs/3-tasks.md`。

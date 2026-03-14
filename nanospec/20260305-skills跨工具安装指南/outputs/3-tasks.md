@@ -42,3 +42,14 @@
 - [x] 5.6 完成本轮有效 commit：`528b114 docs(skills): localize nanospec workflow guidance`。
 
 验收条件：skill 文案、README、CHANGELOG 和测试口径保持一致，且任务状态可追踪。
+
+## 6. align 优先级与任务命名约束
+
+- [x] 6.1 强化 `SKILL.md`、`references/align.md` 与 `references/run.md`：出现需求变化、实现偏差或临时决策时，必须先执行 align，再继续其他阶段。
+- [x] 6.2 为新建 NanoSpec 任务统一命名规则：目录名必须使用 `YYYYMMDD-任务主题` 格式，并同步到 `SKILL.md`、`references/init.md`、`references/run.md` 与 `references/onboard.md`。
+- [x] 6.3 更新 `README.md` 与 `CHANGELOG.md`，同步 align 优先级和任务命名格式。
+- [x] 6.4 扩充回归测试，覆盖 align 优先级文案和 `YYYYMMDD-任务主题` 约束。
+- [x] 6.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`、`npm run build`。
+- [ ] 6.6 完成本轮有效 commit。
+
+验收条件：skill 主文档、参考稿、README 与测试对 align 和任务命名的口径一致。

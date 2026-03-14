@@ -10,6 +10,10 @@
 3. 内置 `nanospec` skill 的发布态与项目态副本都需要统一为中文说明；
 4. skill 工作流不能再把 `nanospec` CLI 当成前置依赖，而要支持按目录结构直接运行。
 
+本轮对齐再补充两项口径：
+5. `align` 需要被强调为偏差处理的优先入口，而不是可选补记；
+6. 新建 NanoSpec 任务目录名必须带时间前缀。
+
 ## 需求
 
 1. 将项目内多个 NanoSpec skill 合并为一个 `nanospec` skill。
@@ -32,6 +36,8 @@
    - 发布态 skill 与项目内 `.codex` 副本保持一致；
    - skill 文档不会回退到英文标题；
    - 不会重新引入 `nanospec new`、`nanospec init`、`nanospec --version` 等 CLI 硬依赖描述。
+10. `SKILL.md`、`references/align.md`、`references/run.md` 与 README 需要明确：出现需求变化、实现偏差或临时决策时，必须先执行 align，再继续 spec / plan / execute。
+11. 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`；相关规则要同步到 `SKILL.md`、`references/init.md`、`references/run.md`、`references/onboard.md` 与 README。
 
 ## 验收标准
 
@@ -41,3 +47,5 @@
 - `src/static/skills/nanospec` 与 `.codex/skills/nanospec` 的 `SKILL.md`、`references/*.md` 内容保持一致，且采用中文说明。
 - `nanospec` skill 能在没有 CLI 的仓库里按约定目录结构运行，不把 CLI 命令当作前置步骤。
 - 存在自动化回归测试覆盖双副本同步、中文标题与无 CLI 硬依赖约束。
+- skill 文档与 README 明确要求：出现偏差或变更时，先 align 再继续其他阶段。
+- 新建任务目录名统一为 `YYYYMMDD-任务主题` 格式。

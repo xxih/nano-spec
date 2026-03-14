@@ -20,6 +20,8 @@
    - 发布态 skill 与 `.codex` 副本逐文件一致；
    - 不重新出现英文章节标题；
    - init/run/onboard 不重新引入 CLI 硬依赖文案。
+9. 在 `SKILL.md`、`references/align.md`、`references/run.md` 与 README 中强化 align 优先级，明确偏差出现时必须先对齐、再继续后续阶段。
+10. 在 `SKILL.md`、`references/init.md`、`references/run.md`、`references/onboard.md` 与 README 中统一新建任务命名规则：`YYYYMMDD-任务主题`。
 
 ## 风险与约束
 
@@ -27,3 +29,4 @@
 - references 内容需要一层索引可达，避免深层跳转。
 - README 可以补充必要背景，但不能回退成“如何创作 skill”的教程。
 - `.codex/skills/nanospec` 与 `src/static/skills/nanospec` 必须同步更新，避免发布态与项目态口径漂移。
+- 任务命名规则必须只约束“新建任务”，不能破坏对用户显式指定既有目录的复用能力。

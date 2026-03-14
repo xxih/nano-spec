@@ -47,7 +47,7 @@ nanospec new
 2. 规格：`/spec.1-spec`
 3. 规划：`/spec.2-plan`
 4. 执行：`/spec.3-execute`
-5. 对齐（可选）：`/spec.align`
+5. 对齐（出现需求变更、实现偏差或临时决策时立即执行）：`/spec.align`
 6. 验收/总结（可选）：`/spec.accept`、`/spec.summary`
 
 ## 内置 Skill
@@ -56,7 +56,9 @@ nanospec new
 
 - skill 文案已全部中文化。
 - skill 可脱离 `nanospec` CLI 运行；只要仓库里具备约定目录结构，就可以直接按文件推进。
-- 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<task-name>/{brief.md,alignment.md,assets/,outputs/}`。
+- 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute。
+- 最小任务结构：`.nanospec/.current`（可选）和 `nanospec/<YYYYMMDD-task-name>/{brief.md,alignment.md,assets/,outputs/}`。
+- 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 
 ## 安装 Skill（简版）
 

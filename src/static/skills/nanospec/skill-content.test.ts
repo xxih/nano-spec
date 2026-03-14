@@ -58,14 +58,37 @@ describe('nanospec skill content', () => {
 		expect(skillContent).toContain('`.nanospec/.current` 只是任务指针');
 
 		expect(initContent).toContain('不依赖 `nanospec` CLI');
-		expect(initContent).toContain('直接创建 `nanospec/<task-name>/`');
+		expect(initContent).toContain('直接创建 `nanospec/<YYYYMMDD-task-name>/`');
 		expect(initContent).not.toContain('nanospec new <task-name>');
 
 		expect(runContent).toContain('不依赖 `nanospec` CLI');
-		expect(runContent).toContain('手动创建 `nanospec/<task-name>/`');
+		expect(runContent).toContain('手动创建 `nanospec/<YYYYMMDD-task-name>/`');
 		expect(runContent).toContain('不把 `nanospec new`、`nanospec init` 当成前置条件');
 
 		expect(onboardContent).toContain('不要求先安装 CLI');
 		expect(onboardContent).not.toContain('nanospec --version');
+	});
+
+	it('should prioritize align and require timestamp-prefixed task names', () => {
+		const skillContent = readPublishedFile('SKILL.md');
+		const initContent = readPublishedFile(join('references', 'init.md'));
+		const runContent = readPublishedFile(join('references', 'run.md'));
+		const alignContent = readPublishedFile(join('references', 'align.md'));
+		const onboardContent = readPublishedFile(join('references', 'onboard.md'));
+
+		expect(skillContent).toContain('新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式');
+		expect(skillContent).toContain('先执行 align');
+		expect(skillContent).toContain('align 不是可选补记');
+
+		expect(initContent).toContain('YYYYMMDD-任务主题');
+		expect(initContent).toContain('任务名必须以当前日期前缀 `YYYYMMDD-` 开头');
+
+		expect(runContent).toContain('先执行 align');
+		expect(runContent).toContain('新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式');
+
+		expect(alignContent).toContain('先暂停当前阶段，立即进入 align');
+		expect(alignContent).toContain('align 不是可选补记');
+
+		expect(onboardContent).toContain('按 `YYYYMMDD-任务主题` 格式创建任务目录');
 	});
 });
