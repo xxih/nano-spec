@@ -98,3 +98,11 @@
 - [x] 11.3 更新 `CHANGELOG.md`、`alignment.md`、`outputs/1-spec.md` 与 `outputs/2-plan.md`，同步新的任务跟踪规则。
 
 验收条件：以后不再需要为了把 commit hash 写回 task 而额外补一次 task 日志提交。
+
+## 12. AGENTS 整理与 1.3.5 发布
+
+- [x] 12.1 整理项目级 `AGENTS.md`：补齐结构编号、收口提交与发布规则，并把“nanospec task 不记录 git 元信息”提升为项目级约束。
+- [x] 12.2 更新 `package.json`、`package-lock.json` 与 `CHANGELOG.md`，准备 `1.3.5` 发布。
+- [x] 12.3 运行发布前校验：`npm test`、`npm run build`、`npm pack --dry-run`，并检查 tarball 中不包含 `ralph`。
+
+验收条件：项目级规则已整理，`1.3.5` 发布内容已准备完毕且本地校验通过；tag、push 和本机 skill 升级属于发布执行动作，不再写入 task 清单。

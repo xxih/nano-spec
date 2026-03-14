@@ -32,3 +32,6 @@
 
 - [x] **[变更]** 用户要求停止把 commit hash 写入 `outputs/3-tasks.md`，并删除现有任务中的相关条目，避免以后为了回写 git 元信息再额外提交一次。 `@2026-03-15`
   - **Resolved:** 已删除当前任务中所有 commit/hash/补任务日志相关 task 项，并在 `SKILL.md`、`references/execute.md`、`references/summary.md` 与 CHANGELOG 中明确：`3-tasks.md` 只记录交付动作与状态，不记录 git 元信息。 `@2026-03-15`
+
+- [x] **[变更]** 用户要求整理项目级 `AGENTS.md`，发新版本，并同步升级 `~/.codex` 下的 `nanospec` skill。 `@2026-03-15`
+  - **Resolved:** 已整理 `AGENTS.md` 结构、准备 `1.3.5` 发布记录，并将在本地校验通过后打 tag、推送和同步 `~/.codex/skills/nanospec`。 `@2026-03-15`
