@@ -72,6 +72,6 @@
 - [x] 8.3 更新 `SKILL.md` 与 `README.md`：明确使用本 skill 时可通过 `/xxx` 路由到对应阶段，同时兼容 `/spec.align`、`/spec.2-plan` 等前缀命令。
 - [x] 8.4 更新 `CHANGELOG.md` 与回归测试，锁定 “align 机制 + `/xxx` 路由” 文案。
 - [x] 8.5 运行本轮最小必要验证命令：`npm test -- src/static/skills/nanospec/skill-content.test.ts`。
-- [ ] 8.6 完成本轮有效 commit。
+- [x] 8.6 完成本轮有效 commit：`6e9941b docs(nanospec): explain align mechanism routing`。
 
 验收条件：`SKILL.md` 已具备独立的 align 机制说明与 slash 路由说明，发布副本、项目副本、README、CHANGELOG、测试和任务记录保持一致。
