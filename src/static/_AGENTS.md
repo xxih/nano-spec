@@ -41,7 +41,7 @@
 <specs_dir>/                     # 用户产出目录
 └── <task_name>/                 # 任务目录
     ├── brief.md / prd.md        # 需求描述（二选一）
-    ├── assets/                  # 辅助素材
+    ├── assets/                  # 辅助素材（建议按需拆成 research/、bug-context/、api/ 等）
     ├── alignment.md             # 对齐记录（按需）
     └── outputs/
         ├── 1-spec.md
@@ -51,7 +51,18 @@
         └── summary.md           # 可选
 ```
 
-### 2.2 输入优先级
+### 2.2 assets 建议
+
+- `assets/` 用来沉淀任务上下文，不限制格式，按需建目录即可。
+- 常见拆分：
+  - `research/`：调研、竞品、方案比较、外部参考
+  - `bug-context/`：复现步骤、日志、截图、录屏、环境信息
+  - `api/`：接口文档、OpenAPI、请求响应样例、字段映射
+  - `data/`：测试数据、SQL、CSV、mock
+  - `ui/`：线框图、设计稿、交互截图
+  - `references/`：规范、会议纪要、上下游约束
+
+### 2.3 输入优先级
 
 ```
 alignment.md > brief.md / prd.md > assets/* > 现状

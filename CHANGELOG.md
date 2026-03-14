@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Changed
+- 为新建任务骨架补充 `assets/README.md`，明确 `assets/` 可按需存放 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等上下文材料，并同步更新 README、`_AGENTS.md`、`spec.init` 与内置 `nanospec` skill 说明。
+
 ## 1.3.5 (2026-03-15)
 
 ### Changed

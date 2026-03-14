@@ -57,6 +57,7 @@ nanospec new
 - skill 文案已全部中文化。
 - skill 可脱离 `nanospec` CLI 运行；只要仓库里具备约定目录结构，就可以直接按文件推进。
 - 用户完全可以只采用这套目录规范，不使用 NanoSpec 的其他阶段能力。
+- 任务骨架会附带 `assets/README.md`，提示可按需建立 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等子目录。
 - 当其他 skill 采用“先 plan 后 xxx”模式时，只要装载了 `nanospec` skill，就应按这套目录规范读写中间文档。
 - 出现需求变化或实现偏差时，要先执行 align，再继续 spec / plan / execute，或继续其他已装载的 plan / research / execute skill。
 - `align` 是核心能力，不依赖完整 workflow 才能使用。
@@ -154,6 +155,8 @@ project-root/
 │   └── <task-name>/
 │       ├── brief.md
 │       ├── alignment.md
+│       ├── assets/
+│       │   └── README.md
 │       └── outputs/
 │           ├── 1-spec.md
 │           ├── 2-plan.md
@@ -167,6 +170,8 @@ project-root/
 ~/.codex/
 └── prompts/
 ```
+
+`assets/` 用来放任务上下文，建议按需拆成 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等子目录，不要求一次性建全。
 
 ## 常见问题
 

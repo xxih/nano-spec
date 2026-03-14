@@ -27,6 +27,7 @@ project-root/
         ├── prd.md                # 更正式的需求文档，可选
         ├── alignment.md          # 对齐记录，可按需创建
         ├── assets/
+        │   ├── README.md         # 推荐子目录说明
         │   └── ...               # 资料、截图、草图、补充文档
         └── outputs/
             ├── 1-spec.md
@@ -40,6 +41,7 @@ project-root/
 - 新建任务目录名必须使用 `YYYYMMDD-任务主题` 格式，例如 `20260315-skills跨工具安装指南`。
 - `.nanospec/.current` 只是任务指针，不是 skill 生效的前置条件。
 - 用户完全可以只采用这套目录规范，而不使用 NanoSpec 的其他阶段能力。
+- `assets/` 建议按需拆成 `research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/` 等子目录；骨架里的 `assets/README.md` 只提供建议，不要求全部创建。
 
 ## 核心流程
 
@@ -109,7 +111,7 @@ python3 scripts/create_task_skeleton.py "20260315-支付回调重试" --set-curr
 
 - `nanospec/<YYYYMMDD-task-name>/brief.md`
 - `nanospec/<YYYYMMDD-task-name>/alignment.md`
-- `nanospec/<YYYYMMDD-task-name>/assets/`
+- `nanospec/<YYYYMMDD-task-name>/assets/README.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/1-spec.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/2-plan.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/3-tasks.md`

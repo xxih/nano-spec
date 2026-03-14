@@ -4,6 +4,21 @@ import inquirer from 'inquirer';
 import {loadConfig} from '../config/config.js';
 import {setCurrentTask} from '../config/task-pointer.js';
 
+const ASSETS_README = `# Assets 目录说明
+
+这里放支撑当前任务推进的补充材料，按需建子目录即可，不要求一次性建全。
+
+推荐子目录：
+- \`research/\`：调研记录、竞品资料、方案比较、外部链接摘录
+- \`bug-context/\`：复现步骤、报错日志、截图、录屏、环境信息
+- \`api/\`：接口文档、OpenAPI 片段、请求/响应样例、字段映射
+- \`data/\`：测试数据、SQL、CSV、mock 数据
+- \`ui/\`：线框图、视觉稿、交互截图
+- \`references/\`：规范、会议纪要、上下游约束
+
+保持“够用就建”，不必为了完整性预建所有目录。
+`;
+
 export async function newTask(name?: string): Promise<void> {
 	const cwd = process.cwd();
 	const config = await loadConfig(cwd);
@@ -45,6 +60,7 @@ export async function newTask(name?: string): Promise<void> {
 		`# ${taskName}\n\n<!-- 在此描述需求 -->\n`,
 		'utf-8'
 	);
+	writeFileSync(join(taskDir, 'assets', 'README.md'), ASSETS_README, 'utf-8');
 
 	// 自动将新任务设为当前任务
 	setCurrentTask(cwd, dirName);

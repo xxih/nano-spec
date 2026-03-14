@@ -28,11 +28,13 @@ describe('create-task-skeleton script', () => {
 		const taskDir = join(workdir, 'nanospec', dirName);
 
 		expect(existsSync(join(taskDir, 'assets'))).toBe(true);
+		expect(existsSync(join(taskDir, 'assets', 'README.md'))).toBe(true);
 		expect(existsSync(join(taskDir, 'outputs', '1-spec.md'))).toBe(true);
 		expect(existsSync(join(taskDir, 'outputs', '2-plan.md'))).toBe(true);
 		expect(existsSync(join(taskDir, 'outputs', '3-tasks.md'))).toBe(true);
 		expect(readFileSync(join(workdir, '.nanospec', '.current'), 'utf-8').trim()).toBe(dirName);
 		expect(readFileSync(join(taskDir, 'brief.md'), 'utf-8')).toContain('# 支付 回调');
+		expect(readFileSync(join(taskDir, 'assets', 'README.md'), 'utf-8')).toContain('`bug-context/`');
 	});
 
 	it('should preserve an explicit dated directory name', () => {

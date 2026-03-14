@@ -19,6 +19,7 @@
    - 禁止使用“新任务”“临时任务”“todo”这类泛化命名；
    - 如果无法明确提取任务名，先提出一个最小阻塞问题，不直接创建。
 3. 仍然不依赖 `nanospec` CLI：优先使用 `python3 scripts/create_task_skeleton.py "<task-topic-or-dirname>" --set-current` 创建骨架；若脚本不可用，再手动创建 `nanospec/<YYYYMMDD-task-name>/`、`assets/`、`outputs/`，并按需更新 `.nanospec/.current`。
+   - `assets/` 下建议附带 `README.md`，说明常见子目录：`research/`、`bug-context/`、`api/`、`data/`、`ui/`、`references/`。
 4. 根据用户意图填写或更新 `brief.md`：
    - 背景：用户的原始描述；
    - 目标：从意图中提炼的目标；
@@ -29,7 +30,7 @@
 
 - `nanospec/<YYYYMMDD-task-name>/brief.md`
 - `nanospec/<YYYYMMDD-task-name>/alignment.md`
-- `nanospec/<YYYYMMDD-task-name>/assets/`
+- `nanospec/<YYYYMMDD-task-name>/assets/README.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/1-spec.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/2-plan.md`
 - `nanospec/<YYYYMMDD-task-name>/outputs/3-tasks.md`
@@ -39,4 +40,5 @@
 - 任务名必须以当前日期前缀 `YYYYMMDD-` 开头，并直接对应功能、问题或主题，避免占位命名。
 - 用户已经指定有效任务目录时，优先复用，不重复创建。
 - 使用脚本时，若用户只提供主题名，允许脚本自动补全当天日期前缀。
+- `assets/` 是补充上下文容器，推荐使用 `research/`、`bug-context/`、`api/` 等语义化子目录，但不强制预建完整树。
 - 任务信息不足时，先补问，不要直接生成模糊任务。

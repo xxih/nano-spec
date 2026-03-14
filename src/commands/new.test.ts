@@ -65,7 +65,22 @@ describe('new command', () => {
 
 		expect(existsSync(join(taskDir, 'brief.md'))).toBe(true);
 		expect(existsSync(join(taskDir, 'assets'))).toBe(true);
+		expect(existsSync(join(taskDir, 'assets', 'README.md'))).toBe(true);
 		expect(existsSync(join(taskDir, 'outputs'))).toBe(true);
+	});
+
+	it('应该在 assets/README.md 中写入推荐素材目录', async () => {
+		mkdirSync(nanospecDir, {recursive: true});
+
+		await newTask('test-task');
+
+		const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+		const assetsReadmePath = join(nanospecDir, `${date}-test-task`, 'assets', 'README.md');
+
+		const content = readFileSync(assetsReadmePath, 'utf-8');
+		expect(content).toContain('`research/`');
+		expect(content).toContain('`bug-context/`');
+		expect(content).toContain('`api/`');
 	});
 
 	it('应该创建包含任务名称的 brief.md', async () => {

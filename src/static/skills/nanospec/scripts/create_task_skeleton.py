@@ -7,6 +7,21 @@ from datetime import datetime
 from pathlib import Path
 import re
 
+ASSETS_README = """# Assets 目录说明
+
+这里放支撑当前任务推进的补充材料，按需建子目录即可，不要求一次性建全。
+
+推荐子目录：
+- `research/`：调研记录、竞品资料、方案比较、外部链接摘录
+- `bug-context/`：复现步骤、报错日志、截图、录屏、环境信息
+- `api/`：接口文档、OpenAPI 片段、请求/响应样例、字段映射
+- `data/`：测试数据、SQL、CSV、mock 数据
+- `ui/`：线框图、视觉稿、交互截图
+- `references/`：规范、会议纪要、上下游约束
+
+保持“够用就建”，不必为了完整性预建所有目录。
+"""
+
 
 def normalize_name(raw_name: str) -> str:
     normalized = re.sub(r"[/\s]+", "-", raw_name.strip())
@@ -51,6 +66,7 @@ def main() -> int:
         f"# {raw_name}\n\n目标：\n\n要求：\n1.\n",
     )
     ensure_file(task_dir / "alignment.md", "# Alignment Log\n\n")
+    ensure_file(task_dir / "assets" / "README.md", ASSETS_README)
     ensure_file(task_dir / "outputs" / "1-spec.md", f"# 规格说明：{raw_name}\n\n")
     ensure_file(task_dir / "outputs" / "2-plan.md", f"# 方案：{raw_name}\n\n")
     ensure_file(
